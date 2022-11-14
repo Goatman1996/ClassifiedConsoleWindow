@@ -176,7 +176,7 @@ namespace ClassifiedConsole.Runtime
             {
                 if (this._md5 == null)
                 {
-                    var md5ource = this.msg;
+                    var md5ource = this.level + this.msg;
                     MD5 md = MD5.Create();
                     var pwdBytes = Encoding.UTF8.GetBytes(md5ource);
                     var md5Bytes = md.ComputeHash(pwdBytes);
