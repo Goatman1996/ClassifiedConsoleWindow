@@ -1,6 +1,6 @@
 {
     "name": "com.gm.classifiedconsolewindow",
-    "version": "0.0.1",
+    "version": "0.0.2",
     "displayName": "Classified Console Window",
     "description": "Unity Classified Console Window",
     "unity": "2020.3",
@@ -8,5 +8,8 @@
         "name": "Goatman",
         "email": "goatman914@gmail.com",
         "url": "https://gitee.com/goatman/"
+    },
+    "dependencies": {
+        "com.gm.httpremoteconnector": "0.0.2"
     }
 }
