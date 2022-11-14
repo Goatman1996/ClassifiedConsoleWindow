@@ -1,0 +1,12 @@
+{
+    "name": "com.gm.classifiedconsolewindow",
+    "version": "0.0.1",
+    "displayName": "Classified Console Window",
+    "description": "Unity Classified Console Window",
+    "unity": "2020.3",
+    "author": {
+        "name": "Goatman",
+        "email": "goatman914@gmail.com",
+        "url": "https://gitee.com/goatman/"
+    }
+}
