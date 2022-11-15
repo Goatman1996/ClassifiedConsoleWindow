@@ -213,10 +213,15 @@ namespace ClassifiedConsole.Editor
 
             var tempPath = Application.persistentDataPath;
             tempPath = Path.Combine(tempPath, "RemoteLog");
-            if (Directory.Exists(tempPath))
+            try
             {
-                Directory.Delete(tempPath, true);
+                if (Directory.Exists(tempPath))
+                {
+                    Directory.Delete(tempPath, true);
+                }
             }
+            catch { }
+
             tempPath = Path.Combine(tempPath, $"{targetLogFileId.Value}");
             var remoteLogFile = new LogFile(tempPath, targetLogFileId.Value);
             this.UnRegistsLogFile();
