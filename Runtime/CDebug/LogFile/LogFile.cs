@@ -47,9 +47,26 @@ namespace ClassifiedConsole.Runtime
         public void AppendLog(LogWriter log)
         {
             var logIo = this.GetLogIo(log.logFileName);
-            var logReader = logIo.WriteLog(log);
-            this.indexer.AppendReader(logReader);
-            this.OnAppendLog?.Invoke();
+
+            var writeTask = new ThreadTask();
+            writeTask.Task = () => logIo.WriteLog(log);
+            writeTask.callBack = this.OnThreadWriteTaskBack;
+            ManagedLogFile.threadRunner.AddTaskToQueue(writeTask);
+        }
+
+        private void OnThreadWriteTaskBack(ThreadTask result)
+        {
+            var logReader = result.result as LogReader;
+
+            var writeTask = new ThreadTask();
+            writeTask.Task = () =>
+            {
+                this.indexer.AppendReader(logReader);
+                return null;
+            };
+            writeTask.callBack = (result) => this.OnAppendLog?.Invoke();
+
+            ManagedLogFile.threadRunner.AddTaskToQueue(writeTask);
         }
 
         private Dictionary<string, LogIO> logIoDic;

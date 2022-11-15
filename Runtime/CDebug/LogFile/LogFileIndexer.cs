@@ -1,33 +1,46 @@
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 using ClassifiedConsole.Runtime;
 
 namespace ClassifiedConsole
 {
     internal class LogFileIndexer
     {
+        private FileStream indexerFileStream;
+        private StreamWriter indexerWriter;
+        private StreamReader indexerReader;
+
         private string indexerFileName;
 
         public LogFileIndexer(string indexerName)
         {
             this.indexerFileName = indexerName;
+
+            this.indexerFileStream = new FileStream(indexerFileName, FileMode.OpenOrCreate);
+
+            this.indexerWriter = new StreamWriter(this.indexerFileStream, Encoding.UTF8);
+            this.indexerReader = new StreamReader(this.indexerFileStream, Encoding.UTF8);
         }
 
         private bool hasInit = false;
         private void Initialize()
         {
             this.hasInit = true;
-            if (!File.Exists(indexerFileName))
-            {
-                var createStream = File.Create(indexerFileName);
-                createStream.Close();
-                createStream.Dispose();
-            }
+
+            this.indexerReader.BaseStream.Position = 0;
+            this.indexerReader.DiscardBufferedData();
+
 
             this.managedReader = new List<LogReader>();
-            var allLine = File.ReadLines(this.indexerFileName, System.Text.Encoding.UTF8);
-            foreach (var line in allLine)
+            // var allLine = File.ReadLines(this.indexerFileName, System.Text.Encoding.UTF8);
+            while (true)
             {
+                var line = this.indexerReader.ReadLine();
+                if (string.IsNullOrEmpty(line))
+                {
+                    break;
+                }
                 var reader = LogReader.Parse(line);
                 this.managedReader.Add(reader);
             }
@@ -63,9 +76,10 @@ namespace ClassifiedConsole
         private string[] lineAppender = new string[1];
         public void AppendReader(LogReader logReader)
         {
-            var line = logReader.ToString();
-            this.lineAppender[0] = line;
-            File.AppendAllLines(this.indexerFileName, this.lineAppender);
+            this.indexerWriter.BaseStream.Position = this.indexerWriter.BaseStream.Length;
+
+            logReader.Write(this.indexerWriter);
+            this.indexerWriter.Flush();
             if (this.hasInit)
             {
                 this.managedReader.Add(logReader);

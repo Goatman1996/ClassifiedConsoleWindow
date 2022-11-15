@@ -38,7 +38,7 @@ namespace ClassifiedConsole.Runtime
                         CollectByAssembly(assembly);
                     }
                 }
-                catch (FileNotFoundException e)
+                catch (FileNotFoundException)
                 {
                     UnityEngine.Debug.LogError($"未找到Assembly {assemblyName} ");
                 }

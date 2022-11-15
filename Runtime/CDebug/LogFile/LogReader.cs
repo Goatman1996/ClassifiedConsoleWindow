@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.Security.Cryptography;
 using System.Text;
 using ClassifiedConsole.Runtime;
@@ -25,18 +26,18 @@ namespace ClassifiedConsole.Runtime
         public string logFileName;
 
 
-        public override string ToString()
+        private const string spliter = "_";
+        public void Write(StreamWriter writer)
         {
-            var ret = "";
-            ret += $"{uidIndex}_";
-            ret += $"{instanceIdIndex}_";
-            ret += $"{subSystemIndex}_";
-            ret += $"{levelIndex}_";
-            ret += $"{timeIndex}_";
-            ret += $"{msgIndex}_";
-            ret += $"{stackTrackStartIndex}_";
-            ret += $"{logFileName}";
-            return ret;
+            writer.BaseStream.Position = writer.BaseStream.Length;
+            writer.Write(this.uidIndex); writer.Write(spliter);
+            writer.Write(this.instanceIdIndex); writer.Write(spliter);
+            writer.Write(this.subSystemIndex); writer.Write(spliter);
+            writer.Write(this.levelIndex); writer.Write(spliter);
+            writer.Write(this.timeIndex); writer.Write(spliter);
+            writer.Write(this.msgIndex); writer.Write(spliter);
+            writer.Write(this.stackTrackStartIndex); writer.Write(spliter);
+            writer.WriteLine(this.logFileName);
         }
 
         public static LogReader Parse(string line)

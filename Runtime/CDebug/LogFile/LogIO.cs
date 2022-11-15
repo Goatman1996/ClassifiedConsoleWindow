@@ -7,7 +7,8 @@ namespace ClassifiedConsole.Runtime
 {
     public class LogIO
     {
-        private FileStream fileStream;
+        private FileStream writeBaseStream;
+        private FileStream readBaseStream;
 
         public string logFileName { get; private set; }
 
@@ -19,9 +20,10 @@ namespace ClassifiedConsole.Runtime
             {
                 Directory.CreateDirectory(logDirPath);
             }
-
-            this.fileStream = new FileStream(logFilePath, FileMode.OpenOrCreate);
+            this.writeBaseStream = new FileStream(logFilePath, FileMode.OpenOrCreate, FileAccess.Write, FileShare.Read);
+            this.readBaseStream = new FileStream(logFilePath, FileMode.OpenOrCreate, FileAccess.Read, FileShare.Write);
         }
+
 
         #region Writer
         private StreamWriter _streamWriter;
@@ -31,7 +33,7 @@ namespace ClassifiedConsole.Runtime
             {
                 if (this._streamWriter == null)
                 {
-                    this._streamWriter = new StreamWriter(this.fileStream, Encoding.UTF8);
+                    this._streamWriter = new StreamWriter(this.writeBaseStream, Encoding.UTF8);
                 }
                 return this._streamWriter;
             }
@@ -51,7 +53,7 @@ namespace ClassifiedConsole.Runtime
             {
                 if (this._streamReader == null)
                 {
-                    this._streamReader = new StreamReader(this.fileStream, Encoding.UTF8);
+                    this._streamReader = new StreamReader(this.readBaseStream, Encoding.UTF8);
                 }
                 return this._streamReader;
             }

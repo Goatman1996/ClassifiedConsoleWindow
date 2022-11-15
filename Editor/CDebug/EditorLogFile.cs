@@ -275,13 +275,13 @@ namespace ClassifiedConsole.Editor
                 {
                     await ReceiveNewLogAsync(this.targetLogFile.logCount, receivingId);
                     // 如果Remote 还有剩余的 Log 等待时间短一点
-                    await Task.Delay(200);
+                    await Task.Delay(100);
                     if (this.NeedReceiving(receivingId) == false) return;
                 }
                 else
                 {
                     // 当前没有剩余Log 等待时间长一点
-                    await Task.Delay(5000);
+                    await Task.Delay(100);
                 }
                 if (this.NeedReceiving(receivingId) == false) return;
             }
@@ -364,9 +364,18 @@ namespace ClassifiedConsole.Editor
         public event Action OnEditorLogFileRefresh;
         private void AppendLog_Notify()
         {
-            var index = this.targetLogFile.logCount - 1;
-            this.OnAppendLogInternal(index);
-            this.OnEditorLogFileRefresh?.Invoke();
+            var targetLogCount = this.targetLogFile.logCount;
+            var currentIndex = this.logReaderIndexList.Count;
+
+            if (targetLogCount > currentIndex)
+            {
+                for (int i = currentIndex; i < targetLogCount; i++)
+                {
+                    this.OnAppendLogInternal(i);
+                }
+
+                this.OnEditorLogFileRefresh?.Invoke();
+            }
         }
 
         public void RefreshWithOutNotify()

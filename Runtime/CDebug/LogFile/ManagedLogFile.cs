@@ -8,6 +8,19 @@ namespace ClassifiedConsole.Runtime
 {
     public static class ManagedLogFile
     {
+        private static CDebugThreading _threadRunner;
+        public static CDebugThreading threadRunner
+        {
+            get
+            {
+                if (_threadRunner == null)
+                {
+                    _threadRunner = new CDebugThreading();
+                }
+                return _threadRunner;
+            }
+        }
+
         public static LogFile Current
         {
             get

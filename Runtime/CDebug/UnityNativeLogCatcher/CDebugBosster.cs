@@ -55,10 +55,10 @@ namespace ClassifiedConsole
                     break;
             }
 
-            var msg = CDbugExceptionUtil.SplitCDebugException(condition, out bool isClassifiedException, out int subSystem);
+            var isClassifiedException = condition.StartsWith(nameof(ClassifiedException));
             if (isClassifiedException == false)
             {
-                var log = LogWriterFactory.CreateLogWriterWithStack(msg, logLevel, stackTrace, (int)UnityNativeSubSystem.Unity_Native_Log);
+                var log = LogWriterFactory.CreateLogWriterWithStack(condition, logLevel, stackTrace, (int)UnityNativeSubSystem.Unity_Native_Log);
                 ManagedLogFile.WriteLog(log);
             }
         }

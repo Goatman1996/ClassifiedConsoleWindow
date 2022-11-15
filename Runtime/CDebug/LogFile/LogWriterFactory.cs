@@ -1,53 +1,58 @@
 using System;
 using System.Text;
-using ClassifiedConsole.Runtime;
 
-namespace ClassifiedConsole
+namespace ClassifiedConsole.Runtime
 {
     internal class LogWriterFactory
     {
         private static StringBuilder strackBuilder = new StringBuilder();
-        public static LogWriter CreateLogWriter(string msg, LogLevel logLevel, string uid, int instanceId, params int[] subSystem)
+        public static LogWriter CreateLogWriter(LogWriter logWriter, LogLevel logLevel, string uid, int instanceId, params int[] subSystem)
         {
-            var log = new LogWriter();
-            log.uid = uid;
-            log.instanceId = instanceId;
+            logWriter.uid = uid;
+            logWriter.instanceId = instanceId;
             if (subSystem.Length == 0)
             {
                 subSystem = new int[] { CDebugSubSystemEnumConfig.subSystemNullName };
             }
-            log.logSubSystem = subSystem;
+            logWriter.logSubSystem = subSystem;
             if (CDebugSettings.Instance.SplitLogFile)
             {
-                log.logFileName = CDebugSubSystemEnumConfig.GetSubSystemName(subSystem[0]);
+                logWriter.logFileName = CDebugSubSystemEnumConfig.GetSubSystemName(subSystem[0]);
             }
             else
             {
                 var systemId = CDebugSubSystemEnumConfig.subSystemNullName;
-                log.logFileName = CDebugSubSystemEnumConfig.GetSubSystemName(systemId);
+                logWriter.logFileName = CDebugSubSystemEnumConfig.GetSubSystemName(systemId);
             }
-            log.level = logLevel;
+            logWriter.level = logLevel;
             var nowTs = DateTime.Now - new DateTime(1970, 1, 1, 0, 0, 0);
-            log.time = (long)(nowTs.TotalSeconds);
-            var writeLine = CDebugSettings.Instance.GetWriteLine(logLevel);
-            log.msg = BuildLogMsg(msg, writeLine, out int stackTrackStartIndex).ToString();
-            log.stackTrackStartIndex = stackTrackStartIndex;
-            return log;
+            logWriter.time = (long)(nowTs.TotalSeconds);
+
+            // var writeLine = CDebugSettings.Instance.GetWriteLine(logLevel);
+            // log.msg = BuildLogMsg(msg, writeLine, out int stackTrackStartIndex).ToString();
+            // log.stackTrackStartIndex = msg.Length;
+            return logWriter;
         }
 
-        private static StringBuilder BuildLogMsg(string msg, int msgLineCount, out int stackTrackStartIndex)
+        public static StringBuilder BuildLogMsg(string msg, int msgLineCount, out int stackTrackStartIndex)
         {
             strackBuilder.Clear();
             strackBuilder.AppendLine(msg);
             stackTrackStartIndex = strackBuilder.Length;
+            // strackBuilder.AppendLine(UnityEngine.StackTraceUtility.ExtractStackTrace());
+            // return strackBuilder;
+            if (msgLineCount == 0)
+            {
+                return strackBuilder;
+            }
+            var stackSkinLine = CDebugSettings.Instance.stackSkipLine;
 
             var needFileInfo = CDebugSettings.Instance.msgWithFileInfo;
-            var stack = new System.Diagnostics.StackTrace(needFileInfo);
+            var stack = new System.Diagnostics.StackTrace(stackSkinLine, needFileInfo);
 
             var hasWriteAny = false;
 
-            var stackSkinLine = CDebugSettings.Instance.stackSkipLine;
-            for (int i = stackSkinLine; i < stack.FrameCount; i++)
+            for (int i = 0; i < stack.FrameCount; i++)
             {
                 if (msgLineCount == 0)
                 {
@@ -95,13 +100,22 @@ namespace ClassifiedConsole
             return strackBuilder;
         }
 
+        public static void InitDataFullPath()
+        {
+            if (dataFullPath == null)
+            {
+                dataFullPath = System.IO.Path.GetFullPath(UnityEngine.Application.dataPath);
+                dataFullPath = dataFullPath.Remove(dataFullPath.Length - "Assets".Length, "Assets".Length);
+            }
+        }
+
+        private static string dataFullPath = null;
         private static string TryRootToUnityDataPath(string filePath)
         {
-            if (filePath != null)
+            InitDataFullPath();
+            if (filePath != null && filePath.StartsWith(dataFullPath))
             {
-                var assetPath = System.IO.Path.GetFullPath(UnityEngine.Application.dataPath);
-                assetPath = assetPath.Remove(assetPath.Length - "Assets".Length, "Assets".Length);
-                filePath = filePath.Replace(assetPath, "");
+                filePath = filePath.Replace(dataFullPath, "");
             }
             return filePath;
         }

@@ -126,7 +126,7 @@ namespace ClassifiedConsole
                 this._port = newValue;
             }
         }
-        [SerializeField] private int _stackSkipLine = 4;
+        [SerializeField] private int _stackSkipLine = 3;
         /// <summary>
         /// 栈信息要跳过的行数(自定义必须大于4)
         /// Runtime Only
@@ -136,7 +136,7 @@ namespace ClassifiedConsole
             get => this._stackSkipLine;
             set
             {
-                var newValue = Mathf.Clamp(value, 4, int.MaxValue);
+                var newValue = Mathf.Clamp(value, 3, int.MaxValue);
                 this._stackSkipLine = newValue;
             }
         }

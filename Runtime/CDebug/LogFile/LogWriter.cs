@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 namespace ClassifiedConsole.Runtime
 {
     [Serializable]
-    public struct LogWriter
+    public class LogWriter
     {
         public string uid;
         public int instanceId;

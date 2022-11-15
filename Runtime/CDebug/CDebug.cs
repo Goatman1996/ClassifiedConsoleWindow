@@ -16,8 +16,24 @@ namespace ClassifiedConsole
             {
                 instanceId = context.GetInstanceID();
             }
-            var log = LogWriterFactory.CreateLogWriter(msg, logLevel, uid, instanceId, subSystem);
-            ManagedLogFile.WriteLog(log);
+            // LogWriterFactory.InitDataFullPath();
+
+            var logWriter = new LogWriter();
+            var writeLine = CDebugSettings.Instance.GetWriteLine(logLevel);
+            logWriter.msg = LogWriterFactory.BuildLogMsg(msg, writeLine, out int stackTrackStartIndex).ToString();
+            logWriter.stackTrackStartIndex = msg.Length;
+
+            var writeTask = new ThreadTask();
+            writeTask.Task = () => LogWriterFactory.CreateLogWriter(logWriter, logLevel, uid, instanceId, subSystem);
+            writeTask.callBack = (result) =>
+            {
+                ManagedLogFile.WriteLog((LogWriter)result.result);
+            };
+
+            ManagedLogFile.threadRunner.AddTaskToQueue(writeTask);
+
+            // var log = LogWriterFactory.CreateLogWriter(msg, logLevel, uid, instanceId, subSystem);
+            // ManagedLogFile.WriteLog(log);
         }
 
         public static void Log(string msg, params int[] subSystem)
@@ -77,12 +93,5 @@ namespace ClassifiedConsole
                 UnityEngine.Debug.LogException(new ClassifiedException(subSystem[0], msg), context);
             }
         }
-
-        // public static void Log(string msg, UnityEngine.Object context, params int[] subSystem)
-        // {
-        //     var instanceId = context.GetInstanceID();
-        //     var instance = UnityEditor.EditorUtility.InstanceIDToObject(instanceId);
-        //     UnityEditor.EditorGUIUtility.PingObject(instance);
-        // }
     }
 }
