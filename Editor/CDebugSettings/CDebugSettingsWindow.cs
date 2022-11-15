@@ -264,7 +264,7 @@ namespace ClassifiedConsole.Editor
                 CDebugSettings.Instance.stackSkipLine = value;
                 CDebugSettings.Instance.SaveAndRefreshAssets();
             });
-            helpBox = new HelpBox("自定义跳过栈行数(默认4且应该>=4)", HelpBoxMessageType.Info);
+            helpBox = new HelpBox("自定义跳过栈行数(默认3且应该>=3)", HelpBoxMessageType.Info);
             return filed;
         }
 

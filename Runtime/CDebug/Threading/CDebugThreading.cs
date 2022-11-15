@@ -68,7 +68,6 @@ namespace ClassifiedConsole
                     foreach (var task in this.threadTaskList)
                     {
                         task.result = task.Task?.Invoke();
-                        task.isComplete = true;
                     }
                     this.isRunningThread = false;
                 }
@@ -90,10 +89,8 @@ namespace ClassifiedConsole
 
     public class ThreadTask
     {
-        public int taskId;
         public Func<object> Task;
         public object result;
-        public bool isComplete;
         public Action<ThreadTask> callBack;
     }
 }

@@ -34,7 +34,7 @@ namespace ClassifiedConsole.Runtime
             return logWriter;
         }
 
-        public static StringBuilder BuildLogMsg(string msg, int msgLineCount, out int stackTrackStartIndex)
+        public static StringBuilder BuildLogMsg(string msg, int msgLineCount, int skipLine, out int stackTrackStartIndex)
         {
             strackBuilder.Clear();
             strackBuilder.AppendLine(msg);
@@ -45,7 +45,7 @@ namespace ClassifiedConsole.Runtime
             {
                 return strackBuilder;
             }
-            var stackSkinLine = CDebugSettings.Instance.stackSkipLine;
+            var stackSkinLine = skipLine;
 
             var needFileInfo = CDebugSettings.Instance.msgWithFileInfo;
             var stack = new System.Diagnostics.StackTrace(stackSkinLine, needFileInfo);
