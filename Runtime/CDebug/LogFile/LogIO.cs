@@ -24,6 +24,14 @@ namespace ClassifiedConsole.Runtime
             this.readBaseStream = new FileStream(logFilePath, FileMode.OpenOrCreate, FileAccess.Read, FileShare.Write);
         }
 
+        public void ReleaseIO()
+        {
+            this.streamWriter?.Close();
+            this.writeBaseStream?.Close();
+            this.streamReader?.Close();
+            this.readBaseStream?.Close();
+        }
+
 
         #region Writer
         private StreamWriter _streamWriter;

@@ -79,5 +79,17 @@ namespace ClassifiedConsole.Runtime
             }
             return this.logIoDic[logIoName];
         }
+
+        public void ReleaseIO()
+        {
+            foreach (var io in this.logIoDic.Values)
+            {
+                io.ReleaseIO();
+            }
+            this.logIoDic.Clear();
+
+            this.indexer.ReleaseIO();
+            this.indexer = null;
+        }
     }
 }

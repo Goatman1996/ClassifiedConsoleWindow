@@ -23,6 +23,13 @@ namespace ClassifiedConsole
             this.indexerReader = new StreamReader(this.indexerFileStream, Encoding.UTF8);
         }
 
+        public void ReleaseIO()
+        {
+            this.indexerWriter?.Close();
+            this.indexerReader?.Close();
+            this.indexerFileStream?.Close();
+        }
+
         private bool hasInit = false;
         private void Initialize()
         {

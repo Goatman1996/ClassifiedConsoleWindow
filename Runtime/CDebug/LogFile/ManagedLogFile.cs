@@ -85,6 +85,11 @@ namespace ClassifiedConsole.Runtime
                 {
                     continue;
                 }
+                if (logFileDic.ContainsKey(logId))
+                {
+                    logFileDic[logId].ReleaseIO();
+                    logFileDic.Remove(logId);
+                }
                 Directory.Delete(dir, true);
             }
         }

@@ -28,7 +28,7 @@ namespace ClassifiedConsole.Editor
         private Dictionary<int, LogReader> logReaderDic = new Dictionary<int, LogReader>();
 
         public List<int> showingLogIndexList = new List<int>();
-        public Dictionary<int, int> subSystemLogCount = new Dictionary<int, int>();
+        // public Dictionary<int, int> subSystemLogCount = new Dictionary<int, int>();
         public Dictionary<string, int> md5CountDic = new Dictionary<string, int>();
 
         public int logCount;
@@ -121,6 +121,7 @@ namespace ClassifiedConsole.Editor
             this.remoteLogRequestor = null;
 
             this.localLogFile = logFile;
+            this.remoteLogFile?.ReleaseIO();
             this.remoteLogFile = null;
 
             CDebugSubSystemEnumConfig.remote_SubSystemEnumDic = null;
@@ -136,6 +137,7 @@ namespace ClassifiedConsole.Editor
         {
             this.UnRegistsLogFile();
             this.remoteLogRequestor = remoteRequestor;
+            this.remoteLogFile?.ReleaseIO();
             this.remoteLogFile = null;
             this.localLogFile = null;
 
@@ -215,6 +217,7 @@ namespace ClassifiedConsole.Editor
             tempPath = Path.Combine(tempPath, "RemoteLog");
             try
             {
+                // 这里有可能报错（但是现在IO有Release了，应该不会了）
                 if (Directory.Exists(tempPath))
                 {
                     Directory.Delete(tempPath, true);
@@ -326,7 +329,11 @@ namespace ClassifiedConsole.Editor
             this.logReaderIndexList.Clear();
             this.logReaderDic.Clear();
             this.showingLogIndexList.Clear();
-            this.subSystemLogCount.Clear();
+            // this.subSystemLogCount.Clear();
+            this.subSystem_Log_Count.Clear();
+            this.subSystem_Warning_Count.Clear();
+            this.subSystem_Error_Count.Clear();
+            this.subSystem_Exception_Count.Clear();
             this.md5CountDic.Clear();
             this.SearchFilter = null;
         }
@@ -390,18 +397,24 @@ namespace ClassifiedConsole.Editor
             this.logReaderDic.Add(index, logReader);
 
             var subSystems = logReader.subSystem;
-            foreach (var subSystem in subSystems)
-            {
-                if (!this.subSystemLogCount.ContainsKey(subSystem))
-                {
-                    this.subSystemLogCount[subSystem] = 0;
-                }
-                this.subSystemLogCount[subSystem] += 1;
-            }
+            var level = logReader.level;
+            this.Collect_System_LogCount(level, subSystems);
+            // foreach (var subSystem in subSystems)
+            // {
+            //     if (!this.subSystemLogCount.ContainsKey(subSystem))
+            //     {
+            //         this.subSystemLogCount[subSystem] = 0;
+            //     }
+            //     this.subSystemLogCount[subSystem] += 1;
+            // }
         }
 
         private void RefreshShowingList()
         {
+            // this.subSystem_Log_Count.Clear();
+            // this.subSystem_Warning_Count.Clear();
+            // this.subSystem_Error_Count.Clear();
+            // this.subSystem_Exception_Count.Clear();
             this.logCount = 0;
             this.warningCount = 0;
             this.errorCount = 0;
@@ -410,13 +423,14 @@ namespace ClassifiedConsole.Editor
             this.md5CountDic.Clear();
             foreach (var index in this.logReaderIndexList)
             {
+                var logReader = this.logReaderDic[index];
                 if (!string.IsNullOrEmpty(this.SearchFilter))
                 {
-                    var msg = this.logReaderDic[index].msg;
+                    var msg = logReader.msg;
                     var filterIndex = msg.IndexOf(this.SearchFilter, StringComparison.OrdinalIgnoreCase);
                     if (filterIndex == -1) continue;
                 }
-                var md5 = this.logReaderDic[index].md5;
+                var md5 = logReader.md5;
                 if (CDebugConfig.Collapse)
                 {
                     if (this.md5CountDic.ContainsKey(md5))
@@ -429,10 +443,11 @@ namespace ClassifiedConsole.Editor
                         this.md5CountDic[md5] = 1;
                     }
                 }
-                var level = this.logReaderDic[index].level;
+                var level = logReader.level;
 
-                var levelShow = this.logReaderDic[index].NeedShowLogLevel;
-                var subSystemShow = this.logReaderDic[index].NeedShowSubSystem;
+
+                var levelShow = logReader.NeedShowLogLevel;
+                var subSystemShow = logReader.NeedShowSubSystem;
                 var display = levelShow && subSystemShow;
                 if (display)
                 {
@@ -445,6 +460,48 @@ namespace ClassifiedConsole.Editor
                     else if (level == LogLevel.Warning) this.warningCount++;
                     else if (level == LogLevel.Error) this.errorCount++;
                     else if (level == LogLevel.Exception) this.exceptionCount++;
+                }
+
+                // var subSystem = logReader.subSystem;
+                // this.Collect_System_LogCount(level, subSystem);
+            }
+        }
+
+        private void Collect_System_LogCount(LogLevel level, int[] subSystem)
+        {
+            foreach (var system in subSystem)
+            {
+                if (level == LogLevel.Log)
+                {
+                    if (!this.subSystem_Log_Count.ContainsKey(system))
+                    {
+                        this.subSystem_Log_Count.Add(system, 0);
+                    }
+                    this.subSystem_Log_Count[system]++;
+                }
+                else if (level == LogLevel.Warning)
+                {
+                    if (!this.subSystem_Warning_Count.ContainsKey(system))
+                    {
+                        this.subSystem_Warning_Count.Add(system, 0);
+                    }
+                    this.subSystem_Warning_Count[system]++;
+                }
+                else if (level == LogLevel.Error)
+                {
+                    if (!this.subSystem_Error_Count.ContainsKey(system))
+                    {
+                        this.subSystem_Error_Count.Add(system, 0);
+                    }
+                    this.subSystem_Error_Count[system]++;
+                }
+                else if (level == LogLevel.Exception)
+                {
+                    if (!this.subSystem_Exception_Count.ContainsKey(system))
+                    {
+                        this.subSystem_Exception_Count.Add(system, 0);
+                    }
+                    this.subSystem_Exception_Count[system]++;
                 }
             }
         }
@@ -466,20 +523,36 @@ namespace ClassifiedConsole.Editor
             }
         }
 
-        public int GetLogCount(int subSystemId)
+        public int GetLogCount(int subSystemId, LogLevel level)
         {
-            if (this.subSystemLogCount.ContainsKey(subSystemId))
+            if (level == LogLevel.Log)
             {
-                return this.subSystemLogCount[subSystemId];
+                this.subSystem_Log_Count.TryGetValue(subSystemId, out int value);
+                return value;
+            }
+            if (level == LogLevel.Warning)
+            {
+                this.subSystem_Warning_Count.TryGetValue(subSystemId, out int value);
+                return value;
+            }
+            if (level == LogLevel.Error)
+            {
+                this.subSystem_Error_Count.TryGetValue(subSystemId, out int value);
+                return value;
+            }
+            if (level == LogLevel.Exception)
+            {
+                this.subSystem_Exception_Count.TryGetValue(subSystemId, out int value);
+                return value;
             }
             return 0;
         }
 
-        public IEnumerable<int> GetShowingSubSystem()
-        {
-            return this.subSystemLogCount.Keys;
-        }
-
         public string SearchFilter { get; set; }
+
+        private Dictionary<int, int> subSystem_Log_Count = new Dictionary<int, int>();
+        private Dictionary<int, int> subSystem_Warning_Count = new Dictionary<int, int>();
+        private Dictionary<int, int> subSystem_Error_Count = new Dictionary<int, int>();
+        private Dictionary<int, int> subSystem_Exception_Count = new Dictionary<int, int>();
     }
 }

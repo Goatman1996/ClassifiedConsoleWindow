@@ -73,7 +73,7 @@ namespace ClassifiedConsole.Editor
                 {
                     this.RenderConsole();
                     this.isDirty = false;
-                    dirtyDelay = 5;
+                    dirtyDelay = 60;
                 }
             }
         }

@@ -8,7 +8,13 @@ namespace ClassifiedConsole.Editor
     {
         private Label systemName;
         private Toggle showToggle;
-        private Label logCount;
+
+        private ConsoleSubSystemElementLevel logCountView;
+        private ConsoleSubSystemElementLevel warningCountView;
+        private ConsoleSubSystemElementLevel errorCountView;
+        private ConsoleSubSystemElementLevel exceptionCountView;
+
+        private VisualElement logCountContainer;
 
         public ConsoleSubSystemElement()
         {
@@ -17,17 +23,25 @@ namespace ClassifiedConsole.Editor
             this.Add(this.systemName);
 
 
-            var container = new VisualElement();
-            container.style.flexDirection = FlexDirection.Row;
-            this.logCount = new Label();
-            this.logCount.style.unityTextAlign = UnityEngine.TextAnchor.MiddleCenter;
-            this.systemLogCount = 1000;
+            this.logCountContainer = new VisualElement();
+            this.logCountContainer.style.flexDirection = FlexDirection.Row;
+            // this.logCount = new Label();
+            // this.logCount.style.unityTextAlign = UnityEngine.TextAnchor.MiddleCenter;
+
+            this.logCountView = new ConsoleSubSystemElementLevel(LogLevel.Log);
+            this.warningCountView = new ConsoleSubSystemElementLevel(LogLevel.Warning);
+            this.errorCountView = new ConsoleSubSystemElementLevel(LogLevel.Error);
+            this.exceptionCountView = new ConsoleSubSystemElementLevel(LogLevel.Exception);
+            this.logCountContainer.Add(this.logCountView);
+            this.logCountContainer.Add(this.warningCountView);
+            this.logCountContainer.Add(this.errorCountView);
+            this.logCountContainer.Add(this.exceptionCountView);
+
             this.showToggle = new Toggle();
             this.showToggle.SetValueWithoutNotify(true);
-            container.Add(this.logCount);
-            container.Add(this.showToggle);
+            this.logCountContainer.Add(this.showToggle);
 
-            this.Add(container);
+            this.Add(this.logCountContainer);
 
             this.style.flexDirection = FlexDirection.Row;
             this.style.justifyContent = Justify.SpaceBetween;
@@ -66,25 +80,35 @@ namespace ClassifiedConsole.Editor
             }
         }
 
-        private int systemLogCount
-        {
-            set
-            {
-                if (value >= 1000)
-                {
-                    this.logCount.text = "999+";
-                }
-                else
-                {
-                    this.logCount.text = value.ToString();
-                }
-            }
-        }
-
         public void RefreshLogCount()
         {
-            var logCount = ClassifiedConsoleWindow.windowRoot.editorLogFile.GetLogCount(this.subSystemId);
-            this.systemLogCount = logCount;
+            var editorLogFile = ClassifiedConsoleWindow.windowRoot.editorLogFile;
+            var logCount = editorLogFile.GetLogCount(this.subSystemId, LogLevel.Log);
+            var warningCount = editorLogFile.GetLogCount(this.subSystemId, LogLevel.Warning);
+            var errorCount = editorLogFile.GetLogCount(this.subSystemId, LogLevel.Error);
+            var exceptionCount = editorLogFile.GetLogCount(this.subSystemId, LogLevel.Exception);
+
+
+            this.logCountView.count = logCount;
+            this.warningCountView.count = warningCount;
+            this.errorCountView.count = errorCount;
+            this.exceptionCountView.count = exceptionCount;
+
+            // if (logCount == 0)
+            // {
+            //     if (this.logCountContainer.Contains(this.logCountView))
+            //     {
+            //         this.logCountContainer.Remove(this.logCountView);
+            //     }
+            // }
+            // else
+            // {
+            //     if (!this.logCountContainer.Contains(this.logCountView))
+            //     {
+            //         this.logCountContainer.Add(this.logCountView);
+            //     }
+            // }
+            // this.systemLogCount = logCount;
         }
     }
 }
