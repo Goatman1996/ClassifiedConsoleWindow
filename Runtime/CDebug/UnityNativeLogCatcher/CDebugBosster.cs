@@ -8,7 +8,6 @@ namespace ClassifiedConsole
         [UnityEngine.RuntimeInitializeOnLoadMethod]
         private static void RuntimeOnLoad()
         {
-            UnityEngine.Debug.Log("RuntimeOnLoad");
             if (!hasListenUnityLog)
             {
                 UnityEngine.Application.logMessageReceived += OnUnityLog;
