@@ -22,6 +22,22 @@ namespace ClassifiedConsole
             this.thread.Start();
 
             this.ThreadLoop();
+
+            if (UnityEngine.Application.isEditor == false)
+            {
+                var go = new GameObject();
+                var exitEvt = go.AddComponent<ForThreadOnGameExit>();
+                exitEvt.OnDestroyEvt += this.OnDestroy;
+                GameObject.DontDestroyOnLoad(go);
+            }
+        }
+
+        private void OnDestroy()
+        {
+            if (this.thread != null)
+            {
+                this.thread.Abort();
+            }
         }
 
         private async void ThreadLoop()
