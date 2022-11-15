@@ -20,6 +20,10 @@ namespace ClassifiedConsole.Runtime
 
         public LogReader Write(StreamWriter writer)
         {
+            if (writer == null || writer.BaseStream == null)
+            {
+                return null;
+            }
             var logIndexer = new LogReader();
             logIndexer.logFileName = this.logFileName;
             logIndexer.stackTrackStartIndex = this.stackTrackStartIndex;

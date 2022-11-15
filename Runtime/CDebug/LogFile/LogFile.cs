@@ -56,12 +56,13 @@ namespace ClassifiedConsole.Runtime
 
         private void OnThreadWriteTaskBack(ThreadTask result)
         {
+            if (result.result == null) return;
             var logReader = result.result as LogReader;
 
             var writeTask = new ThreadTask();
             writeTask.Task = () =>
             {
-                this.indexer.AppendReader(logReader);
+                this.indexer?.AppendReader(logReader);
                 return null;
             };
             writeTask.callBack = (result) => this.OnAppendLog?.Invoke();

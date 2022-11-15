@@ -103,7 +103,6 @@ namespace ClassifiedConsole.Runtime
 
         }
 
-
         public static IEnumerable<int> GetAllSubSystemList()
         {
             if (remote_SubSystemEnumDic != null)

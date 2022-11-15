@@ -33,14 +33,10 @@ namespace ClassifiedConsole
         private bool hasInit = false;
         private void Initialize()
         {
-            this.hasInit = true;
-
             this.indexerReader.BaseStream.Position = 0;
             this.indexerReader.DiscardBufferedData();
 
-
             this.managedReader = new List<LogReader>();
-            // var allLine = File.ReadLines(this.indexerFileName, System.Text.Encoding.UTF8);
             while (true)
             {
                 var line = this.indexerReader.ReadLine();
@@ -51,6 +47,8 @@ namespace ClassifiedConsole
                 var reader = LogReader.Parse(line);
                 this.managedReader.Add(reader);
             }
+
+            this.hasInit = true;
         }
 
         private List<LogReader> managedReader;
@@ -79,7 +77,6 @@ namespace ClassifiedConsole
             }
         }
 
-
         private string[] lineAppender = new string[1];
         public void AppendReader(LogReader logReader)
         {
@@ -89,7 +86,7 @@ namespace ClassifiedConsole
             this.indexerWriter.Flush();
             if (this.hasInit)
             {
-                this.managedReader.Add(logReader);
+                this.managedReader?.Add(logReader);
             }
         }
     }

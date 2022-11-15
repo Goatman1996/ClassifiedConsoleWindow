@@ -25,7 +25,6 @@ namespace ClassifiedConsole.Runtime
         public int stackTrackStartIndex;
         public string logFileName;
 
-
         private const string spliter = "_";
         public void Write(StreamWriter writer)
         {
@@ -40,27 +39,46 @@ namespace ClassifiedConsole.Runtime
             writer.WriteLine(this.logFileName);
         }
 
+        public bool IsBrokenReader = false;
         public static LogReader Parse(string line)
         {
-            var spliter = line.Split('_');
-            var reader = new LogReader();
-            reader.uidIndex = long.Parse(spliter[0]);
-            reader.instanceIdIndex = long.Parse(spliter[1]);
-            reader.subSystemIndex = long.Parse(spliter[2]);
-            reader.levelIndex = long.Parse(spliter[3]);
-            reader.timeIndex = long.Parse(spliter[4]);
-            reader.msgIndex = long.Parse(spliter[5]);
-            reader.stackTrackStartIndex = int.Parse(spliter[6]);
-
-            // SubSystem中可能会带有“_”，特殊处理
-            reader.logFileName = "";
-            for (int s = 7; s < spliter.Length; s++)
+            try
             {
-                reader.logFileName += spliter[s];
-                reader.logFileName += "_";
+                var spliter = line.Split('_');
+                var reader = new LogReader();
+                reader.uidIndex = long.Parse(spliter[0]);
+                reader.instanceIdIndex = long.Parse(spliter[1]);
+                reader.subSystemIndex = long.Parse(spliter[2]);
+                reader.levelIndex = long.Parse(spliter[3]);
+                reader.timeIndex = long.Parse(spliter[4]);
+                reader.msgIndex = long.Parse(spliter[5]);
+                reader.stackTrackStartIndex = int.Parse(spliter[6]);
+
+                // SubSystem中可能会带有“_”，特殊处理
+                reader.logFileName = "";
+                for (int s = 7; s < spliter.Length; s++)
+                {
+                    reader.logFileName += spliter[s];
+                    reader.logFileName += "_";
+                }
+                reader.logFileName = reader.logFileName.Remove(reader.logFileName.Length - 1, 1);
+                return reader;
             }
-            reader.logFileName = reader.logFileName.Remove(reader.logFileName.Length - 1, 1);
-            return reader;
+            catch
+            {
+                return GetBroken();
+            }
+        }
+
+
+        public static LogReader GetBroken()
+        {
+            var brokenReader = new LogReader();
+            brokenReader.IsBrokenReader = true;
+            brokenReader.stackTrackStartIndex = 0;
+            var nullName = CDebugSubSystemEnumConfig.subSystemNullName;
+            brokenReader.logFileName = CDebugSubSystemEnumConfig.GetSubSystemName(nullName);
+            return brokenReader;
         }
 
         public LogIO logIO { private get; set; }
@@ -70,6 +88,7 @@ namespace ClassifiedConsole.Runtime
         {
             get
             {
+                if (this.IsBrokenReader) return default;
                 if (this._uid == null)
                 {
                     this._uid = this.logIO.ReadLog(this.uidIndex, INSTANCEID);
@@ -83,6 +102,7 @@ namespace ClassifiedConsole.Runtime
         {
             get
             {
+                if (this.IsBrokenReader) return default;
                 if (this._instanceId == null)
                 {
                     var instanceIdContext = this.logIO.ReadLog(this.instanceIdIndex, SUBSYSTEM);
@@ -97,6 +117,10 @@ namespace ClassifiedConsole.Runtime
         {
             get
             {
+                if (this.IsBrokenReader && this._subSystem == null)
+                {
+                    this._subSystem = new int[] { CDebugSubSystemEnumConfig.subSystemNullName };
+                }
                 if (this._subSystem == null)
                 {
                     var content = this.logIO.ReadLog(this.subSystemIndex, LEVEL);
@@ -117,6 +141,7 @@ namespace ClassifiedConsole.Runtime
         {
             get
             {
+                if (this.IsBrokenReader) return LogLevel.Error;
                 if (this._level == -1)
                 {
                     var content = this.logIO.ReadLog(this.levelIndex, TIME);
@@ -132,6 +157,7 @@ namespace ClassifiedConsole.Runtime
         {
             get
             {
+                if (this.IsBrokenReader) return default;
                 if (this._timeTick == null)
                 {
                     var content = this.logIO.ReadLog(this.timeIndex, MSG);
@@ -146,6 +172,7 @@ namespace ClassifiedConsole.Runtime
         {
             get
             {
+                if (this.IsBrokenReader) return default;
                 if (this._time == null)
                 {
                     var startTime = new DateTime(1970, 1, 1, 0, 0, 0);
@@ -159,6 +186,7 @@ namespace ClassifiedConsole.Runtime
         {
             get
             {
+                if (this.IsBrokenReader) return "Broken";
                 var content = this.logIO.ReadLog(this.msgIndex, END);
                 return content;
             }
@@ -166,6 +194,7 @@ namespace ClassifiedConsole.Runtime
 
         public string GetMsg(int lineCount)
         {
+            if (this.IsBrokenReader) return "Broken";
             var content = this.logIO.ReadLines(this.msgIndex, lineCount);
             return content;
         }
@@ -175,14 +204,15 @@ namespace ClassifiedConsole.Runtime
         {
             get
             {
+                if (this.IsBrokenReader) return "default";
                 if (this._md5 == null)
                 {
-                    var md5ource = this.level + this.msg;
+                    var md5ource = this.msg;
                     MD5 md = MD5.Create();
                     var pwdBytes = Encoding.UTF8.GetBytes(md5ource);
                     var md5Bytes = md.ComputeHash(pwdBytes);
                     var md5String = System.BitConverter.ToString(md5Bytes);
-                    this._md5 = md5String;
+                    this._md5 = this.level + md5String;
                 }
                 return this._md5;
             }
@@ -196,7 +226,7 @@ namespace ClassifiedConsole.Runtime
             {
                 if (needShowLogLevelVersion != CDebugConfig.needShowLogLevelVersion)
                 {
-                    _NeedShowLogLevel = CDebugConfig.NeedShowLogLevel(level);
+                    _NeedShowLogLevel = CDebugConfig.NeedShowLogLevel(this.level);
                     needShowLogLevelVersion = CDebugConfig.needShowLogLevelVersion;
                 }
                 return _NeedShowLogLevel;
@@ -211,7 +241,7 @@ namespace ClassifiedConsole.Runtime
             {
                 if (needShowSubSystemVersion != CDebugSubSystemEnumConfig.SubSystemSettingsVersion)
                 {
-                    _NeedShowSubSystem = CDebugSubSystemEnumConfig.IsSubSystemOn(subSystem);
+                    _NeedShowSubSystem = CDebugSubSystemEnumConfig.IsSubSystemOn(this.subSystem);
                     needShowSubSystemVersion = CDebugSubSystemEnumConfig.SubSystemSettingsVersion;
                 }
                 return _NeedShowSubSystem;
