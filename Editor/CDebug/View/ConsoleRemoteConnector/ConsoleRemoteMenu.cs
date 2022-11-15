@@ -100,6 +100,10 @@ namespace ClassifiedConsole.Editor
 
         private async void OnIpInputFinish(string ip)
         {
+            if (!ip.Contains(":"))
+            {
+                ip = ip + ":" + CDebugSettings.Instance.port;
+            }
             var success = await this.remoteRequestor.TryConnect(ip, typeof(LogFileRemoteListener));
             if (success)
             {

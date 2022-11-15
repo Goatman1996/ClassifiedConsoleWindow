@@ -11,9 +11,10 @@ namespace ClassifiedConsole.Editor
         public static void Show(Rect rect, Action<string> onInputFinish)
         {
             rect = GUIUtility.GUIToScreenRect(rect);
-            rect = new Rect(rect.x, rect.yMax, 300, 100);
+            rect = new Rect(rect.x, rect.yMax, 300, 50);
             var window = EditorWindow.GetWindowWithRect<ConsoleRemoteIpInputer>(rect, true);
             window.position = rect;
+            window.FocusFiedld();
 
             window.onInputFinish = onInputFinish;
         }
@@ -40,6 +41,11 @@ namespace ClassifiedConsole.Editor
             var ip = this.ipFiled.value;
             this.onInputFinish?.Invoke(ip);
             this.Close();
+        }
+
+        public void FocusFiedld()
+        {
+            this.ipFiled.Focus();
         }
     }
 }
