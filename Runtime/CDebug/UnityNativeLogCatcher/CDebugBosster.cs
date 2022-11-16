@@ -53,18 +53,20 @@ namespace ClassifiedConsole
                     return;
             }
 
-            var IsClassifiedException = CDebugAttributeHelper.IsClassifiedException(condition, out int subSystem, out string realMsg);
+            var isException = logLevel == LogLevel.Exception;
+            var IsClassifiedException = false;
+            if (isException)
+            {
+                IsClassifiedException = CDebugAttributeHelper.IsClassifiedException(condition, out int subSystem, out string realMsg);
+                if (IsClassifiedException)
+                {
+                    CDebug.LogInternalWithStack(realMsg, stackTrace, logLevel, null, null, subSystem);
+                    return;
+                }
+            }
 
-            if (IsClassifiedException)
-            {
-                var log = LogWriterFactory.CreateLogWriterWithStack(realMsg, logLevel, stackTrace, subSystem);
-                ManagedLogFile.WriteLog(log);
-            }
-            else
-            {
-                var log = LogWriterFactory.CreateLogWriterWithStack(realMsg, logLevel, stackTrace, (int)UnityNativeSubSystem.Unity_Native_Log);
-                ManagedLogFile.WriteLog(log);
-            }
+            var subSystemNative = (int)UnityNativeSubSystem.Unity_Native_Log;
+            CDebug.LogInternalWithStack(condition, stackTrace, logLevel, null, null, subSystemNative);
         }
 
         [ClassifiedConsole.CDebugSubSystem]

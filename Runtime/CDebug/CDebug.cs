@@ -9,7 +9,32 @@ namespace ClassifiedConsole
 {
     public static class CDebug
     {
-        private static void LogInternal(int skipLine, string msg, LogLevel logLevel, string uid, UnityEngine.Object context, params int[] subSystem)
+        internal static void LogInternalWithStack(string msg, string stack, LogLevel logLevel, string uid, UnityEngine.Object context, params int[] subSystem)
+        {
+            int instanceId = 0;
+            if (context != null)
+            {
+                instanceId = context.GetInstanceID();
+            }
+
+            var logWriter = new LogWriter();
+            var writeLine = CDebugSettings.Instance.GetWriteLine(logLevel);
+            logWriter.msg = LogWriterFactory.BuildLogMsgWithIn(msg, stack, writeLine, out int stackTrackStartIndex).ToString();
+            logWriter.stackTrackStartIndex = msg.Length;
+
+            var writeTask = new ThreadTask();
+            writeTask.Task = () => LogWriterFactory.CreateLogWriter(logWriter, logLevel, uid, instanceId, subSystem);
+            writeTask.callBack = (result) =>
+            {
+                ManagedLogFile.WriteLog((LogWriter)result.result);
+            };
+
+            ManagedLogFile.threadRunner.AddTaskToQueue(writeTask);
+        }
+
+
+
+        internal static void LogInternal(int skipLine, string msg, LogLevel logLevel, string uid, UnityEngine.Object context, params int[] subSystem)
         {
             int instanceId = 0;
             if (context != null)
@@ -107,51 +132,53 @@ namespace ClassifiedConsole
         #region LogException
         public static void LogException(string msg, params int[] subSystem)
         {
-            if (subSystem.Length == 0)
+            if (UnityEngine.Application.isEditor && !UnityEngine.Application.isPlaying)
             {
-                UnityEngine.Debug.LogException(new ClassifiedException(CDebugSubSystemEnumConfig.subSystemNullName, msg), null);
+                var skipLine = CDebugSettings.Instance.stackSkipLine;
+                LogInternal(skipLine, msg, LogLevel.Exception, null, null, subSystem);
+            }
+            else if (UnityEngine.Application.isPlaying && !CDebugSettings.Instance.catchNativeException)
+            {
+                var skipLine = CDebugSettings.Instance.stackSkipLine;
+                LogInternal(skipLine, msg, LogLevel.Exception, null, null, subSystem);
             }
             else
             {
-                UnityEngine.Debug.LogException(new ClassifiedException(subSystem[0], msg), null);
+                if (subSystem.Length == 0)
+                {
+                    UnityEngine.Debug.LogException(new ClassifiedException(CDebugSubSystemEnumConfig.subSystemNullName, msg), null);
+                }
+                else
+                {
+                    UnityEngine.Debug.LogException(new ClassifiedException(subSystem[0], msg), null);
+                }
             }
         }
 
         public static void LogException(string msg, UnityEngine.Object context, params int[] subSystem)
         {
-            if (subSystem.Length == 0)
+            if (UnityEngine.Application.isEditor && !UnityEngine.Application.isPlaying)
             {
-                UnityEngine.Debug.LogException(new ClassifiedException(CDebugSubSystemEnumConfig.subSystemNullName, msg), context);
+                var skipLine = CDebugSettings.Instance.stackSkipLine;
+                LogInternal(skipLine, msg, LogLevel.Exception, null, context, subSystem);
+            }
+            else if (UnityEngine.Application.isPlaying && !CDebugSettings.Instance.catchNativeException)
+            {
+                var skipLine = CDebugSettings.Instance.stackSkipLine;
+                LogInternal(skipLine, msg, LogLevel.Exception, null, context, subSystem);
             }
             else
             {
-                UnityEngine.Debug.LogException(new ClassifiedException(subSystem[0], msg), context);
+                if (subSystem.Length == 0)
+                {
+                    UnityEngine.Debug.LogException(new ClassifiedException(CDebugSubSystemEnumConfig.subSystemNullName, msg), context);
+                }
+                else
+                {
+                    UnityEngine.Debug.LogException(new ClassifiedException(subSystem[0], msg), context);
+                }
             }
         }
-
-        // public static void LogException(int skipLine, string msg, params int[] subSystem)
-        // {
-        //     if (subSystem.Length == 0)
-        //     {
-        //         UnityEngine.Debug.LogException(new ClassifiedException(CDebugSubSystemEnumConfig.subSystemNullName, msg), null);
-        //     }
-        //     else
-        //     {
-        //         UnityEngine.Debug.LogException(new ClassifiedException(subSystem[0], msg), null);
-        //     }
-        // }
-
-        // public static void LogException(int skipLine, string msg, UnityEngine.Object context, params int[] subSystem)
-        // {
-        //     if (subSystem.Length == 0)
-        //     {
-        //         UnityEngine.Debug.LogException(new ClassifiedException(CDebugSubSystemEnumConfig.subSystemNullName, msg), context);
-        //     }
-        //     else
-        //     {
-        //         UnityEngine.Debug.LogException(new ClassifiedException(subSystem[0], msg), context);
-        //     }
-        // }
         #endregion
     }
 }

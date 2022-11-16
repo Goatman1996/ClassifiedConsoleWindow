@@ -30,6 +30,8 @@ namespace ClassifiedConsole.Editor
             left.Add(archiveMenu);
             var collapseToggle = this.CreateCollapseToggle();
             left.Add(collapseToggle);
+            var pauseMenu = this.CreatePauseOnMenu();
+            left.Add(pauseMenu);
             this.archivedLogFileMenu = this.CreateArchivedLogFileMenu();
             left.Add(this.archivedLogFileMenu);
             var remoteMenu = new ConsoleRemoteMenu();
@@ -91,6 +93,31 @@ namespace ClassifiedConsole.Editor
 
             collapseToggle.SetValueWithoutNotify(CDebugConfig.Collapse);
             return collapseToggle;
+        }
+
+        private ToolbarMenu CreatePauseOnMenu()
+        {
+            var pauseOnMenu = new ToolbarMenu();
+            pauseOnMenu.style.flexShrink = 0;
+            pauseOnMenu.text = "PauseOn...";
+            pauseOnMenu.menu.AppendAction(nameof(CDebugConfig.PauseOnError),
+            (act) => CDebugConfig.PauseOnError = !CDebugConfig.PauseOnError,
+            (act =>
+            {
+                var isOn = CDebugConfig.PauseOnError;
+                if (isOn) return DropdownMenuAction.Status.Checked;
+                else return DropdownMenuAction.Status.Normal;
+            }));
+            pauseOnMenu.menu.AppendAction(nameof(CDebugConfig.PauseOnException),
+            (act) => CDebugConfig.PauseOnException = !CDebugConfig.PauseOnException,
+            (act =>
+            {
+                var isOn = CDebugConfig.PauseOnException;
+                if (isOn) return DropdownMenuAction.Status.Checked;
+                else return DropdownMenuAction.Status.Normal;
+            }));
+
+            return pauseOnMenu;
         }
 
         private ToolbarSearchField CreateSearchBar()

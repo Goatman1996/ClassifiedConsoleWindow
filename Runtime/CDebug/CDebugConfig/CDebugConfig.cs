@@ -8,11 +8,6 @@ namespace ClassifiedConsole.Runtime
 {
     public class CDebugConfig
     {
-        private static Guid _ToEditorGUID = new Guid(13, 17, 3, 3, 2, 3, 5, 6, 2, 3, 5);
-        public static Guid ToEditorGUID => _ToEditorGUID;
-        private static Guid _ToPlayerGUID = new Guid(4, 2, 1, 3, 2, 3, 5, 6, 2, 3, 1);
-        public static Guid ToPlayerGUID => _ToPlayerGUID;
-
         public static bool ArchiveOnPlay
         {
             get
@@ -116,7 +111,7 @@ namespace ClassifiedConsole.Runtime
             }
         }
 
-        public static bool? _ShowException;
+        private static bool? _ShowException;
         public static bool ShowException
         {
             get
@@ -134,6 +129,46 @@ namespace ClassifiedConsole.Runtime
                 PlayerPrefs.SetInt("CDebugConfig.ShowException", intValue);
                 _ShowException = value;
                 needShowLogLevelVersion++;
+            }
+        }
+
+        private static bool? _PauseOnError;
+        public static bool PauseOnError
+        {
+            get
+            {
+                if (_PauseOnError == null)
+                {
+                    var value = PlayerPrefs.GetInt("CDebugConfig.PauseOnError", 0);
+                    _PauseOnError = value == 1;
+                }
+                return _PauseOnError.Value;
+            }
+            set
+            {
+                var intValue = value ? 1 : 0;
+                PlayerPrefs.SetInt("CDebugConfig.PauseOnError", intValue);
+                _PauseOnError = value;
+            }
+        }
+
+        private static bool? _PauseOnException;
+        public static bool PauseOnException
+        {
+            get
+            {
+                if (_PauseOnException == null)
+                {
+                    var value = PlayerPrefs.GetInt("CDebugConfig.PauseOnException", 0);
+                    _PauseOnException = value == 1;
+                }
+                return _PauseOnException.Value;
+            }
+            set
+            {
+                var intValue = value ? 1 : 0;
+                PlayerPrefs.SetInt("CDebugConfig.PauseOnException", intValue);
+                _PauseOnException = value;
             }
         }
 

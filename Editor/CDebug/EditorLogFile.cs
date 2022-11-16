@@ -374,14 +374,21 @@ namespace ClassifiedConsole.Editor
             var targetLogCount = this.targetLogFile.logCount;
             var currentIndex = this.logReaderIndexList.Count;
 
+            bool needPause = false;
             if (targetLogCount > currentIndex)
             {
                 for (int i = currentIndex; i < targetLogCount; i++)
                 {
-                    this.OnAppendLogInternal(i);
+                    needPause = needPause || this.OnAppendLogInternal(i);
                 }
 
                 this.OnEditorLogFileRefresh?.Invoke();
+
+                if (needPause && UnityEngine.Application.isPlaying)
+                {
+                    ClassifiedConsoleWindow.windowRoot.MarkDirtyImmediatly();
+                    UnityEditor.EditorApplication.isPaused = true;
+                }
             }
         }
 
@@ -390,7 +397,7 @@ namespace ClassifiedConsole.Editor
             this.RefreshShowingList();
         }
 
-        private void OnAppendLogInternal(int index)
+        private bool OnAppendLogInternal(int index)
         {
             var logReader = this.targetLogFile[index];
             this.logReaderIndexList.Add(index);
@@ -399,22 +406,19 @@ namespace ClassifiedConsole.Editor
             var subSystems = logReader.subSystem;
             var level = logReader.level;
             this.Collect_System_LogCount(level, subSystems);
-            // foreach (var subSystem in subSystems)
-            // {
-            //     if (!this.subSystemLogCount.ContainsKey(subSystem))
-            //     {
-            //         this.subSystemLogCount[subSystem] = 0;
-            //     }
-            //     this.subSystemLogCount[subSystem] += 1;
-            // }
+            if (level == LogLevel.Error && CDebugConfig.PauseOnError)
+            {
+                return true;
+            }
+            if (level == LogLevel.Exception && CDebugConfig.PauseOnException)
+            {
+                return true;
+            }
+            return false;
         }
 
         private void RefreshShowingList()
         {
-            // this.subSystem_Log_Count.Clear();
-            // this.subSystem_Warning_Count.Clear();
-            // this.subSystem_Error_Count.Clear();
-            // this.subSystem_Exception_Count.Clear();
             this.logCount = 0;
             this.warningCount = 0;
             this.errorCount = 0;

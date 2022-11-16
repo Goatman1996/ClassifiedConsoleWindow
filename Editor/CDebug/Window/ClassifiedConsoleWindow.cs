@@ -63,6 +63,12 @@ namespace ClassifiedConsole.Editor
             this.isDirty = true;
         }
 
+        public void MarkDirtyImmediatly()
+        {
+            this.MarkDirty();
+            this.dirtyDelay = 0;
+        }
+
         private int dirtyDelay = 0;
         private void Update()
         {
@@ -102,7 +108,7 @@ namespace ClassifiedConsole.Editor
             this.mainConsole.logLayout.lastClick = null;
             this.mainConsole.logDetail.ClearMsg();
             this.topBar.RefreshHistoryMenuItem();
-            this.MarkDirty();
+            this.MarkDirtyImmediatly();
         }
 
         public void TryLoadHistoryLogFile(int logFileId)

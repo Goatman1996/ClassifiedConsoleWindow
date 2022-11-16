@@ -120,38 +120,44 @@ namespace ClassifiedConsole.Runtime
             return filePath;
         }
 
-        public static LogWriter CreateLogWriterWithStack(string msg, LogLevel logLevel, string stackTrack, params int[] subSystem)
-        {
-            var log = new LogWriter();
-            log.uid = null;
-            if (subSystem.Length == 0)
-            {
-                subSystem = new int[] { CDebugSubSystemEnumConfig.subSystemNullName };
-            }
-            log.logSubSystem = subSystem;
-            if (CDebugSettings.Instance.SplitLogFile)
-            {
-                log.logFileName = CDebugSubSystemEnumConfig.GetSubSystemName(subSystem[0]);
-            }
-            else
-            {
-                var systemId = CDebugSubSystemEnumConfig.subSystemNullName;
-                log.logFileName = CDebugSubSystemEnumConfig.GetSubSystemName(systemId);
-            }
-            log.level = logLevel;
-            var nowTs = DateTime.Now - new DateTime(1970, 1, 1, 0, 0, 0);
-            log.time = (long)(nowTs.TotalSeconds);
-            var writeLine = CDebugSettings.Instance.GetWriteLine(logLevel);
-            log.msg = BuildLogMsgWithIn(msg, stackTrack, writeLine, out int stackTrackStartIndex).ToString();
-            log.stackTrackStartIndex = stackTrackStartIndex;
-            return log;
-        }
+        // public static LogWriter CreateLogWriterWithStack(string msg, LogLevel logLevel, string stackTrack, params int[] subSystem)
+        // {
+        //     var log = new LogWriter();
+        //     log.uid = null;
+        //     if (subSystem.Length == 0)
+        //     {
+        //         subSystem = new int[] { CDebugSubSystemEnumConfig.subSystemNullName };
+        //     }
+        //     log.logSubSystem = subSystem;
+        //     if (CDebugSettings.Instance.SplitLogFile)
+        //     {
+        //         log.logFileName = CDebugSubSystemEnumConfig.GetSubSystemName(subSystem[0]);
+        //     }
+        //     else
+        //     {
+        //         var systemId = CDebugSubSystemEnumConfig.subSystemNullName;
+        //         log.logFileName = CDebugSubSystemEnumConfig.GetSubSystemName(systemId);
+        //     }
+        //     log.level = logLevel;
+        //     var nowTs = DateTime.Now - new DateTime(1970, 1, 1, 0, 0, 0);
+        //     log.time = (long)(nowTs.TotalSeconds);
+        //     var writeLine = CDebugSettings.Instance.GetWriteLine(logLevel);
+        //     log.msg = BuildLogMsgWithIn(msg, stackTrack, writeLine, out int stackTrackStartIndex).ToString();
+        //     log.stackTrackStartIndex = stackTrackStartIndex;
+        //     return log;
+        // }
 
-        private static StringBuilder BuildLogMsgWithIn(string msg, string stack, int msgLineCount, out int stackTrackStartIndex)
+        public static StringBuilder BuildLogMsgWithIn(string msg, string stack, int msgLineCount, out int stackTrackStartIndex)
         {
             strackBuilder.Clear();
             strackBuilder.AppendLine(msg);
             stackTrackStartIndex = strackBuilder.Length;
+
+            if (msgLineCount == -1)
+            {
+                strackBuilder.Append(stack);
+                return strackBuilder;
+            }
 
             var lines = stack.Split('\n');
 
