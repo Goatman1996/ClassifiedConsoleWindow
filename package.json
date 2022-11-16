@@ -1,6 +1,6 @@
 {
     "name": "com.gm.classifiedconsolewindow",
-    "version": "0.0.8",
+    "version": "0.0.9",
     "displayName": "Classified Console Window",
     "description": "Unity Classified Console Window",
     "unity": "2020.3",
@@ -10,6 +10,6 @@
         "url": "https://github.com/Goatman1996/"
     },
     "dependencies": {
-        "com.gm.httpremoteconnector": "0.0.4"
+        "com.gm.httpremoteconnector": "0.0.5"
     }
 }
