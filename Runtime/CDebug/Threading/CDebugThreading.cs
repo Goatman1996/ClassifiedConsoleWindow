@@ -26,6 +26,7 @@ namespace ClassifiedConsole.Runtime
             if (UnityEngine.Application.isEditor == false)
             {
                 var go = new GameObject();
+                go.name = nameof(ForThreadOnGameExit);
                 var exitEvt = go.AddComponent<ForThreadOnGameExit>();
                 exitEvt.OnDestroyEvt += this.OnDestroy;
                 GameObject.DontDestroyOnLoad(go);
