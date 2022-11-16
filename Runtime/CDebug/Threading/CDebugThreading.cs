@@ -5,7 +5,7 @@ using System.Threading;
 using System;
 using System.Threading.Tasks;
 
-namespace ClassifiedConsole
+namespace ClassifiedConsole.Runtime
 {
     public class CDebugThreading
     {
