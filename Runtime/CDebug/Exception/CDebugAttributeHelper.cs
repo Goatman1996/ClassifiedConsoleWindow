@@ -85,11 +85,6 @@ namespace ClassifiedConsole
                 if (msg.StartsWith(exceptionName))
                 {
                     var spliter = msg.Split(':');
-
-                    foreach (var s in spliter)
-                    {
-                        UnityEngine.Debug.Log(s);
-                    }
                     if (spliter.Length >= 2 && int.TryParse(spliter[1], out int targetSubSystem))
                     {
                         subSystem = targetSubSystem;
