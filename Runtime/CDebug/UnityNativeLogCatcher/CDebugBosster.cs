@@ -54,10 +54,16 @@ namespace ClassifiedConsole
                     break;
             }
 
-            var isClassifiedException = condition.StartsWith(nameof(ClassifiedException));
-            if (isClassifiedException == false)
+            var IsClassifiedException = CDebugAttributeHelper.IsClassifiedException(condition, out int subSystem, out string realMsg);
+
+            if (IsClassifiedException)
             {
-                var log = LogWriterFactory.CreateLogWriterWithStack(condition, logLevel, stackTrace, (int)UnityNativeSubSystem.Unity_Native_Log);
+                var log = LogWriterFactory.CreateLogWriterWithStack(realMsg, logLevel, stackTrace, subSystem);
+                ManagedLogFile.WriteLog(log);
+            }
+            else
+            {
+                var log = LogWriterFactory.CreateLogWriterWithStack(realMsg, logLevel, stackTrace, (int)UnityNativeSubSystem.Unity_Native_Log);
                 ManagedLogFile.WriteLog(log);
             }
         }

@@ -142,11 +142,6 @@ namespace ClassifiedConsole.Runtime
             var nowTs = DateTime.Now - new DateTime(1970, 1, 1, 0, 0, 0);
             log.time = (long)(nowTs.TotalSeconds);
             var writeLine = CDebugSettings.Instance.GetWriteLine(logLevel);
-            if (writeLine != -1)
-            {
-                // 从Unity Native 里来的Log，如果不是不限制栈行数的话，就多加一行，才能看到第一个栈信息
-                writeLine++;
-            }
             log.msg = BuildLogMsgWithIn(msg, stackTrack, writeLine, out int stackTrackStartIndex).ToString();
             log.stackTrackStartIndex = stackTrackStartIndex;
             return log;
