@@ -50,8 +50,7 @@ namespace ClassifiedConsole
                     logLevel = LogLevel.Exception;
                     break;
                 default:
-                    logLevel = LogLevel.Log;
-                    break;
+                    return;
             }
 
             var IsClassifiedException = CDebugAttributeHelper.IsClassifiedException(condition, out int subSystem, out string realMsg);
