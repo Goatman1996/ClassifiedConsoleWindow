@@ -8,6 +8,12 @@ namespace ClassifiedConsole.Editor
 {
     internal class ClassifiedConsoleWindow : EditorWindow
     {
+        [UnityEngine.RuntimeInitializeOnLoadMethod]
+        private static void FocusConsoleIfOpen()
+        {
+            EditorWindow.FocusWindowIfItsOpen<ClassifiedConsoleWindow>();
+        }
+
         public static ClassifiedConsoleWindow windowRoot;
 
         private bool isRemote = false;
