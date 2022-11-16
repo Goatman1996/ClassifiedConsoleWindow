@@ -76,9 +76,9 @@ namespace ClassifiedConsole.Editor
                 this.rootView.Add(field);
             }
             {
-                var field = this.CreateSkipLineField(out HelpBox helpBox);
-                this.rootView.Add(helpBox);
-                this.rootView.Add(field);
+                // var field = this.CreateSkipLineField(out HelpBox helpBox);
+                // this.rootView.Add(helpBox);
+                // this.rootView.Add(field);
             }
             {
                 var field = this.CreateAssemblyFiled(out HelpBox helpBox);
@@ -280,7 +280,7 @@ namespace ClassifiedConsole.Editor
                 CDebugSettings.Instance.subSystemDefinedAssembly = evt.newValue;
                 CDebugSettings.Instance.SaveAndRefreshAssets();
             });
-            helpBox = new HelpBox("所有包含定义了【ClassifiedConsole.CDebugSubSystem】枚举的程序集名称", HelpBoxMessageType.Info);
+            helpBox = new HelpBox("所有包含定义了【ClassifiedConsole.CDebugSubSystem & CDebugException】属性的程序集名称", HelpBoxMessageType.Info);
             return filed;
         }
     }
