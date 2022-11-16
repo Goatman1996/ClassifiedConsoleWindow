@@ -137,8 +137,8 @@ namespace ClassifiedConsole
             set
             {
                 return;
-                var newValue = Mathf.Clamp(value, 3, int.MaxValue);
-                this._stackSkipLine = newValue;
+                // var newValue = Mathf.Clamp(value, 3, int.MaxValue);
+                // this._stackSkipLine = newValue;
             }
         }
         /// <summary>
