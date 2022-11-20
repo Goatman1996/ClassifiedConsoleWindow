@@ -47,7 +47,6 @@ namespace ClassifiedConsole.Runtime
             writer.WriteLine(this.logFileName);
         }
 
-        private const char a = 'a';
         public bool IsBrokenReader = false;
         public static LogReader Parse(string line)
         {
