@@ -85,7 +85,7 @@ namespace ClassifiedConsole.Editor
                 {
                     this.RenderConsole();
                     this.isDirty = false;
-                    dirtyDelay = 30;
+                    dirtyDelay = CDebugSettings.Instance.windowFPS;
                 }
             }
         }

@@ -146,6 +146,25 @@ namespace ClassifiedConsole
         /// </summary>
         public string subSystemDefinedAssembly = "Assembly-CSharp";
 
+        [SerializeField] private int _windowFPS = 30;
+        public int windowFPS
+        {
+            get
+            {
+                return Mathf.Clamp(this._windowFPS, 5, 60);
+            }
+        }
+
+        [SerializeField] private int _limitLogCount = (100 * 100) * 10;
+        public int limitLogCount
+        {
+            get
+            {
+                // 1万 ~ 100万
+                return Mathf.Clamp(this._limitLogCount, 10000, 1000000);
+            }
+        }
+
         private static CDebugSettings Load()
         {
             var textAsset = Resources.Load<TextAsset>("CDebugSettings");
