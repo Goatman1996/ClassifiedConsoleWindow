@@ -23,49 +23,28 @@ namespace ClassifiedConsole.Runtime
             {
                 return null;
             }
-            var logIndexer = new LogReader();
-            logIndexer.logFileName = this.logFileName;
-            logIndexer.stackTrackStartIndex = this.stackTrackStartIndex;
+            var logReader = new LogReader();
+            logReader.logFileName = this.logFileName;
+            logReader.stackTrackStartIndex = this.stackTrackStartIndex;
 
             writer.BaseStream.Position = writer.BaseStream.Length;
 
             // InstanceId
-            logIndexer.instanceIdIndex = this.WriteGetLastIndex(writer, LogReader.INSTANCEID);
-            writer.WriteLine(this.instanceId);
-
+            logReader.instanceId = this.instanceId;
             // SUBSYSTEM
-            logIndexer.subSystemIndex = this.WriteGetLastIndex(writer, LogReader.SUBSYSTEM);
-            foreach (var system in this.logSubSystem)
-            {
-                writer.WriteLine(system);
-            }
-
+            logReader.subSystem = this.logSubSystem;
             // LEVEL
-            logIndexer.levelIndex = this.WriteGetLastIndex(writer, LogReader.LEVEL);
-            writer.WriteLine(((int)this.level).ToString());
-
+            logReader.level = this.level;
             // TIME
-            logIndexer.timeIndex = this.WriteGetLastIndex(writer, LogReader.TIME);
-            writer.WriteLine(this.time.ToString());
-
+            logReader.timeSpan = this.time;
             // MSG
-            logIndexer.msgIndex = this.WriteGetLastIndex(writer, LogReader.MSG);
+            logReader.msgIndex = writer.BaseStream.Position;
             writer.WriteLine(this.msg);
-
-            // END
             writer.WriteLine(LogReader.END);
-            writer.WriteLine("");
 
             writer.Flush();
 
-            return logIndexer;
-        }
-
-        private long WriteGetLastIndex(StreamWriter writer, string content)
-        {
-            writer.WriteLine(content);
-            writer.Flush();
-            return writer.BaseStream.Position;
+            return logReader;
         }
     }
 }

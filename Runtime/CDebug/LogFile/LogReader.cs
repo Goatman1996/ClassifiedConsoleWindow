@@ -8,14 +8,10 @@ namespace ClassifiedConsole.Runtime
 {
     public class LogReader
     {
-        public const string INSTANCEID = "#InstanceId";
-        public long instanceIdIndex;
-        public const string SUBSYSTEM = "#SubSystem";
-        public long subSystemIndex;
-        public const string LEVEL = "#Level";
-        public long levelIndex;
-        public const string TIME = "#Time";
-        public long timeIndex;
+        public int instanceId;
+        public int[] subSystem;
+        public LogLevel level;
+        public long timeSpan;
         public const string MSG = "#Msg";
         public long msgIndex;
         public const string END = "#End";
@@ -23,30 +19,53 @@ namespace ClassifiedConsole.Runtime
         public int stackTrackStartIndex;
         public string logFileName;
 
-        private const string spliter = "_";
+        private const char baseSpliter = '_';
+        private const char subSystemSpliter = ',';
         public void Write(StreamWriter writer)
         {
             writer.BaseStream.Position = writer.BaseStream.Length;
-            writer.Write(this.instanceIdIndex); writer.Write(spliter);
-            writer.Write(this.subSystemIndex); writer.Write(spliter);
-            writer.Write(this.levelIndex); writer.Write(spliter);
-            writer.Write(this.timeIndex); writer.Write(spliter);
-            writer.Write(this.msgIndex); writer.Write(spliter);
-            writer.Write(this.stackTrackStartIndex); writer.Write(spliter);
+            writer.Write(this.instanceId); writer.Write(baseSpliter);
+
+            for (int i = 0; i < this.subSystem.Length; i++)
+            {
+                var sub = this.subSystem[i];
+                writer.Write(sub);
+                if (i != this.subSystem.Length - 1)
+                {
+                    writer.Write(subSystemSpliter);
+                }
+                else
+                {
+                    writer.Write(baseSpliter);
+                }
+            }
+
+            writer.Write(((int)this.level)); writer.Write(baseSpliter);
+            writer.Write(this.timeSpan); writer.Write(baseSpliter);
+            writer.Write(this.msgIndex); writer.Write(baseSpliter);
+            writer.Write(this.stackTrackStartIndex); writer.Write(baseSpliter);
             writer.WriteLine(this.logFileName);
         }
 
+        private const char a = 'a';
         public bool IsBrokenReader = false;
         public static LogReader Parse(string line)
         {
             try
             {
-                var spliter = line.Split('_');
+                var spliter = line.Split(baseSpliter);
                 var reader = new LogReader();
-                reader.instanceIdIndex = long.Parse(spliter[0]);
-                reader.subSystemIndex = long.Parse(spliter[1]);
-                reader.levelIndex = long.Parse(spliter[2]);
-                reader.timeIndex = long.Parse(spliter[3]);
+                reader.instanceId = int.Parse(spliter[0]);
+                {
+                    var subSystemStringArray = spliter[1].Split(subSystemSpliter);
+                    reader.subSystem = new int[subSystemStringArray.Length];
+                    for (int i = 0; i < subSystemStringArray.Length; i++)
+                    {
+                        reader.subSystem[i] = int.Parse(subSystemStringArray[i]);
+                    }
+                }
+                reader.level = (LogLevel)int.Parse(spliter[2]);
+                reader.timeSpan = long.Parse(spliter[3]);
                 reader.msgIndex = long.Parse(spliter[4]);
                 reader.stackTrackStartIndex = int.Parse(spliter[5]);
 
@@ -79,76 +98,6 @@ namespace ClassifiedConsole.Runtime
 
         public LogIO logIO { private get; set; }
 
-        private int? _instanceId;
-        public int instanceId
-        {
-            get
-            {
-                if (this.IsBrokenReader) return default;
-                if (this._instanceId == null)
-                {
-                    var instanceIdContext = this.logIO.ReadLog(this.instanceIdIndex, SUBSYSTEM);
-                    this._instanceId = int.Parse(instanceIdContext);
-                }
-                return this._instanceId.Value;
-            }
-        }
-
-        private int[] _subSystem;
-        public int[] subSystem
-        {
-            get
-            {
-                if (this.IsBrokenReader && this._subSystem == null)
-                {
-                    this._subSystem = new int[] { CDebugSubSystemEnumConfig.subSystemNullName };
-                }
-                if (this._subSystem == null)
-                {
-                    var content = this.logIO.ReadLog(this.subSystemIndex, LEVEL);
-                    var spliter = content.Split('\n');
-                    this._subSystem = new int[spliter.Length];
-                    for (int i = 0; i < spliter.Length; i++)
-                    {
-                        var line = spliter[i];
-                        this._subSystem[i] = int.Parse(line);
-                    }
-                }
-                return this._subSystem;
-            }
-        }
-
-        private int _level = -1;
-        public LogLevel level
-        {
-            get
-            {
-                if (this.IsBrokenReader) return LogLevel.Error;
-                if (this._level == -1)
-                {
-                    var content = this.logIO.ReadLog(this.levelIndex, TIME);
-                    var contentInt = int.Parse(content);
-                    this._level = contentInt;
-                }
-                return (LogLevel)this._level;
-            }
-        }
-
-        private long? _timeTick;
-        private long timeTick
-        {
-            get
-            {
-                if (this.IsBrokenReader) return default;
-                if (this._timeTick == null)
-                {
-                    var content = this.logIO.ReadLog(this.timeIndex, MSG);
-                    this._timeTick = long.Parse(content);
-                }
-                return this._timeTick.Value;
-            }
-        }
-
         private DateTime? _time;
         public DateTime time
         {
@@ -158,7 +107,7 @@ namespace ClassifiedConsole.Runtime
                 if (this._time == null)
                 {
                     var startTime = new DateTime(1970, 1, 1, 0, 0, 0);
-                    this._time = startTime.AddSeconds(this.timeTick);
+                    this._time = startTime.AddSeconds(this.timeSpan);
                 }
                 return this._time.Value;
             }
@@ -237,7 +186,7 @@ namespace ClassifiedConsole.Runtime
             remoteLog.instanceId = this.instanceId;
             remoteLog.logSubSystem = this.subSystem;
             remoteLog.level = this.level;
-            remoteLog.time = this.timeTick;
+            remoteLog.time = this.timeSpan;
             remoteLog.msg = this.msg;
             remoteLog.stackTrackStartIndex = this.stackTrackStartIndex;
             remoteLog.logFileName = this.logFileName;
