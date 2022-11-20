@@ -179,5 +179,21 @@ namespace ClassifiedConsole.Runtime
             var isExists = Directory.Exists(logFilePath);
             return isKeep && isExists;
         }
+
+        public static void CleanUpManagedLogFile()
+        {
+            foreach (var kv in logFileDic)
+            {
+                kv.Value.ReleaseIO();
+            }
+            logFileDic.Clear();
+            var logDir = Path.GetFullPath(Application.persistentDataPath + $"/Log");
+            if (Directory.Exists(logDir))
+            {
+                Directory.Delete(logDir, true);
+            }
+
+            ManagedLogFile.OnCurrentLogFileChanged?.Invoke();
+        }
     }
 }

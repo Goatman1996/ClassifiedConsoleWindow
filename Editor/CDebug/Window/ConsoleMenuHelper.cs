@@ -22,5 +22,11 @@ namespace ClassifiedConsole.Editor
             var path = UnityEngine.Application.persistentDataPath;
             EditorUtility.OpenWithDefaultApp(path);
         }
+
+        [MenuItem("Window/Classified/CleanArchive", false, 6)]
+        private static void CleanArchive()
+        {
+            ClassifiedConsole.Runtime.ManagedLogFile.CleanUpManagedLogFile();
+        }
     }
 }
