@@ -6,9 +6,8 @@ namespace ClassifiedConsole.Runtime
     internal class LogWriterFactory
     {
         private static StringBuilder strackBuilder = new StringBuilder();
-        public static LogWriter CreateLogWriter(LogWriter logWriter, LogLevel logLevel, string uid, int instanceId, params int[] subSystem)
+        public static LogWriter CreateLogWriter(LogWriter logWriter, LogLevel logLevel, int instanceId, params int[] subSystem)
         {
-            logWriter.uid = uid;
             logWriter.instanceId = instanceId;
             if (subSystem.Length == 0)
             {

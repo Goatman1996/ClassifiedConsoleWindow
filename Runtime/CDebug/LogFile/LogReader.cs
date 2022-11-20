@@ -8,8 +8,6 @@ namespace ClassifiedConsole.Runtime
 {
     public class LogReader
     {
-        public const string UID = "#Uid";
-        public long uidIndex;
         public const string INSTANCEID = "#InstanceId";
         public long instanceIdIndex;
         public const string SUBSYSTEM = "#SubSystem";
@@ -29,7 +27,6 @@ namespace ClassifiedConsole.Runtime
         public void Write(StreamWriter writer)
         {
             writer.BaseStream.Position = writer.BaseStream.Length;
-            writer.Write(this.uidIndex); writer.Write(spliter);
             writer.Write(this.instanceIdIndex); writer.Write(spliter);
             writer.Write(this.subSystemIndex); writer.Write(spliter);
             writer.Write(this.levelIndex); writer.Write(spliter);
@@ -46,17 +43,16 @@ namespace ClassifiedConsole.Runtime
             {
                 var spliter = line.Split('_');
                 var reader = new LogReader();
-                reader.uidIndex = long.Parse(spliter[0]);
-                reader.instanceIdIndex = long.Parse(spliter[1]);
-                reader.subSystemIndex = long.Parse(spliter[2]);
-                reader.levelIndex = long.Parse(spliter[3]);
-                reader.timeIndex = long.Parse(spliter[4]);
-                reader.msgIndex = long.Parse(spliter[5]);
-                reader.stackTrackStartIndex = int.Parse(spliter[6]);
+                reader.instanceIdIndex = long.Parse(spliter[0]);
+                reader.subSystemIndex = long.Parse(spliter[1]);
+                reader.levelIndex = long.Parse(spliter[2]);
+                reader.timeIndex = long.Parse(spliter[3]);
+                reader.msgIndex = long.Parse(spliter[4]);
+                reader.stackTrackStartIndex = int.Parse(spliter[5]);
 
                 // SubSystem中可能会带有“_”，特殊处理
                 reader.logFileName = "";
-                for (int s = 7; s < spliter.Length; s++)
+                for (int s = 6; s < spliter.Length; s++)
                 {
                     reader.logFileName += spliter[s];
                     reader.logFileName += "_";
@@ -82,20 +78,6 @@ namespace ClassifiedConsole.Runtime
         }
 
         public LogIO logIO { private get; set; }
-
-        private string _uid;
-        public string uid
-        {
-            get
-            {
-                if (this.IsBrokenReader) return default;
-                if (this._uid == null)
-                {
-                    this._uid = this.logIO.ReadLog(this.uidIndex, INSTANCEID);
-                }
-                return this._uid;
-            }
-        }
 
         private int? _instanceId;
         public int instanceId
@@ -252,7 +234,6 @@ namespace ClassifiedConsole.Runtime
         {
             var remoteLog = new LogWriter();
 
-            remoteLog.uid = this.uid;
             remoteLog.instanceId = this.instanceId;
             remoteLog.logSubSystem = this.subSystem;
             remoteLog.level = this.level;

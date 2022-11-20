@@ -8,7 +8,6 @@ namespace ClassifiedConsole.Runtime
     [Serializable]
     public struct LogWriter
     {
-        public string uid;
         public int instanceId;
         public int[] logSubSystem;
         public LogLevel level;
@@ -29,10 +28,6 @@ namespace ClassifiedConsole.Runtime
             logIndexer.stackTrackStartIndex = this.stackTrackStartIndex;
 
             writer.BaseStream.Position = writer.BaseStream.Length;
-
-            // UID
-            logIndexer.uidIndex = this.WriteGetLastIndex(writer, LogReader.UID);
-            writer.WriteLine(this.uid);
 
             // InstanceId
             logIndexer.instanceIdIndex = this.WriteGetLastIndex(writer, LogReader.INSTANCEID);

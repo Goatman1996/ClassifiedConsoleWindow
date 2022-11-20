@@ -9,7 +9,7 @@ namespace ClassifiedConsole
 {
     public static class CDebug
     {
-        internal static void LogInternalWithStack(string msg, string stack, LogLevel logLevel, string uid, UnityEngine.Object context, params int[] subSystem)
+        internal static void LogInternalWithStack(string msg, string stack, LogLevel logLevel, UnityEngine.Object context, params int[] subSystem)
         {
             int instanceId = 0;
             if (context != null)
@@ -23,7 +23,7 @@ namespace ClassifiedConsole
             logWriter.stackTrackStartIndex = msg.Length;
 
             var writeTask = new ThreadTask();
-            writeTask.Task = () => LogWriterFactory.CreateLogWriter(logWriter, logLevel, uid, instanceId, subSystem);
+            writeTask.Task = () => LogWriterFactory.CreateLogWriter(logWriter, logLevel, instanceId, subSystem);
             writeTask.callBack = (result) =>
             {
                 ManagedLogFile.WriteLog((LogWriter)result.result);
@@ -34,7 +34,7 @@ namespace ClassifiedConsole
 
 
 
-        internal static void LogInternal(int skipLine, string msg, LogLevel logLevel, string uid, UnityEngine.Object context, params int[] subSystem)
+        internal static void LogInternal(int skipLine, string msg, LogLevel logLevel, UnityEngine.Object context, params int[] subSystem)
         {
             int instanceId = 0;
             if (context != null)
@@ -48,7 +48,7 @@ namespace ClassifiedConsole
             logWriter.stackTrackStartIndex = msg.Length;
 
             var writeTask = new ThreadTask();
-            writeTask.Task = () => LogWriterFactory.CreateLogWriter(logWriter, logLevel, uid, instanceId, subSystem);
+            writeTask.Task = () => LogWriterFactory.CreateLogWriter(logWriter, logLevel, instanceId, subSystem);
             writeTask.callBack = (result) =>
             {
                 ManagedLogFile.WriteLog((LogWriter)result.result);
@@ -61,23 +61,23 @@ namespace ClassifiedConsole
         public static void Log(string msg, params int[] subSystem)
         {
             var skipLine = CDebugSettings.Instance.stackSkipLine;
-            LogInternal(skipLine, msg, LogLevel.Log, null, null, subSystem);
+            LogInternal(skipLine, msg, LogLevel.Log, null, subSystem);
         }
 
         public static void Log(string msg, UnityEngine.Object context, params int[] subSystem)
         {
             var skipLine = CDebugSettings.Instance.stackSkipLine;
-            LogInternal(skipLine, msg, LogLevel.Log, null, context, subSystem);
+            LogInternal(skipLine, msg, LogLevel.Log, context, subSystem);
         }
 
         public static void Log(int skipLine, string msg, params int[] subSystem)
         {
-            LogInternal(skipLine, msg, LogLevel.Log, null, null, subSystem);
+            LogInternal(skipLine, msg, LogLevel.Log, null, subSystem);
         }
 
         public static void Log(int skipLine, string msg, UnityEngine.Object context, params int[] subSystem)
         {
-            LogInternal(skipLine, msg, LogLevel.Log, null, context, subSystem);
+            LogInternal(skipLine, msg, LogLevel.Log, context, subSystem);
         }
         #endregion
 
@@ -85,23 +85,23 @@ namespace ClassifiedConsole
         public static void LogWarning(string msg, params int[] subSystem)
         {
             var skipLine = CDebugSettings.Instance.stackSkipLine;
-            LogInternal(skipLine, msg, LogLevel.Warning, null, null, subSystem);
+            LogInternal(skipLine, msg, LogLevel.Warning, null, subSystem);
         }
 
         public static void LogWarning(string msg, UnityEngine.Object context, params int[] subSystem)
         {
             var skipLine = CDebugSettings.Instance.stackSkipLine;
-            LogInternal(skipLine, msg, LogLevel.Warning, null, context, subSystem);
+            LogInternal(skipLine, msg, LogLevel.Warning, context, subSystem);
         }
 
         public static void LogWarning(int skipLine, string msg, params int[] subSystem)
         {
-            LogInternal(skipLine, msg, LogLevel.Warning, null, null, subSystem);
+            LogInternal(skipLine, msg, LogLevel.Warning, null, subSystem);
         }
 
         public static void LogWarning(int skipLine, string msg, UnityEngine.Object context, params int[] subSystem)
         {
-            LogInternal(skipLine, msg, LogLevel.Warning, null, context, subSystem);
+            LogInternal(skipLine, msg, LogLevel.Warning, context, subSystem);
         }
         #endregion
 
@@ -109,23 +109,23 @@ namespace ClassifiedConsole
         public static void LogError(string msg, params int[] subSystem)
         {
             var skipLine = CDebugSettings.Instance.stackSkipLine;
-            LogInternal(skipLine, msg, LogLevel.Error, null, null, subSystem);
+            LogInternal(skipLine, msg, LogLevel.Error, null, subSystem);
         }
 
         public static void LogError(string msg, UnityEngine.Object context, params int[] subSystem)
         {
             var skipLine = CDebugSettings.Instance.stackSkipLine;
-            LogInternal(skipLine, msg, LogLevel.Error, null, context, subSystem);
+            LogInternal(skipLine, msg, LogLevel.Error, context, subSystem);
         }
 
         public static void LogError(int skipLine, string msg, params int[] subSystem)
         {
-            LogInternal(skipLine, msg, LogLevel.Error, null, null, subSystem);
+            LogInternal(skipLine, msg, LogLevel.Error, null, subSystem);
         }
 
         public static void LogError(int skipLine, string msg, UnityEngine.Object context, params int[] subSystem)
         {
-            LogInternal(skipLine, msg, LogLevel.Error, null, context, subSystem);
+            LogInternal(skipLine, msg, LogLevel.Error, context, subSystem);
         }
         #endregion
 
@@ -135,12 +135,12 @@ namespace ClassifiedConsole
             if (UnityEngine.Application.isEditor && !UnityEngine.Application.isPlaying)
             {
                 var skipLine = CDebugSettings.Instance.stackSkipLine;
-                LogInternal(skipLine, msg, LogLevel.Exception, null, null, subSystem);
+                LogInternal(skipLine, msg, LogLevel.Exception, null, subSystem);
             }
             else if (UnityEngine.Application.isPlaying && !CDebugSettings.Instance.catchNativeException)
             {
                 var skipLine = CDebugSettings.Instance.stackSkipLine;
-                LogInternal(skipLine, msg, LogLevel.Exception, null, null, subSystem);
+                LogInternal(skipLine, msg, LogLevel.Exception, null, subSystem);
             }
             else
             {
@@ -160,12 +160,12 @@ namespace ClassifiedConsole
             if (UnityEngine.Application.isEditor && !UnityEngine.Application.isPlaying)
             {
                 var skipLine = CDebugSettings.Instance.stackSkipLine;
-                LogInternal(skipLine, msg, LogLevel.Exception, null, context, subSystem);
+                LogInternal(skipLine, msg, LogLevel.Exception, context, subSystem);
             }
             else if (UnityEngine.Application.isPlaying && !CDebugSettings.Instance.catchNativeException)
             {
                 var skipLine = CDebugSettings.Instance.stackSkipLine;
-                LogInternal(skipLine, msg, LogLevel.Exception, null, context, subSystem);
+                LogInternal(skipLine, msg, LogLevel.Exception, context, subSystem);
             }
             else
             {
