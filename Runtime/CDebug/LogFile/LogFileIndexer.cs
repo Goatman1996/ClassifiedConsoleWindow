@@ -12,6 +12,19 @@ namespace ClassifiedConsole
         private StreamReader indexerReader;
 
         private string indexerFileName;
+        private int _tempLogCount = 0;
+        public int TempLogCount
+        {
+            get
+            {
+                if (this.hasInit)
+                {
+                    return this.logCount;
+                }
+                return this._tempLogCount;
+            }
+            private set => this._tempLogCount = value;
+        }
 
         public LogFileIndexer(string indexerName)
         {
@@ -21,6 +34,7 @@ namespace ClassifiedConsole
 
             this.indexerWriter = new StreamWriter(this.indexerFileStream, Encoding.UTF8);
             this.indexerReader = new StreamReader(this.indexerFileStream, Encoding.UTF8);
+            this.TempLogCount = 0;
         }
 
         public void ReleaseIO()
@@ -88,6 +102,7 @@ namespace ClassifiedConsole
             {
                 this.managedReader?.Add(logReader);
             }
+            this.TempLogCount++;
         }
     }
 }

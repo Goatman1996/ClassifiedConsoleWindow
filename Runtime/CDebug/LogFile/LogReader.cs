@@ -90,6 +90,7 @@ namespace ClassifiedConsole.Runtime
             var brokenReader = new LogReader();
             brokenReader.IsBrokenReader = true;
             brokenReader.stackTrackStartIndex = 0;
+            brokenReader.subSystem = new int[] { CDebugSubSystemEnumConfig.subSystemNullName };
             var nullName = CDebugSubSystemEnumConfig.subSystemNullName;
             brokenReader.logFileName = CDebugSubSystemEnumConfig.GetSubSystemName(nullName);
             return brokenReader;

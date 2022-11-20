@@ -216,7 +216,6 @@ namespace ClassifiedConsole.Runtime
     [ClassifiedConsole.CDebugSubSystem]
     internal enum UnDefinedSubSystem
     {
-        [ClassifiedConsole.CDebugSubSystemLabel("label")]
         Not_Classified = int.MinValue,
     }
 }

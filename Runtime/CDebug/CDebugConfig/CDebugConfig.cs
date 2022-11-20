@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Text;
 using UnityEngine;
 
 namespace ClassifiedConsole.Runtime
@@ -46,7 +45,6 @@ namespace ClassifiedConsole.Runtime
         }
 
         public static int needShowLogLevelVersion = 0;
-
         private static bool? _ShowLog;
         public static bool ShowLog
         {

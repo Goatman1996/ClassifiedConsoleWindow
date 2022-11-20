@@ -23,6 +23,11 @@ namespace ClassifiedConsole.Runtime
 
         private LogFileIndexer indexer;
 
+        public int TempLogCount
+        {
+            get => this.indexer.TempLogCount;
+        }
+
         public int logCount
         {
             get

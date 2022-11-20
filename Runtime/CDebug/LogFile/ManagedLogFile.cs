@@ -48,6 +48,10 @@ namespace ClassifiedConsole.Runtime
 
         public static void WriteLog(LogWriter log)
         {
+            if (Current.TempLogCount > 100000)
+            {
+                Archive();
+            }
             Current.AppendLog(log);
         }
 
