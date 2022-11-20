@@ -9,6 +9,7 @@ namespace ClassifiedConsole.Runtime
     public class CDebugSubSystemEnumConfig
     {
         public readonly static int subSystemNullName = (int)UnDefinedSubSystem.Not_Classified;
+        private static Dictionary<int, string> _subSystemEnumLabelDic;
         private static Dictionary<int, string> _subSystemEnumDic;
         private static Dictionary<int, string> subSystemEnumDic
         {
@@ -16,6 +17,7 @@ namespace ClassifiedConsole.Runtime
             {
                 if (_subSystemEnumDic == null)
                 {
+                    _subSystemEnumLabelDic = new Dictionary<int, string>();
                     _subSystemEnumDic = new Dictionary<int, string>();
                     InitSubSystemEnum();
                 }
@@ -25,6 +27,11 @@ namespace ClassifiedConsole.Runtime
 
         private static void InitSubSystemEnum()
         {
+            // var packageRuntimeAssembly = Assembly.Load("GM.ClassifiedConsole.Runtime");
+            // CollectByAssembly(packageRuntimeAssembly);
+
+            CollectEnumType(typeof(CDebugBosster.UnityNativeSubSystem));
+
             var assemblyString = CDebugSettings.Instance.subSystemDefinedAssembly;
             var assemblyNameArray = assemblyString.Split(',');
             foreach (var assemblyName in assemblyNameArray)
@@ -48,8 +55,7 @@ namespace ClassifiedConsole.Runtime
                 }
             }
 
-            var packageRuntimeAssembly = Assembly.Load("GM.ClassifiedConsole.Runtime");
-            CollectByAssembly(packageRuntimeAssembly);
+            CollectEnumType(typeof(UnDefinedSubSystem));
         }
 
         private static void CollectByAssembly(Assembly assembly)
@@ -77,10 +83,43 @@ namespace ClassifiedConsole.Runtime
             {
                 var value = enumType.GetEnumName(key);
                 _subSystemEnumDic[(int)key] = value;
+
+                var field = key.GetType().GetField(value);
+                var attr = field.GetCustomAttributes(typeof(CDebugSubSystemLabelAttribute), false);
+                if (attr.Length > 0)
+                {
+                    var label = (CDebugSubSystemLabelAttribute)attr[0];
+                    _subSystemEnumLabelDic.Add((int)key, label.label);
+                }
+                else
+                {
+                    _subSystemEnumLabelDic.Add((int)key, value);
+                }
+            }
+        }
+
+        public static string GetSubSystemLabel(int key)
+        {
+            if (remote_SubSystemEnumLabelDic != null)
+            {
+                if (!remote_SubSystemEnumLabelDic.ContainsKey(key))
+                {
+                    remote_SubSystemEnumLabelDic[key] = key.ToString();
+                }
+                return remote_SubSystemEnumLabelDic[key];
+            }
+            else
+            {
+                if (!_subSystemEnumLabelDic.ContainsKey(key))
+                {
+                    _subSystemEnumLabelDic[key] = key.ToString();
+                }
+                return _subSystemEnumLabelDic[key];
             }
         }
 
         public static Dictionary<int, string> remote_SubSystemEnumDic;
+        public static Dictionary<int, string> remote_SubSystemEnumLabelDic;
 
         public static string GetSubSystemName(int key)
         {
@@ -177,6 +216,7 @@ namespace ClassifiedConsole.Runtime
     [ClassifiedConsole.CDebugSubSystem]
     internal enum UnDefinedSubSystem
     {
+        [ClassifiedConsole.CDebugSubSystemLabel("label")]
         Not_Classified = int.MinValue,
     }
 }

@@ -179,11 +179,14 @@ namespace ClassifiedConsole.Editor
                     return;
                 }
                 CDebugSubSystemEnumConfig.remote_SubSystemEnumDic = new Dictionary<int, string>();
+                CDebugSubSystemEnumConfig.remote_SubSystemEnumLabelDic = new Dictionary<int, string>();
                 for (int i = 0; i < responseParam.subSystemKey.Count; i++)
                 {
                     var key = responseParam.subSystemKey[i];
                     var value = responseParam.subSystemName[i];
+                    var label = responseParam.subSystemLabel[i];
                     CDebugSubSystemEnumConfig.remote_SubSystemEnumDic.Add(key, value);
+                    CDebugSubSystemEnumConfig.remote_SubSystemEnumLabelDic.Add(key, label);
                 }
             }
 

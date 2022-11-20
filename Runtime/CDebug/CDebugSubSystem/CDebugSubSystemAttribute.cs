@@ -7,4 +7,15 @@ namespace ClassifiedConsole
     {
 
     }
+
+    [AttributeUsage(AttributeTargets.Field)]
+    public class CDebugSubSystemLabelAttribute : Attribute
+    {
+        public string label;
+
+        public CDebugSubSystemLabelAttribute(string label)
+        {
+            this.label = label;
+        }
+    }
 }

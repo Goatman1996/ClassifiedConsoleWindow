@@ -76,7 +76,7 @@ namespace ClassifiedConsole.Editor
                 var isOn = CDebugSubSystemEnumConfig.IsSubSystemOn(this._subSystemId);
                 this.showToggle.SetValueWithoutNotify(isOn);
 
-                this.systemName.text = CDebugSubSystemEnumConfig.GetSubSystemName(this._subSystemId);
+                this.systemName.text = CDebugSubSystemEnumConfig.GetSubSystemLabel(this._subSystemId);
             }
         }
 

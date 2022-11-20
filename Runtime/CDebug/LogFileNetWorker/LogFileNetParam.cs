@@ -34,6 +34,7 @@ namespace ClassifiedConsole.Runtime
 
         public List<int> subSystemKey;
         public List<string> subSystemName;
+        public List<string> subSystemLabel;
 
         public static LogFileNetResponseParam FromJson(string json)
         {

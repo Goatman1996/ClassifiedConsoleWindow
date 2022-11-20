@@ -63,14 +63,18 @@ namespace ClassifiedConsole
                 var keyIenum = CDebugSubSystemEnumConfig.GetAllSubSystemList();
                 var keyList = new List<int>(keyIenum);
                 var valueList = new List<string>();
+                var labelList = new List<string>();
                 foreach (var key in keyList)
                 {
                     var value = CDebugSubSystemEnumConfig.GetSubSystemName(key);
                     valueList.Add(value);
+                    var label = CDebugSubSystemEnumConfig.GetSubSystemLabel(key);
+                    labelList.Add(label);
                 }
 
                 responseParam.subSystemKey = keyList;
                 responseParam.subSystemName = valueList;
+                responseParam.subSystemLabel = labelList;
                 return UnityEngine.JsonUtility.ToJson(responseParam);
             }
             else
