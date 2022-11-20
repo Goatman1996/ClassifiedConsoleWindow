@@ -83,9 +83,10 @@ namespace ClassifiedConsole.Editor
             foreach (var line in stackTrackLines)
             {
                 var fpIndex = line.IndexOf(") (at ");
-                if (fpIndex == -1)
+                if (fpIndex == -1 || line.StartsWith("ClassifiedConsole.CDebug:LogException"))
                 {
                     // 没有文件名
+                    // 或者是需要跳过CDebug。LogExceotion的
                     this.herfBuider.AppendLine(line);
                     continue;
                 }
