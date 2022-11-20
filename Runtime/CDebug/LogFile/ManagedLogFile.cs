@@ -65,6 +65,11 @@ namespace ClassifiedConsole.Runtime
             var currentDir = Application.persistentDataPath + $"/Log/{currentFileId}/";
             if (Directory.Exists(currentDir))
             {
+                var files = Directory.GetFiles(currentDir);
+                if (files.Length == 1 && Path.GetFileName(files[0]) == "_Indexer_")
+                {
+                    return;
+                }
                 currentFileId++;
                 DeleteNoKeepLogFile();
                 OnCurrentLogFileChanged?.Invoke();
