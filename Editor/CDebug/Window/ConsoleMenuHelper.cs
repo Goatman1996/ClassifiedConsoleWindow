@@ -23,7 +23,7 @@ namespace ClassifiedConsole.Editor
             EditorUtility.OpenWithDefaultApp(path);
         }
 
-        [MenuItem("Window/Classified/CleanArchive", false, 6)]
+        [MenuItem("Window/Classified/Reset/CleanArchive", false, 7)]
         private static void CleanArchive()
         {
             ClassifiedConsole.Runtime.ManagedLogFile.CleanUpManagedLogFile();
