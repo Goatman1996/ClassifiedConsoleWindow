@@ -19,7 +19,7 @@ namespace ClassifiedConsole.Editor
         [MenuItem("Window/Classified/OpenLogFilePath", false, 6)]
         private static void OpenLogFilePath()
         {
-            var path = UnityEngine.Application.persistentDataPath;
+            var path = ClassifiedConsole.Runtime.LogFilePathConfig.versionRoot;
             EditorUtility.OpenWithDefaultApp(path);
         }
 

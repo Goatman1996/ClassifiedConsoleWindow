@@ -66,7 +66,8 @@ namespace ClassifiedConsole.Runtime
 
         public static void Archive()
         {
-            var currentDir = Application.persistentDataPath + $"/Log/{currentFileId}/";
+            // var currentDir = Application.persistentDataPath + $"/Log/{currentFileId}/";
+            var currentDir = Path.Combine(LogFilePathConfig.versionRoot, currentFileId.ToString());
             if (Directory.Exists(currentDir))
             {
                 var files = Directory.GetFiles(currentDir);
@@ -82,7 +83,7 @@ namespace ClassifiedConsole.Runtime
 
         private static void DeleteNoKeepLogFile()
         {
-            var logDir = Path.GetFullPath(Application.persistentDataPath + $"/Log");
+            var logDir = Path.GetFullPath(LogFilePathConfig.versionRoot);
             var dirArray = Directory.GetDirectories(logDir);
             foreach (var dir in dirArray)
             {
@@ -152,7 +153,8 @@ namespace ClassifiedConsole.Runtime
 
         private static string GetLogFilePath(int fileId)
         {
-            var filePath = Application.persistentDataPath + $"/Log/{fileId}";
+            // var filePath = Application.persistentDataPath + $"/Log/{fileId}";
+            var filePath = Path.Combine(LogFilePathConfig.versionRoot, fileId.ToString());
             return filePath;
         }
 
@@ -191,11 +193,13 @@ namespace ClassifiedConsole.Runtime
                 kv.Value.ReleaseIO();
             }
             logFileDic.Clear();
-            var logDir = Path.GetFullPath(Application.persistentDataPath + $"/Log");
+            var logDir = Path.GetFullPath(LogFilePathConfig.root);
             if (Directory.Exists(logDir))
             {
                 Directory.Delete(logDir, true);
             }
+
+            ManagedLogFile.currentFileId = 1;
 
             ManagedLogFile.OnCurrentLogFileChanged?.Invoke();
         }

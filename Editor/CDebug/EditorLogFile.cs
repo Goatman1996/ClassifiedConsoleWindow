@@ -216,8 +216,7 @@ namespace ClassifiedConsole.Editor
                 this._RemoteLogFileIdList = responseParam.LogFileIdList;
             }
 
-            var tempPath = Application.persistentDataPath;
-            tempPath = Path.Combine(tempPath, "RemoteLog");
+            var tempPath = Path.Combine(LogFilePathConfig.root, "RemoteLog");
             try
             {
                 // 这里有可能报错（但是现在IO有Release了，应该不会了）
