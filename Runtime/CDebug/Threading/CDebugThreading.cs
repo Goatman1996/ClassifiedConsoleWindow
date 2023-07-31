@@ -21,7 +21,7 @@ namespace ClassifiedConsole.Runtime
             this.thread.IsBackground = true;
             this.thread.Start();
 
-            this.ThreadLoop();
+            // this.ThreadLoop();
 
             if (UnityEngine.Application.isEditor == false)
             {
@@ -29,6 +29,14 @@ namespace ClassifiedConsole.Runtime
                 go.name = nameof(ForThreadOnGameExit);
                 var exitEvt = go.AddComponent<ForThreadOnGameExit>();
                 exitEvt.OnDestroyEvt += this.OnDestroy;
+                GameObject.DontDestroyOnLoad(go);
+            }
+
+            {
+                var go = new GameObject();
+                go.name = nameof(ForThreadUpdate);
+                var exitEvt = go.AddComponent<ForThreadUpdate>();
+                exitEvt.OnUpdate += this.ThreadLoop;
                 GameObject.DontDestroyOnLoad(go);
             }
         }
@@ -41,35 +49,35 @@ namespace ClassifiedConsole.Runtime
             }
         }
 
-        private async void ThreadLoop()
+        private void ThreadLoop()
         {
-            while (true)
+            // while (true)
+            // {
+            if (this.isRunningThread == false)
             {
-                if (this.isRunningThread == false)
+                foreach (var task in this.threadTaskList)
                 {
-                    foreach (var task in this.threadTaskList)
-                    {
-                        this.OnTaskComplete(task);
-                    }
-                    this.threadTaskList.Clear();
-
-                    var addedTaskCount = threadMaxHandleTaskCount;
-                    while (this.taskQueue.Count > 0)
-                    {
-                        addedTaskCount--;
-                        if (addedTaskCount < 0)
-                        {
-                            break;
-                        }
-                        this.threadTaskList.Add(this.taskQueue.Dequeue());
-                    }
-                    if (this.threadTaskList.Count > 0)
-                    {
-                        this.isRunningThread = true;
-                    }
+                    this.OnTaskComplete(task);
                 }
-                await Task.Delay(1);
+                this.threadTaskList.Clear();
+
+                var addedTaskCount = threadMaxHandleTaskCount;
+                while (this.taskQueue.Count > 0)
+                {
+                    addedTaskCount--;
+                    if (addedTaskCount < 0)
+                    {
+                        break;
+                    }
+                    this.threadTaskList.Add(this.taskQueue.Dequeue());
+                }
+                if (this.threadTaskList.Count > 0)
+                {
+                    this.isRunningThread = true;
+                }
             }
+            // await Task.Delay(1);
+            // }
         }
 
         private bool isRunningThread = false;
