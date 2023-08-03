@@ -116,15 +116,21 @@ namespace ClassifiedConsole.Runtime
             return false;
         }
 
+        private static int _currentFileId = -1;
         public static int currentFileId
         {
             get
             {
-                return PlayerPrefs.GetInt("LogFileId", 0);
+                if (_currentFileId == -1)
+                {
+                    _currentFileId = PlayerPrefs.GetInt("LogFileId", 0);
+                }
+                return _currentFileId;
             }
             private set
             {
                 PlayerPrefs.SetInt("LogFileId", value);
+                _currentFileId = value;
             }
         }
 
