@@ -37,8 +37,13 @@ namespace ClassifiedConsole.Runtime
             logReader.timeSpan = this.time;
             // MSG
             logReader.msgIndex = writer.BaseStream.Position;
-            writer.WriteLine(this.msg);
-            writer.WriteLine(LogReader.END);
+
+            // writer.WriteLine(this.msg);
+            // writer.WriteLine(LogReader.END);
+            writer.Write(this.msg);
+            writer.WriteLine();
+            writer.Write(LogReader.END);
+            writer.WriteLine();
 
             writer.Flush();
 
