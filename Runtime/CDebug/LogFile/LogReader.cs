@@ -44,7 +44,8 @@ namespace ClassifiedConsole.Runtime
             writer.Write(this.timeSpan); writer.Write(baseSpliter);
             writer.Write(this.msgIndex); writer.Write(baseSpliter);
             writer.Write(this.stackTrackStartIndex); writer.Write(baseSpliter);
-            writer.WriteLine(this.logFileName);
+            writer.Write(this.logFileName);
+            writer.WriteLine();
         }
 
         public bool IsBrokenReader = false;
