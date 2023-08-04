@@ -63,8 +63,9 @@ namespace ClassifiedConsole.Runtime
                 var stackFrame = stack.GetFrame(i);
                 var methd = stackFrame.GetMethod();
 
-                strackBuilder.Append($"{methd.DeclaringType.Name}.");
-                strackBuilder.Append($"{methd.Name}");
+                strackBuilder.Append(methd.DeclaringType.Name);
+                strackBuilder.Append(".");
+                strackBuilder.Append(methd.Name);
 
                 strackBuilder.Append('(');
                 var methodParam = methd.GetParameters();
@@ -72,7 +73,8 @@ namespace ClassifiedConsole.Runtime
                 {
                     foreach (var param in methodParam)
                     {
-                        strackBuilder.Append($"{param.ParameterType},");
+                        strackBuilder.Append(param.ParameterType);
+                        strackBuilder.Append(",");
                     }
                     strackBuilder.Remove(strackBuilder.Length - 1, 1);
                 }
@@ -84,8 +86,9 @@ namespace ClassifiedConsole.Runtime
                     var fileName = stackFrame.GetFileName();
                     fileName = TryRootToUnityDataPath(fileName);
 
-                    strackBuilder.Append($"{fileName}:");
-                    strackBuilder.Append($"{stackFrame.GetFileLineNumber()}");
+                    strackBuilder.Append(fileName);
+                    strackBuilder.Append(":");
+                    strackBuilder.Append(stackFrame.GetFileLineNumber().ToString());
                     strackBuilder.Append(")");
                 }
                 strackBuilder.AppendLine("");
