@@ -18,6 +18,7 @@ namespace ClassifiedConsole.Runtime
             this.taskQueue = new Queue<ThreadTask>();
             this.threadTaskList = new List<ThreadTask>();
             this.thread = new Thread(RuntimeThreading);
+            this.thread.Name = "CDebug Thread";
             this.thread.IsBackground = true;
             this.thread.Start();
 
