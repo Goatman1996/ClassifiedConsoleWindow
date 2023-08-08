@@ -63,21 +63,26 @@ namespace ClassifiedConsole.Runtime
                 var stackFrame = stack.GetFrame(i);
                 var methd = stackFrame.GetMethod();
 
-                strackBuilder.Append(methd.DeclaringType.Name);
+                strackBuilder.Append(methd.DeclaringType.FullName);
                 strackBuilder.Append(".");
                 strackBuilder.Append(methd.Name);
 
                 strackBuilder.Append('(');
-                var methodParam = methd.GetParameters();
-                if (methodParam.Length > 0)
+                var needParamDetails = true;
+                if (needParamDetails)
                 {
-                    foreach (var param in methodParam)
+                    var methodParam = methd.GetParameters();
+                    if (methodParam.Length > 0)
                     {
-                        strackBuilder.Append(param.ParameterType);
-                        strackBuilder.Append(",");
+                        foreach (var param in methodParam)
+                        {
+                            strackBuilder.Append(param.ParameterType);
+                            strackBuilder.Append(",");
+                        }
+                        strackBuilder.Remove(strackBuilder.Length - 1, 1);
                     }
-                    strackBuilder.Remove(strackBuilder.Length - 1, 1);
                 }
+
                 strackBuilder.Append(") ");
 
                 if (needFileInfo)
@@ -88,7 +93,15 @@ namespace ClassifiedConsole.Runtime
 
                     strackBuilder.Append(fileName);
                     strackBuilder.Append(":");
-                    strackBuilder.Append(stackFrame.GetFileLineNumber().ToString());
+                    // strackBuilder.Append(stackFrame.GetFileLineNumber().ToString());
+                    // 解GC
+                    {
+                        var numberString = new NumberString(stackFrame.GetFileLineNumber());
+                        for (int j = numberString.Length - 1; j >= 0; j--)
+                        {
+                            strackBuilder.Append(numberString[j]);
+                        }
+                    }
                     strackBuilder.Append(")");
                 }
                 strackBuilder.AppendLine("");

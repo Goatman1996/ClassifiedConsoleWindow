@@ -70,13 +70,13 @@ namespace ClassifiedConsole.Runtime
             ManagedLogFile.threadRunner.AddTaskToQueue(task);
         }
 
-        private void OnThreadWriteTaskBack(ThreadTask result)
-        {
-            if (result.result == null) return;
-            var logReader = result.result as LogReader;
+        // private void OnThreadWriteTaskBack(ThreadTask result)
+        // {
+        //     if (result.result == null) return;
+        //     var logReader = result.result as LogReader;
 
-            this.OnThreadWriteTaskBack(logReader);
-        }
+        //     this.OnThreadWriteTaskBack(logReader);
+        // }
 
         public void OnThreadWriteTaskBack(LogReader logReader)
         {
