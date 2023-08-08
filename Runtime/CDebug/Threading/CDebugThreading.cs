@@ -105,7 +105,9 @@ namespace ClassifiedConsole.Runtime
 
         public void AddTaskToQueue(IThreadTask task)
         {
-            this.taskQueue.Enqueue(task);
+            // this.taskQueue.Enqueue(task);
+            task.Run();
+            task.CallBack();
         }
 
         private void OnTaskComplete(IThreadTask task)

@@ -89,7 +89,7 @@ namespace ClassifiedConsole.Runtime
                 {
                     strackBuilder.Append("(at ");
                     var fileName = stackFrame.GetFileName();
-                    fileName = TryRootToUnityDataPath(fileName);
+                    // fileName = TryRootToUnityDataPath(fileName);
 
                     strackBuilder.Append(fileName);
                     strackBuilder.Append(":");
@@ -125,7 +125,7 @@ namespace ClassifiedConsole.Runtime
         }
 
         private static string dataFullPath = null;
-        private static string TryRootToUnityDataPath(string filePath)
+        public static string TryRootToUnityDataPath(string filePath)
         {
             InitDataFullPath();
             if (filePath != null && filePath.StartsWith(dataFullPath))

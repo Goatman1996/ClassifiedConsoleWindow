@@ -59,7 +59,9 @@ namespace ClassifiedConsole.Editor
             var time = this.logReader.time;
             var timeString = time.ToString("HH:mm:ss");
             var content = $"[{timeString}] ";
-            content += logReader.GetMsg(2);
+            var shortMsg = logReader.GetMsg(2);
+            shortMsg = ConsoleLogDetail.TryRootToUnityDataPath(shortMsg);
+            content += shortMsg;
             this.label.text = content;
 
             if (CDebugConfig.Collapse)

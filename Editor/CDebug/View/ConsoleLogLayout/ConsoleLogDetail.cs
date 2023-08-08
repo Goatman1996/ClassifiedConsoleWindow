@@ -95,8 +95,12 @@ namespace ClassifiedConsole.Editor
                 this.herfBuider.Append(line.Substring(0, fpIndex));
                 // 文件 信息
                 var fileAndLineString = line.Substring(fpIndex);
+                // TryRootToUnityDataPath
+                fileAndLineString = TryRootToUnityDataPath(fileAndLineString);
+
                 var fileLineSpliterIndex = fileAndLineString.LastIndexOf(':');
                 var filePathString = fileAndLineString.Substring(0, fileLineSpliterIndex);
+
                 var lineString = fileAndLineString.Substring(fileLineSpliterIndex + 1);
                 lineString = lineString.Substring(0, lineString.IndexOf(')'));
                 this.herfBuider.Append("<a hrefPath=\"" + filePathString + "\" line=\"" + lineString + "\">");
@@ -132,6 +136,26 @@ namespace ClassifiedConsole.Editor
         public void ClearMsg()
         {
             this.detail = null;
+        }
+
+        public static void InitDataFullPath()
+        {
+            if (dataFullPath == null)
+            {
+                dataFullPath = System.IO.Path.GetFullPath(UnityEngine.Application.dataPath);
+                dataFullPath = dataFullPath.Remove(dataFullPath.Length - "Assets".Length, "Assets".Length);
+            }
+        }
+
+        private static string dataFullPath = null;
+        public static string TryRootToUnityDataPath(string filePath)
+        {
+            InitDataFullPath();
+            if (filePath != null && filePath.Contains(dataFullPath))
+            {
+                filePath = filePath.Replace(dataFullPath, "");
+            }
+            return filePath;
         }
     }
 }

@@ -58,16 +58,27 @@ namespace ClassifiedConsole.Runtime
         {
             var logIo = this.GetLogIo(log.logFileName);
 
+            // GC
             // var writeTask = new ThreadTask();
             // writeTask.Task = () => logIo.WriteLog(log);
             // writeTask.callBack = this.OnThreadWriteTaskBack;
-            var task = new ThreadTask_WriterAppendLog()
+
+            // 解 GC
+            // var task = new ThreadTask_WriterAppendLog()
+            // {
+            //     logIO = logIo,
+            //     logWriter = log,
+            //     logFile = this
+            // };
+            // ManagedLogFile.threadRunner.AddTaskToQueue(task);
+
+            // 单线程
+            var result = logIo.WriteLog(log);
+            if (result == null)
             {
-                logIO = logIo,
-                logWriter = log,
-                logFile = this
-            };
-            ManagedLogFile.threadRunner.AddTaskToQueue(task);
+                return;
+            }
+            this.OnThreadWriteTaskBack(result);
         }
 
         // private void OnThreadWriteTaskBack(ThreadTask result)
@@ -80,6 +91,7 @@ namespace ClassifiedConsole.Runtime
 
         public void OnThreadWriteTaskBack(LogReader logReader)
         {
+            // GC
             // var writeTask = new ThreadTask();
             // writeTask.Task = () =>
             // {
@@ -88,14 +100,19 @@ namespace ClassifiedConsole.Runtime
             // };
             // writeTask.callBack = (result) => this.OnAppendLog?.Invoke();
 
-            var task = new ThreadTask_OnThreadWriteTaskBack
-            {
-                indexer = this.indexer,
-                logReader = logReader,
-                logFile = this
-            };
+            // 解 GC
+            // var task = new ThreadTask_OnThreadWriteTaskBack
+            // {
+            //     indexer = this.indexer,
+            //     logReader = logReader,
+            //     logFile = this
+            // };
+            // ManagedLogFile.threadRunner.AddTaskToQueue(task);
 
-            ManagedLogFile.threadRunner.AddTaskToQueue(task);
+            // 单线程
+            this.indexer?.AppendReader(logReader);
+
+            this.CallOnAppendLog();
         }
 
         private Dictionary<string, LogIO> logIoDic;

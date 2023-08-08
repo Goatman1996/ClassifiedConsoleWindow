@@ -22,6 +22,7 @@ namespace ClassifiedConsole
             logWriter.msg = LogWriterFactory.BuildLogMsgWithIn(msg, stack, writeLine, out int stackTrackStartIndex).ToString();
             logWriter.stackTrackStartIndex = msg.Length;
 
+            // GC
             // var writeTask = new ThreadTask();
             // writeTask.Task = () => LogWriterFactory.CreateLogWriter(logWriter, logLevel, instanceId, subSystem);
             // writeTask.callBack = (result) =>
@@ -29,15 +30,20 @@ namespace ClassifiedConsole
             //     ManagedLogFile.WriteLog((LogWriter)result.result);
             // };
 
-            var task = new ThreadTask_LogInternal
-            {
-                logWriter = logWriter,
-                logLevel = logLevel,
-                instanceId = instanceId,
-                subSystem = subSystem
-            };
+            // 解 GC
+            // var task = new ThreadTask_LogInternal
+            // {
+            //     logWriter = logWriter,
+            //     logLevel = logLevel,
+            //     instanceId = instanceId,
+            //     subSystem = subSystem
+            // };
 
-            ManagedLogFile.threadRunner.AddTaskToQueue(task);
+            // ManagedLogFile.threadRunner.AddTaskToQueue(task);
+
+            // 单线程
+            var result = LogWriterFactory.CreateLogWriter(logWriter, logLevel, instanceId, subSystem);
+            ManagedLogFile.WriteLog(result);
         }
 
 
@@ -52,9 +58,17 @@ namespace ClassifiedConsole
 
             var logWriter = new LogWriter();
             var writeLine = CDebugSettings.Instance.GetWriteLine(logLevel);
-            logWriter.msg = LogWriterFactory.BuildLogMsg(msg, writeLine, skipLine, out int stackTrackStartIndex).ToString();
+            if (writeLine == 0)
+            {
+                logWriter.msg = msg;
+            }
+            else
+            {
+                logWriter.msg = LogWriterFactory.BuildLogMsg(msg, writeLine, skipLine, out int stackTrackStartIndex).ToString();
+            }
             logWriter.stackTrackStartIndex = msg.Length;
 
+            // GC
             // var writeTask = new ThreadTask();
             // writeTask.Task = () => LogWriterFactory.CreateLogWriter(logWriter, logLevel, instanceId, subSystem);
             // writeTask.callBack = (result) =>
@@ -62,15 +76,20 @@ namespace ClassifiedConsole
             //     ManagedLogFile.WriteLog((LogWriter)result.result);
             // };
 
-            var task = new ThreadTask_LogInternal
-            {
-                logWriter = logWriter,
-                logLevel = logLevel,
-                instanceId = instanceId,
-                subSystem = subSystem
-            };
+            // 解 GC
+            // var task = new ThreadTask_LogInternal
+            // {
+            //     logWriter = logWriter,
+            //     logLevel = logLevel,
+            //     instanceId = instanceId,
+            //     subSystem = subSystem
+            // };
 
-            ManagedLogFile.threadRunner.AddTaskToQueue(task);
+            // ManagedLogFile.threadRunner.AddTaskToQueue(task);
+
+            // 单线程
+            var result = LogWriterFactory.CreateLogWriter(logWriter, logLevel, instanceId, subSystem);
+            ManagedLogFile.WriteLog(result);
         }
 
         #region Log
