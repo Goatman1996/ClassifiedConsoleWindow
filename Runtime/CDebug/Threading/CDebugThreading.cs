@@ -112,11 +112,4 @@ namespace ClassifiedConsole.Runtime
             task.callBack?.Invoke(task);
         }
     }
-
-    public class ThreadTask
-    {
-        public Func<object> Task;
-        public object result;
-        public Action<ThreadTask> callBack;
-    }
 }
