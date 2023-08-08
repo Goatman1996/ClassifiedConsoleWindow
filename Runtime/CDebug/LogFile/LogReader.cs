@@ -29,7 +29,15 @@ namespace ClassifiedConsole.Runtime
             for (int i = 0; i < this.subSystem.Length; i++)
             {
                 var sub = this.subSystem[i];
-                writer.Write(sub);
+
+                // writer.Write(sub);
+                // 解GC
+                var subNumberString = new NumberString(sub);
+                for (int j = subNumberString.Length - 1; j >= 0; j--)
+                {
+                    writer.Write(subNumberString[j]);
+                }
+
                 if (i != this.subSystem.Length - 1)
                 {
                     writer.Write(subSystemSpliter);
@@ -40,10 +48,51 @@ namespace ClassifiedConsole.Runtime
                 }
             }
 
-            writer.Write(((int)this.level)); writer.Write(baseSpliter);
-            writer.Write(this.timeSpan); writer.Write(baseSpliter);
-            writer.Write(this.msgIndex); writer.Write(baseSpliter);
-            writer.Write(this.stackTrackStartIndex); writer.Write(baseSpliter);
+            // writer.Write(((int)this.level)); 
+            // 解GC
+            {
+                var numberString = new NumberString((int)this.level);
+                for (int j = numberString.Length - 1; j >= 0; j--)
+                {
+                    writer.Write(numberString[j]);
+                }
+            }
+
+            writer.Write(baseSpliter);
+            // writer.Write(this.timeSpan); 
+            // 解GC
+            {
+                var numberString = new NumberString(this.timeSpan);
+                for (int j = numberString.Length - 1; j >= 0; j--)
+                {
+                    writer.Write(numberString[j]);
+                }
+            }
+
+            writer.Write(baseSpliter);
+            // writer.Write(this.msgIndex); 
+            // 解GC
+            {
+                var numberString = new NumberString(this.msgIndex);
+                for (int j = numberString.Length - 1; j >= 0; j--)
+                {
+                    writer.Write(numberString[j]);
+                }
+            }
+
+            writer.Write(baseSpliter);
+
+            // writer.Write(this.stackTrackStartIndex);
+            // 解GC
+            {
+                var numberString = new NumberString(this.stackTrackStartIndex);
+                for (int j = numberString.Length - 1; j >= 0; j--)
+                {
+                    writer.Write(numberString[j]);
+                }
+            }
+
+            writer.Write(baseSpliter);
             writer.Write(this.logFileName);
             writer.WriteLine();
         }
