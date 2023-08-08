@@ -10,13 +10,13 @@ namespace ClassifiedConsole.Runtime
     public class CDebugThreading
     {
         public int threadMaxHandleTaskCount = 1000;
-        public Queue<ThreadTask> taskQueue;
+        public Queue<IThreadTask> taskQueue;
 
         private Thread thread;
         public CDebugThreading()
         {
-            this.taskQueue = new Queue<ThreadTask>();
-            this.threadTaskList = new List<ThreadTask>();
+            this.taskQueue = new Queue<IThreadTask>();
+            this.threadTaskList = new List<IThreadTask>();
             this.thread = new Thread(RuntimeThreading);
             this.thread.Name = "CDebug Thread";
             this.thread.IsBackground = true;
@@ -83,8 +83,8 @@ namespace ClassifiedConsole.Runtime
 
         private bool isRunningThread = false;
 
-        private List<ThreadTask> threadTaskList;
-        private ThreadTask RunningTask;
+        private List<IThreadTask> threadTaskList;
+        private IThreadTask RunningTask;
         private void RuntimeThreading()
         {
             while (true)
@@ -93,7 +93,8 @@ namespace ClassifiedConsole.Runtime
                 {
                     foreach (var task in this.threadTaskList)
                     {
-                        task.result = task.Task?.Invoke();
+                        // task.result = task.Task?.Invoke();
+                        task.Run();
                     }
                     this.isRunningThread = false;
                 }
@@ -102,14 +103,14 @@ namespace ClassifiedConsole.Runtime
             }
         }
 
-        public void AddTaskToQueue(ThreadTask task)
+        public void AddTaskToQueue(IThreadTask task)
         {
             this.taskQueue.Enqueue(task);
         }
 
-        private void OnTaskComplete(ThreadTask task)
+        private void OnTaskComplete(IThreadTask task)
         {
-            task.callBack?.Invoke(task);
+            task.CallBack();
         }
     }
 }

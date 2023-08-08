@@ -48,15 +48,26 @@ namespace ClassifiedConsole.Runtime
             }
         }
 
+        public void CallOnAppendLog()
+        {
+            this.OnAppendLog?.Invoke();
+        }
+
         public event Action OnAppendLog;
         public void AppendLog(LogWriter log)
         {
             var logIo = this.GetLogIo(log.logFileName);
 
-            var writeTask = new ThreadTask();
-            writeTask.Task = () => logIo.WriteLog(log);
-            writeTask.callBack = this.OnThreadWriteTaskBack;
-            ManagedLogFile.threadRunner.AddTaskToQueue(writeTask);
+            // var writeTask = new ThreadTask();
+            // writeTask.Task = () => logIo.WriteLog(log);
+            // writeTask.callBack = this.OnThreadWriteTaskBack;
+            var task = new ThreadTask_WriterAppendLog()
+            {
+                logIO = logIo,
+                logWriter = log,
+                logFile = this
+            };
+            ManagedLogFile.threadRunner.AddTaskToQueue(task);
         }
 
         private void OnThreadWriteTaskBack(ThreadTask result)
@@ -64,15 +75,27 @@ namespace ClassifiedConsole.Runtime
             if (result.result == null) return;
             var logReader = result.result as LogReader;
 
-            var writeTask = new ThreadTask();
-            writeTask.Task = () =>
-            {
-                this.indexer?.AppendReader(logReader);
-                return null;
-            };
-            writeTask.callBack = (result) => this.OnAppendLog?.Invoke();
+            this.OnThreadWriteTaskBack(logReader);
+        }
 
-            ManagedLogFile.threadRunner.AddTaskToQueue(writeTask);
+        public void OnThreadWriteTaskBack(LogReader logReader)
+        {
+            // var writeTask = new ThreadTask();
+            // writeTask.Task = () =>
+            // {
+            //     this.indexer?.AppendReader(logReader);
+            //     return null;
+            // };
+            // writeTask.callBack = (result) => this.OnAppendLog?.Invoke();
+
+            var task = new ThreadTask_OnThreadWriteTaskBack
+            {
+                indexer = this.indexer,
+                logReader = logReader,
+                logFile = this
+            };
+
+            ManagedLogFile.threadRunner.AddTaskToQueue(task);
         }
 
         private Dictionary<string, LogIO> logIoDic;

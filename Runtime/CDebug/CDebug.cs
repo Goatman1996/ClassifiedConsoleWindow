@@ -22,14 +22,22 @@ namespace ClassifiedConsole
             logWriter.msg = LogWriterFactory.BuildLogMsgWithIn(msg, stack, writeLine, out int stackTrackStartIndex).ToString();
             logWriter.stackTrackStartIndex = msg.Length;
 
-            var writeTask = new ThreadTask();
-            writeTask.Task = () => LogWriterFactory.CreateLogWriter(logWriter, logLevel, instanceId, subSystem);
-            writeTask.callBack = (result) =>
+            // var writeTask = new ThreadTask();
+            // writeTask.Task = () => LogWriterFactory.CreateLogWriter(logWriter, logLevel, instanceId, subSystem);
+            // writeTask.callBack = (result) =>
+            // {
+            //     ManagedLogFile.WriteLog((LogWriter)result.result);
+            // };
+
+            var task = new ThreadTask_LogInternal
             {
-                ManagedLogFile.WriteLog((LogWriter)result.result);
+                logWriter = logWriter,
+                logLevel = logLevel,
+                instanceId = instanceId,
+                subSystem = subSystem
             };
 
-            ManagedLogFile.threadRunner.AddTaskToQueue(writeTask);
+            ManagedLogFile.threadRunner.AddTaskToQueue(task);
         }
 
 
@@ -47,14 +55,22 @@ namespace ClassifiedConsole
             logWriter.msg = LogWriterFactory.BuildLogMsg(msg, writeLine, skipLine, out int stackTrackStartIndex).ToString();
             logWriter.stackTrackStartIndex = msg.Length;
 
-            var writeTask = new ThreadTask();
-            writeTask.Task = () => LogWriterFactory.CreateLogWriter(logWriter, logLevel, instanceId, subSystem);
-            writeTask.callBack = (result) =>
+            // var writeTask = new ThreadTask();
+            // writeTask.Task = () => LogWriterFactory.CreateLogWriter(logWriter, logLevel, instanceId, subSystem);
+            // writeTask.callBack = (result) =>
+            // {
+            //     ManagedLogFile.WriteLog((LogWriter)result.result);
+            // };
+
+            var task = new ThreadTask_LogInternal
             {
-                ManagedLogFile.WriteLog((LogWriter)result.result);
+                logWriter = logWriter,
+                logLevel = logLevel,
+                instanceId = instanceId,
+                subSystem = subSystem
             };
 
-            ManagedLogFile.threadRunner.AddTaskToQueue(writeTask);
+            ManagedLogFile.threadRunner.AddTaskToQueue(task);
         }
 
         #region Log

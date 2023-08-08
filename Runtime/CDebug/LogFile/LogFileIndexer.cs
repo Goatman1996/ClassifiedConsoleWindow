@@ -5,7 +5,7 @@ using ClassifiedConsole.Runtime;
 
 namespace ClassifiedConsole
 {
-    internal class LogFileIndexer
+    public class LogFileIndexer
     {
         private FileStream indexerFileStream;
         private StreamWriter indexerWriter;
