@@ -70,13 +70,26 @@ namespace ClassifiedConsole.Editor
                 if (this._md5 == null)
                 {
                     var md5ource = this.msg;
-                    MD5 md = MD5.Create();
+                    // MD5 md = MD5.Create();
                     var pwdBytes = Encoding.UTF8.GetBytes(md5ource);
-                    var md5Bytes = md.ComputeHash(pwdBytes);
+                    var md5Bytes = md5Builder.ComputeHash(pwdBytes);
                     var md5String = System.BitConverter.ToString(md5Bytes);
                     this._md5 = this.level + md5String;
                 }
                 return this._md5;
+            }
+        }
+
+        private static MD5 _md5Builder = null;
+        private static MD5 md5Builder
+        {
+            get
+            {
+                if (_md5Builder == null)
+                {
+                    _md5Builder = MD5.Create();
+                }
+                return _md5Builder;
             }
         }
 

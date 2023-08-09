@@ -24,8 +24,10 @@ namespace ClassifiedConsole.Editor
             }
         }
 
-        private List<int> logReaderIndexList = new List<int>();
-        private Dictionary<int, EditorLogReader> logReaderDic = new Dictionary<int, EditorLogReader>();
+        private List<EditorLogReader> logReaderList = new List<EditorLogReader>();
+
+        // private List<int> logReaderIndexList = new List<int>();
+        // private Dictionary<int, EditorLogReader> logReaderDic = new Dictionary<int, EditorLogReader>();
 
         public List<int> showingLogIndexList = new List<int>();
         // public Dictionary<int, int> subSystemLogCount = new Dictionary<int, int>();
@@ -328,8 +330,10 @@ namespace ClassifiedConsole.Editor
             this._RemoteCurrentLogFileId = -1;
             this._RemoteLogFileIdList = null;
 
-            this.logReaderIndexList.Clear();
-            this.logReaderDic.Clear();
+            // this.logReaderIndexList.Clear();
+            // this.logReaderDic.Clear();
+            this.logReaderList.Clear();
+
             this.showingLogIndexList.Clear();
             // this.subSystemLogCount.Clear();
             this.subSystem_Log_Count.Clear();
@@ -374,7 +378,8 @@ namespace ClassifiedConsole.Editor
         private void AppendLog_Notify()
         {
             var targetLogCount = this.targetLogFile.logCount;
-            var currentIndex = this.logReaderIndexList.Count;
+            // var currentIndex = this.logReaderIndexList.Count;
+            var currentIndex = this.logReaderList.Count;
 
             bool needPause = false;
             if (targetLogCount > currentIndex)
@@ -402,10 +407,11 @@ namespace ClassifiedConsole.Editor
         private bool OnAppendLogInternal(int index)
         {
             var logReader = this.targetLogFile[index];
-            this.logReaderIndexList.Add(index);
+            // this.logReaderIndexList.Add(index);
             var logIo = this.targetLogFile.GetLogIo(logReader.logFileName);
             var editorLogReader = new EditorLogReader(logReader, logIo);
-            this.logReaderDic.Add(index, editorLogReader);
+            // this.logReaderDic.Add(index, editorLogReader);
+            this.logReaderList.Add(editorLogReader);
 
             var subSystems = logReader.subSystem;
             var level = logReader.level;
@@ -429,17 +435,23 @@ namespace ClassifiedConsole.Editor
             this.exceptionCount = 0;
             this.showingLogIndexList.Clear();
             this.md5CountDic.Clear();
-            foreach (var index in this.logReaderIndexList)
+            var collapse = CDebugConfig.Collapse;
+            var searchContent = this.SearchFilter;
+            var hasSearchContent = !string.IsNullOrEmpty(searchContent);
+
+            // foreach (var index in this.logReaderIndexList)
+            for (int index = 0; index < this.logReaderList.Count; index++)
             {
-                var logReader = this.logReaderDic[index];
-                if (!string.IsNullOrEmpty(this.SearchFilter))
+                // var logReader = this.logReaderDic[index];
+                var logReader = this.logReaderList[index];
+                if (hasSearchContent)
                 {
                     var msg = logReader.msg;
                     var filterIndex = msg.IndexOf(this.SearchFilter, StringComparison.OrdinalIgnoreCase);
                     if (filterIndex == -1) continue;
                 }
                 var md5 = logReader.md5;
-                if (CDebugConfig.Collapse)
+                if (collapse)
                 {
                     if (this.md5CountDic.ContainsKey(md5))
                     {
@@ -524,7 +536,7 @@ namespace ClassifiedConsole.Editor
         {
             get
             {
-                return this.logReaderDic[index];
+                return this.logReaderList[index];
             }
         }
 
