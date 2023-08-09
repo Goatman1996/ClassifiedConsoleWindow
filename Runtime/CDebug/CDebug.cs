@@ -9,7 +9,7 @@ namespace ClassifiedConsole
 {
     public static class CDebug
     {
-        internal static void LogInternalWithStack(string msg, string stack, LogLevel logLevel, UnityEngine.Object context, params int[] subSystem)
+        internal static void LogInternalWithStack(string msg, string stack, LogLevel logLevel, UnityEngine.Object context, int subSystem = (int)UnDefinedSubSystem.Not_Classified)
         {
             int instanceId = 0;
             if (context != null)
@@ -48,7 +48,7 @@ namespace ClassifiedConsole
 
 
 
-        internal static void LogInternal(int skipLine, string msg, LogLevel logLevel, UnityEngine.Object context, params int[] subSystem)
+        internal static void LogInternal(int skipLine, string msg, LogLevel logLevel, UnityEngine.Object context, int subSystem = (int)UnDefinedSubSystem.Not_Classified)
         {
             int instanceId = 0;
             if (context != null)
@@ -93,79 +93,79 @@ namespace ClassifiedConsole
         }
 
         #region Log
-        public static void Log(string msg, params int[] subSystem)
+        public static void Log(string msg, int subSystem = (int)UnDefinedSubSystem.Not_Classified)
         {
             var skipLine = CDebugSettings.Instance.stackSkipLine;
             LogInternal(skipLine, msg, LogLevel.Log, null, subSystem);
         }
 
-        public static void Log(string msg, UnityEngine.Object context, params int[] subSystem)
+        public static void Log(string msg, UnityEngine.Object context, int subSystem = (int)UnDefinedSubSystem.Not_Classified)
         {
             var skipLine = CDebugSettings.Instance.stackSkipLine;
             LogInternal(skipLine, msg, LogLevel.Log, context, subSystem);
         }
 
-        public static void Log(int skipLine, string msg, params int[] subSystem)
+        public static void Log(int skipLine, string msg, int subSystem = (int)UnDefinedSubSystem.Not_Classified)
         {
             LogInternal(skipLine, msg, LogLevel.Log, null, subSystem);
         }
 
-        public static void Log(int skipLine, string msg, UnityEngine.Object context, params int[] subSystem)
+        public static void Log(int skipLine, string msg, UnityEngine.Object context, int subSystem = (int)UnDefinedSubSystem.Not_Classified)
         {
             LogInternal(skipLine, msg, LogLevel.Log, context, subSystem);
         }
         #endregion
 
         #region LogWarning
-        public static void LogWarning(string msg, params int[] subSystem)
+        public static void LogWarning(string msg, int subSystem = (int)UnDefinedSubSystem.Not_Classified)
         {
             var skipLine = CDebugSettings.Instance.stackSkipLine;
             LogInternal(skipLine, msg, LogLevel.Warning, null, subSystem);
         }
 
-        public static void LogWarning(string msg, UnityEngine.Object context, params int[] subSystem)
+        public static void LogWarning(string msg, UnityEngine.Object context, int subSystem = (int)UnDefinedSubSystem.Not_Classified)
         {
             var skipLine = CDebugSettings.Instance.stackSkipLine;
             LogInternal(skipLine, msg, LogLevel.Warning, context, subSystem);
         }
 
-        public static void LogWarning(int skipLine, string msg, params int[] subSystem)
+        public static void LogWarning(int skipLine, string msg, int subSystem = (int)UnDefinedSubSystem.Not_Classified)
         {
             LogInternal(skipLine, msg, LogLevel.Warning, null, subSystem);
         }
 
-        public static void LogWarning(int skipLine, string msg, UnityEngine.Object context, params int[] subSystem)
+        public static void LogWarning(int skipLine, string msg, UnityEngine.Object context, int subSystem = (int)UnDefinedSubSystem.Not_Classified)
         {
             LogInternal(skipLine, msg, LogLevel.Warning, context, subSystem);
         }
         #endregion
 
         #region LogError
-        public static void LogError(string msg, params int[] subSystem)
+        public static void LogError(string msg, int subSystem = (int)UnDefinedSubSystem.Not_Classified)
         {
             var skipLine = CDebugSettings.Instance.stackSkipLine;
             LogInternal(skipLine, msg, LogLevel.Error, null, subSystem);
         }
 
-        public static void LogError(string msg, UnityEngine.Object context, params int[] subSystem)
+        public static void LogError(string msg, UnityEngine.Object context, int subSystem = (int)UnDefinedSubSystem.Not_Classified)
         {
             var skipLine = CDebugSettings.Instance.stackSkipLine;
             LogInternal(skipLine, msg, LogLevel.Error, context, subSystem);
         }
 
-        public static void LogError(int skipLine, string msg, params int[] subSystem)
+        public static void LogError(int skipLine, string msg, int subSystem = (int)UnDefinedSubSystem.Not_Classified)
         {
             LogInternal(skipLine, msg, LogLevel.Error, null, subSystem);
         }
 
-        public static void LogError(int skipLine, string msg, UnityEngine.Object context, params int[] subSystem)
+        public static void LogError(int skipLine, string msg, UnityEngine.Object context, int subSystem = (int)UnDefinedSubSystem.Not_Classified)
         {
             LogInternal(skipLine, msg, LogLevel.Error, context, subSystem);
         }
         #endregion
 
         #region LogException
-        public static void LogException(string msg, params int[] subSystem)
+        public static void LogException(string msg, int subSystem = (int)UnDefinedSubSystem.Not_Classified)
         {
             if (UnityEngine.Application.isEditor && !UnityEngine.Application.isPlaying)
             {
@@ -179,18 +179,11 @@ namespace ClassifiedConsole
             }
             else
             {
-                if (subSystem.Length == 0)
-                {
-                    UnityEngine.Debug.LogException(new ClassifiedException(CDebugSubSystemEnumConfig.subSystemNullName, msg), null);
-                }
-                else
-                {
-                    UnityEngine.Debug.LogException(new ClassifiedException(subSystem[0], msg), null);
-                }
+                UnityEngine.Debug.LogException(new ClassifiedException(subSystem, msg), null);
             }
         }
 
-        public static void LogException(string msg, UnityEngine.Object context, params int[] subSystem)
+        public static void LogException(string msg, UnityEngine.Object context, int subSystem = (int)UnDefinedSubSystem.Not_Classified)
         {
             if (UnityEngine.Application.isEditor && !UnityEngine.Application.isPlaying)
             {
@@ -204,14 +197,7 @@ namespace ClassifiedConsole
             }
             else
             {
-                if (subSystem.Length == 0)
-                {
-                    UnityEngine.Debug.LogException(new ClassifiedException(CDebugSubSystemEnumConfig.subSystemNullName, msg), context);
-                }
-                else
-                {
-                    UnityEngine.Debug.LogException(new ClassifiedException(subSystem[0], msg), context);
-                }
+                UnityEngine.Debug.LogException(new ClassifiedException(subSystem, msg), context);
             }
         }
         #endregion

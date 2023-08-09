@@ -6,17 +6,17 @@ namespace ClassifiedConsole.Runtime
     internal class LogWriterFactory
     {
         private static StringBuilder strackBuilder = new StringBuilder();
-        public static LogWriter CreateLogWriter(LogWriter logWriter, LogLevel logLevel, int instanceId, params int[] subSystem)
+        public static LogWriter CreateLogWriter(LogWriter logWriter, LogLevel logLevel, int instanceId, int subSystem)
         {
             logWriter.instanceId = instanceId;
-            if (subSystem.Length == 0)
-            {
-                subSystem = new int[] { CDebugSubSystemEnumConfig.subSystemNullName };
-            }
+            // if (subSystem.Length == 0)
+            // {
+            //     subSystem = new int[] { CDebugSubSystemEnumConfig.subSystemNullName };
+            // }
             logWriter.logSubSystem = subSystem;
             if (CDebugSettings.Instance.SplitLogFile)
             {
-                logWriter.logFileName = CDebugSubSystemEnumConfig.GetSubSystemName(subSystem[0]);
+                logWriter.logFileName = CDebugSubSystemEnumConfig.GetSubSystemName(subSystem);
             }
             else
             {

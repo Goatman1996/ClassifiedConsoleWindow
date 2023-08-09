@@ -473,42 +473,39 @@ namespace ClassifiedConsole.Editor
             }
         }
 
-        private void Collect_System_LogCount(LogLevel level, int[] subSystem)
+        private void Collect_System_LogCount(LogLevel level, int subSystem)
         {
-            foreach (var system in subSystem)
+            if (level == LogLevel.Log)
             {
-                if (level == LogLevel.Log)
+                if (!this.subSystem_Log_Count.ContainsKey(subSystem))
                 {
-                    if (!this.subSystem_Log_Count.ContainsKey(system))
-                    {
-                        this.subSystem_Log_Count.Add(system, 0);
-                    }
-                    this.subSystem_Log_Count[system]++;
+                    this.subSystem_Log_Count.Add(subSystem, 0);
                 }
-                else if (level == LogLevel.Warning)
+                this.subSystem_Log_Count[subSystem]++;
+            }
+            else if (level == LogLevel.Warning)
+            {
+                if (!this.subSystem_Warning_Count.ContainsKey(subSystem))
                 {
-                    if (!this.subSystem_Warning_Count.ContainsKey(system))
-                    {
-                        this.subSystem_Warning_Count.Add(system, 0);
-                    }
-                    this.subSystem_Warning_Count[system]++;
+                    this.subSystem_Warning_Count.Add(subSystem, 0);
                 }
-                else if (level == LogLevel.Error)
+                this.subSystem_Warning_Count[subSystem]++;
+            }
+            else if (level == LogLevel.Error)
+            {
+                if (!this.subSystem_Error_Count.ContainsKey(subSystem))
                 {
-                    if (!this.subSystem_Error_Count.ContainsKey(system))
-                    {
-                        this.subSystem_Error_Count.Add(system, 0);
-                    }
-                    this.subSystem_Error_Count[system]++;
+                    this.subSystem_Error_Count.Add(subSystem, 0);
                 }
-                else if (level == LogLevel.Exception)
+                this.subSystem_Error_Count[subSystem]++;
+            }
+            else if (level == LogLevel.Exception)
+            {
+                if (!this.subSystem_Exception_Count.ContainsKey(subSystem))
                 {
-                    if (!this.subSystem_Exception_Count.ContainsKey(system))
-                    {
-                        this.subSystem_Exception_Count.Add(system, 0);
-                    }
-                    this.subSystem_Exception_Count[system]++;
+                    this.subSystem_Exception_Count.Add(subSystem, 0);
                 }
+                this.subSystem_Exception_Count[subSystem]++;
             }
         }
 

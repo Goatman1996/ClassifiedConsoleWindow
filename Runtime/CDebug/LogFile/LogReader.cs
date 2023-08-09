@@ -9,7 +9,7 @@ namespace ClassifiedConsole.Runtime
     public class LogReader
     {
         public int instanceId;
-        public int[] subSystem;
+        public int subSystem;
         public LogLevel level;
         public long timeSpan;
         public const string MSG = "#Msg";
@@ -20,33 +20,20 @@ namespace ClassifiedConsole.Runtime
         public string logFileName;
 
         private const char baseSpliter = '_';
-        private const char subSystemSpliter = ',';
         public void Write(StreamWriter writer)
         {
             writer.BaseStream.Position = writer.BaseStream.Length;
             writer.Write(this.instanceId); writer.Write(baseSpliter);
 
-            for (int i = 0; i < this.subSystem.Length; i++)
+            // writer.Write(this.subSystem);
+            // 解GC
+            var subNumberString = new NumberString(this.subSystem);
+            for (int j = subNumberString.Length - 1; j >= 0; j--)
             {
-                var sub = this.subSystem[i];
-
-                // writer.Write(sub);
-                // 解GC
-                var subNumberString = new NumberString(sub);
-                for (int j = subNumberString.Length - 1; j >= 0; j--)
-                {
-                    writer.Write(subNumberString[j]);
-                }
-
-                if (i != this.subSystem.Length - 1)
-                {
-                    writer.Write(subSystemSpliter);
-                }
-                else
-                {
-                    writer.Write(baseSpliter);
-                }
+                writer.Write(subNumberString[j]);
             }
+
+            writer.Write(baseSpliter);
 
             // writer.Write(((int)this.level)); 
             // 解GC
@@ -105,14 +92,7 @@ namespace ClassifiedConsole.Runtime
                 var spliter = line.Split(baseSpliter);
                 var reader = new LogReader();
                 reader.instanceId = int.Parse(spliter[0]);
-                {
-                    var subSystemStringArray = spliter[1].Split(subSystemSpliter);
-                    reader.subSystem = new int[subSystemStringArray.Length];
-                    for (int i = 0; i < subSystemStringArray.Length; i++)
-                    {
-                        reader.subSystem[i] = int.Parse(subSystemStringArray[i]);
-                    }
-                }
+                reader.subSystem = int.Parse(spliter[1]);
                 reader.level = (LogLevel)int.Parse(spliter[2]);
                 reader.timeSpan = long.Parse(spliter[3]);
                 reader.msgIndex = long.Parse(spliter[4]);
@@ -140,7 +120,7 @@ namespace ClassifiedConsole.Runtime
             var brokenReader = new LogReader();
             brokenReader.IsBrokenReader = true;
             brokenReader.stackTrackStartIndex = 0;
-            brokenReader.subSystem = new int[] { CDebugSubSystemEnumConfig.subSystemNullName };
+            brokenReader.subSystem = CDebugSubSystemEnumConfig.subSystemNullName;
             var nullName = CDebugSubSystemEnumConfig.subSystemNullName;
             brokenReader.logFileName = CDebugSubSystemEnumConfig.GetSubSystemName(nullName);
             return brokenReader;

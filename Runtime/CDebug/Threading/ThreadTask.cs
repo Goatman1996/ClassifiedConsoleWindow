@@ -62,7 +62,7 @@ namespace ClassifiedConsole.Runtime
         public LogWriter logWriter;
         public LogLevel logLevel;
         public int instanceId;
-        public int[] subSystem;
+        public int subSystem;
 
         public void Run()
         {

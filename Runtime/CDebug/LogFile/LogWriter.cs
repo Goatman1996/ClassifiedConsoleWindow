@@ -7,7 +7,7 @@ namespace ClassifiedConsole.Runtime
     public struct LogWriter
     {
         public int instanceId;
-        public int[] logSubSystem;
+        public int logSubSystem;
         public LogLevel level;
         public long time;
         public string msg;
