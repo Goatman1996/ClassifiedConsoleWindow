@@ -25,7 +25,7 @@ namespace ClassifiedConsole.Editor
         }
 
         private List<int> logReaderIndexList = new List<int>();
-        private Dictionary<int, LogReader> logReaderDic = new Dictionary<int, LogReader>();
+        private Dictionary<int, EditorLogReader> logReaderDic = new Dictionary<int, EditorLogReader>();
 
         public List<int> showingLogIndexList = new List<int>();
         // public Dictionary<int, int> subSystemLogCount = new Dictionary<int, int>();
@@ -403,7 +403,9 @@ namespace ClassifiedConsole.Editor
         {
             var logReader = this.targetLogFile[index];
             this.logReaderIndexList.Add(index);
-            this.logReaderDic.Add(index, logReader);
+            var logIo = this.targetLogFile.GetLogIo(logReader.logFileName);
+            var editorLogReader = new EditorLogReader(logReader, logIo);
+            this.logReaderDic.Add(index, editorLogReader);
 
             var subSystems = logReader.subSystem;
             var level = logReader.level;
@@ -518,11 +520,11 @@ namespace ClassifiedConsole.Editor
             return 0;
         }
 
-        public LogReader this[int index]
+        public EditorLogReader this[int index]
         {
             get
             {
-                return this.targetLogFile[index];
+                return this.logReaderDic[index];
             }
         }
 

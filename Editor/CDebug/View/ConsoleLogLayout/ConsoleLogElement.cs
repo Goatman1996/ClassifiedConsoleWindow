@@ -37,8 +37,8 @@ namespace ClassifiedConsole.Editor
             this.Add(this.label);
         }
 
-        private LogReader _logReader;
-        public LogReader logReader
+        private EditorLogReader _logReader;
+        public EditorLogReader logReader
         {
             get => this._logReader;
             set

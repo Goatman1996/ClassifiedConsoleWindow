@@ -15,7 +15,7 @@ namespace ClassifiedConsole.Runtime
         public int stackTrackStartIndex;
         public string logFileName;
 
-        public LogReader Write(StreamWriter writer)
+        public LogReader? Write(StreamWriter writer)
         {
             if (writer == null || writer.BaseStream == null)
             {

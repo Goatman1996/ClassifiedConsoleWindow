@@ -78,7 +78,7 @@ namespace ClassifiedConsole.Runtime
             {
                 return;
             }
-            this.OnThreadWriteTaskBack(result);
+            this.OnThreadWriteTaskBack(result.Value);
         }
 
         // private void OnThreadWriteTaskBack(ThreadTask result)

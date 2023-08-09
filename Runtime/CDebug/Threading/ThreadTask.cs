@@ -33,10 +33,10 @@ namespace ClassifiedConsole.Runtime
             {
                 return;
             }
-            this.logFile.OnThreadWriteTaskBack(result);
+            this.logFile.OnThreadWriteTaskBack(result.Value);
         }
 
-        private LogReader result;
+        private LogReader? result;
     }
 
     public struct ThreadTask_OnThreadWriteTaskBack : IThreadTask

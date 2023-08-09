@@ -6,7 +6,7 @@ using ClassifiedConsole.Runtime;
 
 namespace ClassifiedConsole.Runtime
 {
-    public class LogReader
+    public struct LogReader
     {
         public int instanceId;
         public int subSystem;
@@ -84,7 +84,7 @@ namespace ClassifiedConsole.Runtime
             writer.WriteLine();
         }
 
-        public bool IsBrokenReader = false;
+        public bool IsBrokenReader;
         public static LogReader Parse(string line)
         {
             try
@@ -128,21 +128,6 @@ namespace ClassifiedConsole.Runtime
 
         public LogIO logIO { private get; set; }
 
-        private DateTime? _time;
-        public DateTime time
-        {
-            get
-            {
-                if (this.IsBrokenReader) return default;
-                if (this._time == null)
-                {
-                    var startTime = new DateTime(1970, 1, 1, 0, 0, 0);
-                    this._time = startTime.AddSeconds(this.timeSpan);
-                }
-                return this._time.Value;
-            }
-        }
-
         public string msg
         {
             get
@@ -150,62 +135,6 @@ namespace ClassifiedConsole.Runtime
                 if (this.IsBrokenReader) return "Broken";
                 var content = this.logIO.ReadLog(this.msgIndex, END);
                 return content;
-            }
-        }
-
-        public string GetMsg(int lineCount)
-        {
-            if (this.IsBrokenReader) return "Broken";
-            var content = this.logIO.ReadLines(this.msgIndex, lineCount);
-            return content;
-        }
-
-        private string _md5;
-        public string md5
-        {
-            get
-            {
-                if (this.IsBrokenReader) return "default";
-                if (this._md5 == null)
-                {
-                    var md5ource = this.msg;
-                    MD5 md = MD5.Create();
-                    var pwdBytes = Encoding.UTF8.GetBytes(md5ource);
-                    var md5Bytes = md.ComputeHash(pwdBytes);
-                    var md5String = System.BitConverter.ToString(md5Bytes);
-                    this._md5 = this.level + md5String;
-                }
-                return this._md5;
-            }
-        }
-
-        private int needShowLogLevelVersion = -1;
-        private bool _NeedShowLogLevel;
-        public bool NeedShowLogLevel
-        {
-            get
-            {
-                if (needShowLogLevelVersion != CDebugConfig.needShowLogLevelVersion)
-                {
-                    _NeedShowLogLevel = CDebugConfig.NeedShowLogLevel(this.level);
-                    needShowLogLevelVersion = CDebugConfig.needShowLogLevelVersion;
-                }
-                return _NeedShowLogLevel;
-            }
-        }
-
-        public int needShowSubSystemVersion = -1;
-        private bool _NeedShowSubSystem;
-        public bool NeedShowSubSystem
-        {
-            get
-            {
-                if (needShowSubSystemVersion != CDebugSubSystemEnumConfig.SubSystemSettingsVersion)
-                {
-                    _NeedShowSubSystem = CDebugSubSystemEnumConfig.IsSubSystemOn(this.subSystem);
-                    needShowSubSystemVersion = CDebugSubSystemEnumConfig.SubSystemSettingsVersion;
-                }
-                return _NeedShowSubSystem;
             }
         }
 

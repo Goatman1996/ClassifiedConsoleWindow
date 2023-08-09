@@ -47,7 +47,7 @@ namespace ClassifiedConsole.Runtime
             }
         }
 
-        public LogReader WriteLog(LogWriter log)
+        public LogReader? WriteLog(LogWriter log)
         {
             return log.Write(this.streamWriter);
         }
