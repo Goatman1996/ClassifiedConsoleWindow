@@ -19,7 +19,7 @@ namespace ClassifiedConsole
 
             var logWriter = new LogWriter();
             var writeLine = CDebugSettings.Instance.GetWriteLine(logLevel);
-            logWriter.msg = LogWriterFactory.BuildLogMsgWithIn(msg, stack, writeLine, out int stackTrackStartIndex).ToString();
+            logWriter.msgSb = LogWriterFactory.BuildLogMsgWithIn(msg, stack, writeLine, out int stackTrackStartIndex);
             logWriter.stackTrackStartIndex = msg.Length;
 
             // GC
@@ -64,7 +64,7 @@ namespace ClassifiedConsole
             }
             else
             {
-                logWriter.msg = LogWriterFactory.BuildLogMsg(msg, writeLine, skipLine, out int stackTrackStartIndex).ToString();
+                logWriter.msgSb = LogWriterFactory.BuildLogMsg(msg, writeLine, skipLine, out int stackTrackStartIndex);
             }
             logWriter.stackTrackStartIndex = msg.Length;
 

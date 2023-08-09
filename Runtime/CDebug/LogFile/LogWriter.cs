@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Text;
 
 namespace ClassifiedConsole.Runtime
 {
@@ -11,6 +12,7 @@ namespace ClassifiedConsole.Runtime
         public LogLevel level;
         public long time;
         public string msg;
+        public StringBuilder msgSb;
 
         public int stackTrackStartIndex;
         public string logFileName;
@@ -40,7 +42,16 @@ namespace ClassifiedConsole.Runtime
 
             // writer.WriteLine(this.msg);
             // writer.WriteLine(LogReader.END);
-            writer.Write(this.msg);
+            if (this.msgSb != null)
+            {
+                var buffer = GetBuffer(this.msgSb.Capacity);
+                this.msgSb.CopyTo(0, buffer, 0, this.msgSb.Length);
+                writer.Write(buffer);
+            }
+            else
+            {
+                writer.Write(this.msg);
+            }
             writer.WriteLine();
             writer.Write(LogReader.END);
             writer.WriteLine();
@@ -48,6 +59,20 @@ namespace ClassifiedConsole.Runtime
             writer.Flush();
 
             return logReader;
+        }
+
+        private static int _bufferCapacity = 1024;
+        private static char[] _buffer = new char[_bufferCapacity];
+
+        private static char[] GetBuffer(int capacity)
+        {
+            if (capacity > _bufferCapacity)
+            {
+                _bufferCapacity = capacity;
+                _buffer = new char[_bufferCapacity];
+            }
+
+            return _buffer;
         }
     }
 }

@@ -15,6 +15,7 @@ namespace ClassifiedConsole.Runtime
         private Thread thread;
         public CDebugThreading()
         {
+            return;
             this.taskQueue = new Queue<IThreadTask>();
             this.threadTaskList = new List<IThreadTask>();
             this.thread = new Thread(RuntimeThreading);
