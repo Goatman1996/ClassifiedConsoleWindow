@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using ClassifiedConsole.Runtime;
 using HttpRemoteConnector;
 using UnityEngine;
+using UnityEngine.Profiling;
 
 namespace ClassifiedConsole.Editor
 {
@@ -427,6 +428,8 @@ namespace ClassifiedConsole.Editor
             return false;
         }
 
+        private Dictionary<string, bool> md5_Search_Contains = new Dictionary<string, bool>();
+
         private void RefreshShowingList()
         {
             this.logCount = 0;
@@ -435,6 +438,7 @@ namespace ClassifiedConsole.Editor
             this.exceptionCount = 0;
             this.showingLogIndexList.Clear();
             this.md5CountDic.Clear();
+            this.md5_Search_Contains.Clear();
             var collapse = CDebugConfig.Collapse;
             var searchContent = this.SearchFilter;
             var hasSearchContent = !string.IsNullOrEmpty(searchContent);
@@ -443,14 +447,45 @@ namespace ClassifiedConsole.Editor
             for (int index = 0; index < this.logReaderList.Count; index++)
             {
                 // var logReader = this.logReaderDic[index];
+
                 var logReader = this.logReaderList[index];
-                if (hasSearchContent)
-                {
-                    var msg = logReader.msg;
-                    var filterIndex = msg.IndexOf(this.SearchFilter, StringComparison.OrdinalIgnoreCase);
-                    if (filterIndex == -1) continue;
-                }
+                var level = logReader.level;
+                var levelShow = logReader.NeedShowLogLevel;
+                var subSystemShow = logReader.NeedShowSubSystem;
+                var display = levelShow && subSystemShow;
                 var md5 = logReader.md5;
+
+                if (subSystemShow)
+                {
+                    if (level == LogLevel.Log) this.logCount++;
+                    else if (level == LogLevel.Warning) this.warningCount++;
+                    else if (level == LogLevel.Error) this.errorCount++;
+                    else if (level == LogLevel.Exception) this.exceptionCount++;
+                }
+
+                if (display == false)
+                {
+                    continue;
+                }
+
+                if (hasSearchContent && display)
+                {
+                    bool inSearch = false;
+                    if (this.md5_Search_Contains.ContainsKey(md5))
+                    {
+                        inSearch = this.md5_Search_Contains[md5];
+                    }
+                    else
+                    {
+                        var msg = logReader.msg;
+
+                        var filterIndex = msg.IndexOf(this.SearchFilter, StringComparison.OrdinalIgnoreCase);
+                        inSearch = filterIndex != -1;
+                        this.md5_Search_Contains.Add(md5, inSearch);
+                    }
+
+                    if (inSearch == false) continue;
+                }
                 if (collapse)
                 {
                     if (this.md5CountDic.ContainsKey(md5))
@@ -463,23 +498,10 @@ namespace ClassifiedConsole.Editor
                         this.md5CountDic[md5] = 1;
                     }
                 }
-                var level = logReader.level;
 
-
-                var levelShow = logReader.NeedShowLogLevel;
-                var subSystemShow = logReader.NeedShowSubSystem;
-                var display = levelShow && subSystemShow;
                 if (display)
                 {
                     this.showingLogIndexList.Add(index);
-                }
-
-                if (subSystemShow)
-                {
-                    if (level == LogLevel.Log) this.logCount++;
-                    else if (level == LogLevel.Warning) this.warningCount++;
-                    else if (level == LogLevel.Error) this.errorCount++;
-                    else if (level == LogLevel.Exception) this.exceptionCount++;
                 }
 
                 // var subSystem = logReader.subSystem;

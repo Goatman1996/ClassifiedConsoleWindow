@@ -44,13 +44,17 @@ namespace ClassifiedConsole.Editor
             }
         }
 
+        private string _msg;
         public string msg
         {
             get
             {
-                if (this.IsBrokenReader) return "Broken";
-                var content = this.logIO.ReadLog(this.msgIndex);
-                return content;
+                if (_msg == null)
+                {
+                    if (this.IsBrokenReader) _msg = "Broken";
+                    _msg = this.logIO.ReadLog(this.msgIndex);
+                }
+                return _msg;
             }
         }
 

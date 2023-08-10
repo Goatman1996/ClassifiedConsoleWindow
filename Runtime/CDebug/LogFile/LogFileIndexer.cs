@@ -50,7 +50,7 @@ namespace ClassifiedConsole
             this.indexerReader.BaseStream.Position = 0;
             this.indexerReader.DiscardBufferedData();
 
-            this.managedReader = new List<LogReader>();
+            this.managedReader = new List<LogReader>(CDebugSettings.Instance.limitLogCount);
             while (true)
             {
                 var line = this.indexerReader.ReadLine();
