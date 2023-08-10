@@ -48,7 +48,7 @@ namespace ClassifiedConsole.Runtime
 
         public static void WriteLog(LogWriter log)
         {
-            if (Current.TempLogCount > CDebugSettings.Instance.limitLogCount)
+            if (Current.TempLogCount >= CDebugSettings.Instance.limitLogCount)
             {
                 Archive();
             }
