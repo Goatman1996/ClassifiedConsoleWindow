@@ -49,7 +49,7 @@ namespace ClassifiedConsole.Editor
             get
             {
                 if (this.IsBrokenReader) return "Broken";
-                var content = this.logIO.ReadLog(this.msgIndex, END);
+                var content = this.logIO.ReadLog(this.msgIndex);
                 return content;
             }
         }

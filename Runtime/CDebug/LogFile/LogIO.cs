@@ -69,7 +69,7 @@ namespace ClassifiedConsole.Runtime
 
         private StringBuilder readerSB = new StringBuilder();
 
-        public string ReadLog(long startIndex, string endToken)
+        public string ReadLog(long startIndex, string endToken = LogReader.END)
         {
             this.readerSB.Clear();
             // this.streamReader.DiscardBufferedData();
@@ -134,6 +134,64 @@ namespace ClassifiedConsole.Runtime
             }
             return this.readerSB.ToString();
         }
+
+        /* 另外一个尝试，并没有什么用 
+        private StringBuilder readerSB = new StringBuilder();
+        private char[] readerBuffer = new char[1024];
+
+        public string ReadLog(long startIndex)
+        {
+            string endToken = LogReader.END;
+
+            this.readerSB.Clear();
+            // this.streamReader.DiscardBufferedData();
+            // this.streamReader.BaseStream.Seek(startIndex, SeekOrigin.Begin);
+            this.streamReader.BaseStream.Position = startIndex;
+            this.streamReader.DiscardBufferedData();
+            var readLoop = 0;
+
+            bool isEnd = false;
+
+            while (true)
+            {
+                var bufferLength = this.streamReader.ReadBlock(this.readerBuffer, 0, this.readerBuffer.Length);
+
+                for (int i = 0; i < bufferLength; i++)
+                {
+                    var content = this.readerBuffer[i];
+                    this.readerSB.Append(content);
+                    if (content == '\n' || content == '\r')
+                    {
+                        var sbLength = this.readerSB.Length;
+
+                        if (sbLength >= 5 &&
+                            this.readerSB[sbLength - 2] == 'd' &&
+                            this.readerSB[sbLength - 3] == 'n' &&
+                            this.readerSB[sbLength - 4] == 'E' &&
+                            this.readerSB[sbLength - 5] == '#')
+                        {
+                            isEnd = true;
+                            break;
+                        }
+                    }
+
+                }
+
+                if (isEnd)
+                {
+                    // 去掉最后一个换行
+                    this.readerSB.Remove(this.readerSB.Length - 5, 5);
+                    break;
+                }
+
+                if (readLoop++ > 1000)
+                {
+                    break;
+                }
+            }
+            return this.readerSB.ToString();
+        }
+        */
         #endregion
     }
 }
