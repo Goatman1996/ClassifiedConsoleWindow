@@ -151,6 +151,18 @@ namespace ClassifiedConsole.Runtime
             return subSystemEnumDic.Keys;
         }
 
+        public static int AllSubSystemListCount
+        {
+            get
+            {
+                if (remote_SubSystemEnumDic != null)
+                {
+                    return remote_SubSystemEnumDic.Count;
+                }
+                return subSystemEnumDic.Count;
+            }
+        }
+
 
         #region Prefs
         private static Dictionary<int, bool> _prefsDic;

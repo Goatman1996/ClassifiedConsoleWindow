@@ -3,6 +3,7 @@ using UnityEngine.UIElements;
 using UnityEditor.UIElements;
 using UnityEditor.IMGUI.Controls;
 using ClassifiedConsole.Runtime;
+using System;
 
 namespace ClassifiedConsole.Editor
 {
@@ -10,6 +11,7 @@ namespace ClassifiedConsole.Editor
     {
         private List<int> subSystemList;
         private ListView subSystemLayout;
+        private List<ConsoleSubSystemElement> managedElement;
 
         public ConsoleSubSystemFilter()
         {
@@ -52,21 +54,27 @@ namespace ClassifiedConsole.Editor
             this.subSystemLayout.itemHeight = 23;
             this.subSystemLayout.makeItem = this.OnMakeItem;
             this.subSystemLayout.bindItem = this.BindItem;
+            this.subSystemLayout.unbindItem = this.Unbind;
             this.subSystemLayout.showAlternatingRowBackgrounds = AlternatingRowBackground.ContentOnly;
             this.subSystemLayout.style.flexGrow = 1;
             this.Add(this.subSystemLayout);
 
             this.style.flexGrow = 1;
 
-            // this.managedElement = new List<ConsoleSubSystemElement>();
+            this.managedElement = new List<ConsoleSubSystemElement>();
             this.InitSubSystem();
+        }
+
+        private void Unbind(VisualElement element, int arg2)
+        {
+            UnityEngine.Debug.LogError(element.name);
         }
 
         // private List<ConsoleSubSystemElement> managedElement;
         private VisualElement OnMakeItem()
         {
             var element = new ConsoleSubSystemElement();
-            // this.managedElement.Add(element);
+            this.managedElement.Add(element);
             return element;
         }
 
@@ -76,25 +84,33 @@ namespace ClassifiedConsole.Editor
             var element = (ui as ConsoleSubSystemElement);
             var subSystemId = this.subSystemList[index];
             element.subSystemId = subSystemId;
+            element.name = subSystemId.ToString();
             element.RefreshLogCount();
         }
 
         private void InitSubSystem()
         {
-            this.subSystemList.Clear();
-            // var subSystemIEnum = ClassifiedConsoleWindow.windowRoot.editorLogFile.GetShowingSubSystem();
-            var subSystemIEnum = CDebugSubSystemEnumConfig.GetAllSubSystemList();
-            this.subSystemList.AddRange(subSystemIEnum);
-            this.subSystemLayout.Refresh();
+            if (this.subSystemList.Count != CDebugSubSystemEnumConfig.AllSubSystemListCount)
+            {
+                this.managedElement.Clear();
+                this.subSystemList.Clear();
+                // var subSystemIEnum = ClassifiedConsoleWindow.windowRoot.editorLogFile.GetShowingSubSystem();
+                var subSystemIEnum = CDebugSubSystemEnumConfig.GetAllSubSystemList();
+                this.subSystemList.AddRange(subSystemIEnum);
+                this.subSystemLayout.Refresh();
+            }
+            else
+            {
+                foreach (var element in this.managedElement)
+                {
+                    element.RefreshLogCount();
+                }
+            }
         }
 
         public void RefreeshSubSystem()
         {
             this.InitSubSystem();
-            // foreach (var element in this.managedElement)
-            // {
-            //     element.RefreshLogCount();
-            // }
         }
     }
 }
