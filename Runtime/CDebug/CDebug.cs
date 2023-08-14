@@ -123,43 +123,5 @@ namespace ClassifiedConsole
             LogInternal(skipLine, msg, LogLevel.Error, context, subSystem);
         }
         #endregion
-
-        #region LogException
-        public static void LogException(string msg, int subSystem = (int)UnDefinedSubSystem.Not_Classified)
-        {
-            if (UnityEngine.Application.isEditor && !UnityEngine.Application.isPlaying)
-            {
-                var skipLine = CDebugSettings.Instance.stackSkipLine;
-                LogInternal(skipLine, msg, LogLevel.Exception, null, subSystem);
-            }
-            else if (UnityEngine.Application.isPlaying && !CDebugSettings.Instance.catchNativeException)
-            {
-                var skipLine = CDebugSettings.Instance.stackSkipLine;
-                LogInternal(skipLine, msg, LogLevel.Exception, null, subSystem);
-            }
-            else
-            {
-                UnityEngine.Debug.LogException(new ClassifiedException(subSystem, msg), null);
-            }
-        }
-
-        public static void LogException(string msg, UnityEngine.Object context, int subSystem = (int)UnDefinedSubSystem.Not_Classified)
-        {
-            if (UnityEngine.Application.isEditor && !UnityEngine.Application.isPlaying)
-            {
-                var skipLine = CDebugSettings.Instance.stackSkipLine;
-                LogInternal(skipLine, msg, LogLevel.Exception, context, subSystem);
-            }
-            else if (UnityEngine.Application.isPlaying && !CDebugSettings.Instance.catchNativeException)
-            {
-                var skipLine = CDebugSettings.Instance.stackSkipLine;
-                LogInternal(skipLine, msg, LogLevel.Exception, context, subSystem);
-            }
-            else
-            {
-                UnityEngine.Debug.LogException(new ClassifiedException(subSystem, msg), context);
-            }
-        }
-        #endregion
     }
 }
