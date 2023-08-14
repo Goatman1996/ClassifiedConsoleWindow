@@ -10,10 +10,10 @@ namespace ClassifiedConsole.Editor
             EditorWindow.GetWindow<ClassifiedConsoleWindow>("ClassifiedConsole");
         }
 
-        [MenuItem("Window/Classified/ConsoleSettings", false, 6)]
+        [MenuItem("Window/Classified/Settings", false, 100)]
         private static void OpenSettingsWindow()
         {
-            EditorWindow.GetWindow<CDebugSettingsWindow>("CDebugSettings");
+            SettingsService.OpenProjectSettings("Project/CDebugSettings");
         }
 
         [MenuItem("Window/Classified/OpenLogFilePath", false, 6)]
