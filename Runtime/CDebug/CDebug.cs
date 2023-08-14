@@ -22,26 +22,6 @@ namespace ClassifiedConsole
             logWriter.msgSb = LogWriterFactory.BuildLogMsgWithIn(msg, stack, writeLine, out int stackTrackStartIndex);
             logWriter.stackTrackStartIndex = msg.Length;
 
-            // GC
-            // var writeTask = new ThreadTask();
-            // writeTask.Task = () => LogWriterFactory.CreateLogWriter(logWriter, logLevel, instanceId, subSystem);
-            // writeTask.callBack = (result) =>
-            // {
-            //     ManagedLogFile.WriteLog((LogWriter)result.result);
-            // };
-
-            // 解 GC
-            // var task = new ThreadTask_LogInternal
-            // {
-            //     logWriter = logWriter,
-            //     logLevel = logLevel,
-            //     instanceId = instanceId,
-            //     subSystem = subSystem
-            // };
-
-            // ManagedLogFile.threadRunner.AddTaskToQueue(task);
-
-            // 单线程
             var result = LogWriterFactory.CreateLogWriter(logWriter, logLevel, instanceId, subSystem);
             ManagedLogFile.WriteLog(result);
         }
@@ -68,26 +48,6 @@ namespace ClassifiedConsole
             }
             logWriter.stackTrackStartIndex = msg.Length;
 
-            // GC
-            // var writeTask = new ThreadTask();
-            // writeTask.Task = () => LogWriterFactory.CreateLogWriter(logWriter, logLevel, instanceId, subSystem);
-            // writeTask.callBack = (result) =>
-            // {
-            //     ManagedLogFile.WriteLog((LogWriter)result.result);
-            // };
-
-            // 解 GC
-            // var task = new ThreadTask_LogInternal
-            // {
-            //     logWriter = logWriter,
-            //     logLevel = logLevel,
-            //     instanceId = instanceId,
-            //     subSystem = subSystem
-            // };
-
-            // ManagedLogFile.threadRunner.AddTaskToQueue(task);
-
-            // 单线程
             var result = LogWriterFactory.CreateLogWriter(logWriter, logLevel, instanceId, subSystem);
             ManagedLogFile.WriteLog(result);
         }

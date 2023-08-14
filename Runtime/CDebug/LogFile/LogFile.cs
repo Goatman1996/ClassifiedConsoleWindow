@@ -58,21 +58,6 @@ namespace ClassifiedConsole.Runtime
         {
             var logIo = this.GetLogIo(log.logFileName);
 
-            // GC
-            // var writeTask = new ThreadTask();
-            // writeTask.Task = () => logIo.WriteLog(log);
-            // writeTask.callBack = this.OnThreadWriteTaskBack;
-
-            // 解 GC
-            // var task = new ThreadTask_WriterAppendLog()
-            // {
-            //     logIO = logIo,
-            //     logWriter = log,
-            //     logFile = this
-            // };
-            // ManagedLogFile.threadRunner.AddTaskToQueue(task);
-
-            // 单线程
             var result = logIo.WriteLog(log);
             if (result == null)
             {
@@ -81,35 +66,8 @@ namespace ClassifiedConsole.Runtime
             this.OnThreadWriteTaskBack(result.Value);
         }
 
-        // private void OnThreadWriteTaskBack(ThreadTask result)
-        // {
-        //     if (result.result == null) return;
-        //     var logReader = result.result as LogReader;
-
-        //     this.OnThreadWriteTaskBack(logReader);
-        // }
-
         public void OnThreadWriteTaskBack(LogReader logReader)
         {
-            // GC
-            // var writeTask = new ThreadTask();
-            // writeTask.Task = () =>
-            // {
-            //     this.indexer?.AppendReader(logReader);
-            //     return null;
-            // };
-            // writeTask.callBack = (result) => this.OnAppendLog?.Invoke();
-
-            // 解 GC
-            // var task = new ThreadTask_OnThreadWriteTaskBack
-            // {
-            //     indexer = this.indexer,
-            //     logReader = logReader,
-            //     logFile = this
-            // };
-            // ManagedLogFile.threadRunner.AddTaskToQueue(task);
-
-            // 单线程
             this.indexer?.AppendReader(logReader);
 
             this.CallOnAppendLog();
