@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace ClassifiedConsole
@@ -107,8 +108,16 @@ namespace ClassifiedConsole
             }
         }
 
-        [Header("所有包含了[CDebugSubSystemAttribute] 设置的Assembly,实用','分割")]
-        public string subSystemDefinedAssembly = "Assembly-CSharp";
+        [Header("所有包含了[CDebugSubSystemAttribute] 设置的Assembly")]
+        [SerializeField]
+        private List<string> _SubSystemDefinedAssembly = new List<string> { "Assembly-CSharp" };
+        public IEnumerable<string> SubSystemDefinedAssembly
+        {
+            get
+            {
+                return this._SubSystemDefinedAssembly;
+            }
+        }
 
         public int WindowFPS
         {

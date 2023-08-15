@@ -9,7 +9,7 @@ namespace ClassifiedConsole
             var ret = Resources.Load<CDebugSettings>("CDebugSettings");
             if (ret == null && Application.isEditor)
             {
-                ret = new CDebugSettings();
+                ret = CDebugSettings.CreateInstance<CDebugSettings>();
 #if UNITY_EDITOR
                 UnityEditor.AssetDatabase.CreateAsset(ret, "Assets/Resources/CDebugSettings.asset");
 #endif

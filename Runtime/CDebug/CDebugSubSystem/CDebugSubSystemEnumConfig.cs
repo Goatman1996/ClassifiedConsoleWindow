@@ -32,8 +32,7 @@ namespace ClassifiedConsole.Runtime
 
             CollectEnumType(typeof(CDebugBosster.UnityNativeSubSystem));
 
-            var assemblyString = CDebugSettings.Instance.subSystemDefinedAssembly;
-            var assemblyNameArray = assemblyString.Split(',');
+            var assemblyNameArray = CDebugSettings.Instance.SubSystemDefinedAssembly;
             foreach (var assemblyName in assemblyNameArray)
             {
                 Assembly assembly;
