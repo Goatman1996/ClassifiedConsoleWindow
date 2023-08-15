@@ -7,7 +7,7 @@ namespace ClassifiedConsole
         [Header("是否按分类系统,分开存放Log文件")]
         public bool SplitLogFile = true;
 
-        [Header("要记录的栈信息(不算Msg)-1 不限制行数")]
+        [Header("要记录的栈信息行数(不算Msg)-1 不限制行数")]
         [SerializeField]
         private int _LogWriteLine = 1;
         public int LogWriteLine
@@ -20,7 +20,6 @@ namespace ClassifiedConsole
             }
         }
 
-        [Header("要记录的栈信息(不算Msg)-1 不限制行数")]
         [SerializeField]
         private int _WarningWriteLine = 1;
         public int WarningWriteLine
@@ -33,7 +32,6 @@ namespace ClassifiedConsole
             }
         }
 
-        [Header("要记录的栈信息(不算Msg)-1 不限制行数")]
         [SerializeField] private int _ErrorWriteLine = -1;
         public int ErrorWriteLine
         {
@@ -45,7 +43,6 @@ namespace ClassifiedConsole
             }
         }
 
-        [Header("要记录的栈信息(不算Msg)-1 不限制行数")]
         [SerializeField]
         private int _ExceptionWriteLine = -1;
         public int ExceptionWriteLine
@@ -96,33 +93,34 @@ namespace ClassifiedConsole
             }
         }
 
-        [Header("自定义跳过栈行数(默认3且应该>=3)")]
-        [SerializeField]
-        private int _stackSkipLine = 3;
         public int stackSkipLine
         {
-            get => this._stackSkipLine;
-            set
+            get
             {
-                return;
+                if (Application.isEditor)
+                {
+                    return 3;
+                }
+                else
+                {
+                    return 0;
+                }
             }
         }
 
         [Header("所有包含了[CDebugSubSystemAttribute] 设置的Assembly,实用','分割")]
         public string subSystemDefinedAssembly = "Assembly-CSharp";
 
-        [Header("windowFPS")]
-        [SerializeField] private int _windowFPS = 30;
-        public int windowFPS
+        public int WindowFPS
         {
             get
             {
-                return Mathf.Clamp(this._windowFPS, 5, 60);
+                return 30;
+                // return Mathf.Clamp(this._WindowFPS, 5, 60);
             }
         }
 
-        [Header("limitLogCount")]
-        [SerializeField] private int _limitLogCount = (100 * 100) * 10;
+        private int _limitLogCount = (100 * 100) * 10;
         public int limitLogCount
         {
             get

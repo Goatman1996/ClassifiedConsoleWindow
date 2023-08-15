@@ -26,8 +26,6 @@ namespace ClassifiedConsole
             ManagedLogFile.WriteLog(result);
         }
 
-
-
         internal static void LogInternal(int skipLine, string msg, LogLevel logLevel, UnityEngine.Object context, int subSystem = (int)UnDefinedSubSystem.Not_Classified)
         {
             int instanceId = 0;
