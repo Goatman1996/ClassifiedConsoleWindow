@@ -93,18 +93,17 @@ namespace ClassifiedConsole
             }
         }
 
+        [Header("是否放弃跳过栈信息,IL2Cpp出包时推荐勾选")]
+        [SerializeField]
+        private bool _IgnoreSkip = false;
+        public bool IgnoreSkip { get => this._IgnoreSkip; }
+
         public int stackSkipLine
         {
             get
             {
-                if (Application.isEditor)
-                {
-                    return 3;
-                }
-                else
-                {
-                    return 0;
-                }
+                if (this._IgnoreSkip) return 0;
+                return 3;
             }
         }
 

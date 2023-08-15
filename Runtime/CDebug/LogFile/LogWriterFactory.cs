@@ -76,7 +76,7 @@ namespace ClassifiedConsole.Runtime
                     {
                         foreach (var param in methodParam)
                         {
-                            strackBuilder.Append(param.ParameterType);
+                            strackBuilder.Append(param.ParameterType.FullName);
                             strackBuilder.Append(",");
                         }
                         strackBuilder.Remove(strackBuilder.Length - 1, 1);

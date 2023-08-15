@@ -65,11 +65,15 @@ namespace ClassifiedConsole
 
         public static void Log(int skipLine, string msg, int subSystem = (int)UnDefinedSubSystem.Not_Classified)
         {
+            if (CDebugSettings.Instance.IgnoreSkip) skipLine = 0;
+            else skipLine += CDebugSettings.Instance.stackSkipLine;
             LogInternal(skipLine, msg, LogLevel.Log, null, subSystem);
         }
 
         public static void Log(int skipLine, string msg, UnityEngine.Object context, int subSystem = (int)UnDefinedSubSystem.Not_Classified)
         {
+            if (CDebugSettings.Instance.IgnoreSkip) skipLine = 0;
+            else skipLine += CDebugSettings.Instance.stackSkipLine;
             LogInternal(skipLine, msg, LogLevel.Log, context, subSystem);
         }
         #endregion
@@ -89,11 +93,15 @@ namespace ClassifiedConsole
 
         public static void LogWarning(int skipLine, string msg, int subSystem = (int)UnDefinedSubSystem.Not_Classified)
         {
+            if (CDebugSettings.Instance.IgnoreSkip) skipLine = 0;
+            else skipLine += CDebugSettings.Instance.stackSkipLine;
             LogInternal(skipLine, msg, LogLevel.Warning, null, subSystem);
         }
 
         public static void LogWarning(int skipLine, string msg, UnityEngine.Object context, int subSystem = (int)UnDefinedSubSystem.Not_Classified)
         {
+            if (CDebugSettings.Instance.IgnoreSkip) skipLine = 0;
+            else skipLine += CDebugSettings.Instance.stackSkipLine;
             LogInternal(skipLine, msg, LogLevel.Warning, context, subSystem);
         }
         #endregion
@@ -113,11 +121,15 @@ namespace ClassifiedConsole
 
         public static void LogError(int skipLine, string msg, int subSystem = (int)UnDefinedSubSystem.Not_Classified)
         {
+            if (CDebugSettings.Instance.IgnoreSkip) skipLine = 0;
+            else skipLine += CDebugSettings.Instance.stackSkipLine;
             LogInternal(skipLine, msg, LogLevel.Error, null, subSystem);
         }
 
         public static void LogError(int skipLine, string msg, UnityEngine.Object context, int subSystem = (int)UnDefinedSubSystem.Not_Classified)
         {
+            if (CDebugSettings.Instance.IgnoreSkip) skipLine = 0;
+            else skipLine += CDebugSettings.Instance.stackSkipLine;
             LogInternal(skipLine, msg, LogLevel.Error, context, subSystem);
         }
         #endregion
