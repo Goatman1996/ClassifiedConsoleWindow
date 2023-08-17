@@ -94,59 +94,29 @@ namespace ClassifiedConsole.Runtime
 
         public static string GetSubSystemLabel(int key)
         {
-            if (remote_SubSystemEnumLabelDic != null)
+            if (_subSystemEnumLabelDic == null)
             {
-                if (!remote_SubSystemEnumLabelDic.ContainsKey(key))
-                {
-                    remote_SubSystemEnumLabelDic[key] = key.ToString();
-                }
-                return remote_SubSystemEnumLabelDic[key];
+                var touch = subSystemEnumDic;
             }
-            else
-            {
-                if (_subSystemEnumLabelDic == null)
-                {
-                    var touch = subSystemEnumDic;
-                }
 
-                if (!_subSystemEnumLabelDic.ContainsKey(key))
-                {
-                    _subSystemEnumLabelDic[key] = key.ToString();
-                }
-                return _subSystemEnumLabelDic[key];
+            if (!_subSystemEnumLabelDic.ContainsKey(key))
+            {
+                _subSystemEnumLabelDic[key] = key.ToString();
             }
+            return _subSystemEnumLabelDic[key];
         }
-
-        public static Dictionary<int, string> remote_SubSystemEnumDic;
-        public static Dictionary<int, string> remote_SubSystemEnumLabelDic;
 
         public static string GetSubSystemName(int key)
         {
-            if (remote_SubSystemEnumDic != null)
+            if (!subSystemEnumDic.ContainsKey(key))
             {
-                if (!remote_SubSystemEnumDic.ContainsKey(key))
-                {
-                    remote_SubSystemEnumDic[key] = key.ToString();
-                }
-                return remote_SubSystemEnumDic[key];
+                subSystemEnumDic[key] = key.ToString();
             }
-            else
-            {
-                if (!subSystemEnumDic.ContainsKey(key))
-                {
-                    subSystemEnumDic[key] = key.ToString();
-                }
-                return subSystemEnumDic[key];
-            }
-
+            return subSystemEnumDic[key];
         }
 
         public static IEnumerable<int> GetAllSubSystemList()
         {
-            if (remote_SubSystemEnumDic != null)
-            {
-                return remote_SubSystemEnumDic.Keys;
-            }
             return subSystemEnumDic.Keys;
         }
 
@@ -154,10 +124,6 @@ namespace ClassifiedConsole.Runtime
         {
             get
             {
-                if (remote_SubSystemEnumDic != null)
-                {
-                    return remote_SubSystemEnumDic.Count;
-                }
                 return subSystemEnumDic.Count;
             }
         }
