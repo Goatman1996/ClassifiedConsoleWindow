@@ -10,7 +10,7 @@ namespace ClassifiedConsole
 
         [Header("要记录的栈信息行数(不算Msg)-1 不限制行数")]
         [SerializeField]
-        private int _LogWriteLine = 1;
+        private int _LogWriteLine = -1;
         public int LogWriteLine
         {
             get => this._LogWriteLine;
@@ -22,7 +22,7 @@ namespace ClassifiedConsole
         }
 
         [SerializeField]
-        private int _WarningWriteLine = 1;
+        private int _WarningWriteLine = -1;
         public int WarningWriteLine
         {
             get => this._WarningWriteLine;

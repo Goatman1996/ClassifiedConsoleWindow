@@ -16,7 +16,7 @@ namespace ClassifiedConsole.Editor
             SettingsService.OpenProjectSettings("Project/CDebugSettings");
         }
 
-        [MenuItem("Window/Classified/OpenLogFilePath", false, 6)]
+        [MenuItem("Window/Classified/Open Log Save Path", false, 6)]
         private static void OpenLogFilePath()
         {
             var path = ClassifiedConsole.Runtime.LogFilePathConfig.versionRoot;

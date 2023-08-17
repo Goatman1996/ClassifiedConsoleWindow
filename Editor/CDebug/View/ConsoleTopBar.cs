@@ -77,6 +77,10 @@ namespace ClassifiedConsole.Editor
                     return DropdownMenuAction.Status.Normal;
                 }
             });
+
+            archiveMenu.menu.AppendAction("Clean Archive",
+            (act) => { ClassifiedConsole.Runtime.ManagedLogFile.CleanUpManagedLogFile(); },
+            (act) => { return DropdownMenuAction.Status.Normal; });
             container.Add(archiveMenu);
             return container;
         }
@@ -170,6 +174,18 @@ namespace ClassifiedConsole.Editor
                 {
                     var showingId = editorLogFile.TargetLogFileID;
                     return showingId == logFileId ? DropdownMenuAction.Status.Checked : DropdownMenuAction.Status.Normal;
+                });
+            }
+            {
+                this.archivedLogFileMenu.menu.AppendAction("Open Log Save Path",
+                (act) =>
+                {
+                    var path = ClassifiedConsole.Runtime.LogFilePathConfig.versionRoot;
+                    UnityEditor.EditorUtility.OpenWithDefaultApp(path);
+                },
+                (act) =>
+                {
+                    return DropdownMenuAction.Status.Normal;
                 });
             }
         }
