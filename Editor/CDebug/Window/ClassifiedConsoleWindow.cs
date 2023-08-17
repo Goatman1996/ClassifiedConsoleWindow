@@ -20,6 +20,7 @@ namespace ClassifiedConsole.Editor
         public RemoteRequestor remoteRequestor;
         private VisualElement rootView;
         private ConsoleLeftRightView mainConsole;
+        private CmdView cmdView;
         private ConsoleTopBar topBar;
         public EditorLogFile editorLogFile;
 
@@ -107,6 +108,9 @@ namespace ClassifiedConsole.Editor
 
             this.mainConsole = new ConsoleLeftRightView();
             this.rootView.Add(this.mainConsole);
+
+            this.cmdView = new CmdView();
+            this.rootView.Add(this.cmdView);
         }
 
         private void OnTargetLogFileChanged()

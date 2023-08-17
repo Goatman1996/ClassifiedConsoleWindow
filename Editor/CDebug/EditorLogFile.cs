@@ -416,7 +416,7 @@ namespace ClassifiedConsole.Editor
 
             var subSystems = logReader.subSystem;
             var level = logReader.level;
-            this.Collect_System_LogCount(level, subSystems);
+            // this.Collect_System_LogCount(level, subSystems);
             if (level == LogLevel.Error && CDebugConfig.PauseOnError)
             {
                 return true;
@@ -432,6 +432,15 @@ namespace ClassifiedConsole.Editor
 
         private void RefreshShowingList()
         {
+            this.subSystem_Log_Count.Clear();
+            this.subSystem_Warning_Count.Clear();
+            this.subSystem_Error_Count.Clear();
+            this.subSystem_Exception_Count.Clear();
+            this.subSystemList.Clear();
+            foreach (var subSystem in CDebugSubSystemEnumConfig.GetAllSubSystemList())
+            {
+                this.subSystemList.Add(subSystem);
+            }
             this.logCount = 0;
             this.warningCount = 0;
             this.errorCount = 0;
@@ -462,6 +471,9 @@ namespace ClassifiedConsole.Editor
                     else if (level == LogLevel.Error) this.errorCount++;
                     else if (level == LogLevel.Exception) this.exceptionCount++;
                 }
+
+                var subSystem = logReader.subSystem;
+                this.Collect_System_LogCount(level, subSystem);
 
                 if (display == false)
                 {
@@ -503,9 +515,6 @@ namespace ClassifiedConsole.Editor
                 {
                     this.showingLogIndexList.Add(index);
                 }
-
-                // var subSystem = logReader.subSystem;
-                // this.Collect_System_LogCount(level, subSystem);
             }
         }
 
@@ -542,6 +551,10 @@ namespace ClassifiedConsole.Editor
                     this.subSystem_Exception_Count.Add(subSystem, 0);
                 }
                 this.subSystem_Exception_Count[subSystem]++;
+            }
+            if (this.subSystemList.Contains(subSystem) == false)
+            {
+                this.subSystemList.Add(subSystem);
             }
         }
 
@@ -593,5 +606,6 @@ namespace ClassifiedConsole.Editor
         private Dictionary<int, int> subSystem_Warning_Count = new Dictionary<int, int>();
         private Dictionary<int, int> subSystem_Error_Count = new Dictionary<int, int>();
         private Dictionary<int, int> subSystem_Exception_Count = new Dictionary<int, int>();
+        public HashSet<int> subSystemList = new HashSet<int>();
     }
 }

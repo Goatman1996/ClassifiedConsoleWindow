@@ -118,6 +118,7 @@ namespace ClassifiedConsole
                 return this._SubSystemDefinedAssembly;
             }
         }
+        public int SubSystemDefinedAssemblyCount => this._SubSystemDefinedAssembly.Count;
 
         public int WindowFPS
         {

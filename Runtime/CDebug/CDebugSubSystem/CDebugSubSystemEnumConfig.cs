@@ -27,11 +27,7 @@ namespace ClassifiedConsole.Runtime
 
         private static void InitSubSystemEnum()
         {
-            // var packageRuntimeAssembly = Assembly.Load("GM.ClassifiedConsole.Runtime");
-            // CollectByAssembly(packageRuntimeAssembly);
-
             CollectEnumType(typeof(CDebugBosster.UnityNativeSubSystem));
-
             var assemblyNameArray = CDebugSettings.Instance.SubSystemDefinedAssembly;
             foreach (var assemblyName in assemblyNameArray)
             {
@@ -53,7 +49,6 @@ namespace ClassifiedConsole.Runtime
                     UnityEngine.Debug.LogException(e);
                 }
             }
-
             CollectEnumType(typeof(UnDefinedSubSystem));
         }
 
@@ -109,6 +104,11 @@ namespace ClassifiedConsole.Runtime
             }
             else
             {
+                if (_subSystemEnumLabelDic == null)
+                {
+                    var touch = subSystemEnumDic;
+                }
+
                 if (!_subSystemEnumLabelDic.ContainsKey(key))
                 {
                     _subSystemEnumLabelDic[key] = key.ToString();

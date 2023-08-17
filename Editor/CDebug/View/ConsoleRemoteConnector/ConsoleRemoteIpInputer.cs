@@ -12,7 +12,7 @@ namespace ClassifiedConsole.Editor
         {
             rect = GUIUtility.GUIToScreenRect(rect);
             rect = new Rect(rect.x, rect.yMax, 300, 50);
-            var window = EditorWindow.GetWindowWithRect<ConsoleRemoteIpInputer>(rect, true);
+            var window = EditorWindow.GetWindowWithRect<ConsoleRemoteIpInputer>(rect, true, "Ip");
             window.position = rect;
             window.FocusFiedld();
 
