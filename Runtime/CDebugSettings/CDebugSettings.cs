@@ -44,17 +44,17 @@ namespace ClassifiedConsole
             }
         }
 
-        [SerializeField]
-        private int _ExceptionWriteLine = -1;
-        public int ExceptionWriteLine
-        {
-            get => this._ExceptionWriteLine;
-            set
-            {
-                var newValue = Mathf.Clamp(value, -1, int.MaxValue);
-                this._ExceptionWriteLine = newValue;
-            }
-        }
+        // [SerializeField]
+        // private int _ExceptionWriteLine = -1;
+        // public int ExceptionWriteLine
+        // {
+        //     get => this._ExceptionWriteLine;
+        //     set
+        //     {
+        //         var newValue = Mathf.Clamp(value, -1, int.MaxValue);
+        //         this._ExceptionWriteLine = newValue;
+        //     }
+        // }
 
         [Header("栈信息是否包含文件信息(建议出包前设置成false)")]
         public bool msgWithFileInfo = true;
@@ -79,7 +79,7 @@ namespace ClassifiedConsole
         [Header("是否监听运行时Error")]
         public bool catchNativeError = false;
         [Header("是否监听运行时Exception")]
-        public bool catchNativeException = false;
+        public bool catchNativeException = true;
 
         [Header("调试真机时，开放的端口号")]
         [SerializeField]
@@ -149,8 +149,8 @@ namespace ClassifiedConsole
                     return this.WarningWriteLine;
                 case LogLevel.Error:
                     return this.ErrorWriteLine;
-                case LogLevel.Exception:
-                    return this.ExceptionWriteLine;
+                    // case LogLevel.Exception:
+                    // return this.ExceptionWriteLine;
             }
             return -1;
         }
