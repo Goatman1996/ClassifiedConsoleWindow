@@ -437,6 +437,10 @@ namespace ClassifiedConsole.Editor
             this.subSystemList.Clear();
             foreach (var subSystem in CDebugSubSystemEnumConfig.GetAllSubSystemList())
             {
+                if (CDebugSubSystemEnumConfig.GetSubSystemName(subSystem) == subSystem.ToString())
+                {
+                    continue;
+                }
                 this.subSystemList.Add(subSystem);
             }
             this.logCount = 0;
