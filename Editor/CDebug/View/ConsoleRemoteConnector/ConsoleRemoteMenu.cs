@@ -107,6 +107,10 @@ namespace ClassifiedConsole.Editor
             var success = await this.remoteRequestor.TryConnect(ip, typeof(LogFileRemoteListener));
             if (success)
             {
+                if (ip.StartsWith("http://"))
+                {
+                    ip.Replace("http://", "");
+                }
                 CDebugConfig.IpPrefs = ip;
                 this.RefreshMenu();
             }
