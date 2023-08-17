@@ -39,7 +39,7 @@ namespace ClassifiedConsole.Editor
         public int errorCount;
         public int exceptionCount;
 
-        private RemoteRequestor remoteLogRequestor;
+        public RemoteRequestor remoteLogRequestor { get; private set; }
         private LogFile remoteLogFile;
         private LogFile localLogFile;
         private LogFile targetLogFile
@@ -115,7 +115,7 @@ namespace ClassifiedConsole.Editor
             }
         }
 
-        private bool isRemote { get => this.remoteLogRequestor != null; }
+        public bool isRemote { get => this.remoteLogRequestor != null; }
 
         public event Action OnTargetLogFileChanged;
         public void InitFromLocal(LogFile logFile)

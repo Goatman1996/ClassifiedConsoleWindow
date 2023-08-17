@@ -11,6 +11,8 @@ namespace ClassifiedConsole.Runtime
         public bool IsGetLog;
         public bool IsGetSubSystem;
 
+        public string Cmd;
+
         public int LogFileId;
         public int GetLogStartIndex;
         public int GetLogLength;
@@ -35,6 +37,8 @@ namespace ClassifiedConsole.Runtime
         public List<int> subSystemKey;
         public List<string> subSystemName;
         public List<string> subSystemLabel;
+
+        public bool cmdExecuteSuccess;
 
         public static LogFileNetResponseParam FromJson(string json)
         {

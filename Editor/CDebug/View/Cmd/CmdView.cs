@@ -10,15 +10,14 @@ namespace ClassifiedConsole.Editor
     {
         private TextField cmdInput;
         private Button executeBtn;
-        private Assembly asm;
+
+        public ClassifiedConsole.Runtime.Cmd cmdExecuter;
 
         public CmdView()
         {
             this.style.flexDirection = FlexDirection.Row;
 
             this.cmdInput = new TextField();
-            this.cmdInput.style.fontSize = 24;
-            // this.cmdInput.isDelayed = true;
             this.cmdInput.RegisterCallback<UnityEngine.UIElements.KeyDownEvent>(this.OnKeyDown);
             this.cmdInput.RegisterCallback<UnityEngine.UIElements.FocusInEvent>(this.OnInputFocusInChanged);
             this.cmdInput.RegisterCallback<UnityEngine.UIElements.FocusOutEvent>(this.OnInputFocusOutChanged);
@@ -31,35 +30,42 @@ namespace ClassifiedConsole.Editor
             this.executeBtn.clicked += this.OnClickExecuteBtn;
             this.Add(this.executeBtn);
 
-            this.asm = Assembly.Load("Assembly-CSharp");
+            this.cmdExecuter = new Cmd();
 
             this.ExecuteBorderColor = Color.red;
         }
 
         private void OnInputFocusInChanged(FocusInEvent evt)
         {
-            // Debug.Log("In");
+            CmdTipListView.Instance.display = false;
         }
 
         private void OnInputFocusOutChanged(FocusOutEvent evt)
         {
-            // Debug.Log("Out");
+            CmdTipListView.Instance.display = false;
         }
 
         private void OnKeyDown(UnityEngine.UIElements.KeyDownEvent evt)
         {
             if (evt.keyCode == KeyCode.Return)
             {
-                if (this.CheckContentValid)
-                {
-                    this.OnClickExecuteBtn();
-                }
+                this.OnClickExecuteBtn();
+            }
+            if (evt.keyCode == KeyCode.UpArrow)
+            {
+                this.cmdInput.value = CmdTipListView.Instance.GetUp();
+            }
+            if (evt.keyCode == KeyCode.DownArrow)
+            {
+                this.cmdInput.value = CmdTipListView.Instance.GetDown();
             }
         }
 
         private void OnCmdInputChanged(ChangeEvent<string> evt)
         {
-            if (this.CheckContentValid)
+            this.cmdExecuter.cmdContent = evt.newValue;
+
+            if (this.cmdExecuter.cmdValid)
             {
                 this.ExecuteBorderColor = Color.green;
             }
@@ -72,71 +78,44 @@ namespace ClassifiedConsole.Editor
 
         private void OnClickExecuteBtn()
         {
-            if (CheckContentValid)
+            if (string.IsNullOrEmpty(this.cmdExecuter.cmdContent))
             {
-                this.inputMethod.Invoke(null, null);
+                return;
+            }
+            if (ClassifiedConsoleWindow.windowRoot.editorLogFile.isRemote)
+            {
+                this.CallRemote();
+                return;
+            }
+            if (this.cmdExecuter.cmdValid)
+            {
+                var result = this.cmdExecuter.ExecuteCmd();
+                if (result)
+                {
+                    CmdTipListView.Instance.AddRecord(this.cmdExecuter.cmdContent);
+                    CmdTipListView.Instance.SerializeRecord();
+                    this.cmdInput.value = "";
+                }
             }
         }
 
-        private bool CheckContentValid
+        private async void CallRemote()
         {
-            get
+            var requestParam = new LogFileNetRequestParam();
+            requestParam.Cmd = this.cmdExecuter.cmdContent;
+            var requestJson = requestParam.ToJson();
+            var result = await ClassifiedConsoleWindow.windowRoot.editorLogFile.remoteLogRequestor.PostAsync(requestJson, false);
+            var responseParam = LogFileNetResponseParam.FromJson(result);
+            if (responseParam.cmdExecuteSuccess)
             {
-                return inputMethod != null;
-            }
-        }
-
-        private Type inputType
-        {
-            get
-            {
-                var content = this.cmdInput.text;
-
-                var dotSplit = content.Split('.');
-                if (dotSplit.Length <= 1) return null;
-
-                var lastDot = content.LastIndexOf('.');
-                var typeString = content.Substring(0, lastDot);
-                var methodString = content.Substring(lastDot + 1);
-
-                if (string.IsNullOrEmpty(methodString)) return null;
-
-                var type = this.asm.GetType(typeString);
-                if (type == null) return null;
-
-                return type;
-            }
-        }
-
-
-        private MethodInfo inputMethod
-        {
-            get
-            {
-                var content = this.cmdInput.text;
-
-                var dotSplit = content.Split('.');
-                if (dotSplit.Length <= 1) return null;
-
-                var lastDot = content.LastIndexOf('.');
-                var typeString = content.Substring(0, lastDot);
-                var methodString = content.Substring(lastDot + 1);
-
-                if (string.IsNullOrEmpty(methodString)) return null;
-
-                var type = this.asm.GetType(typeString);
-                if (type == null) return null;
-
-                var method = type.GetMethod(methodString, BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic);
-                if (method == null) return null;
-
-                return method;
+                CmdTipListView.Instance.AddRecord(this.cmdExecuter.cmdContent);
+                CmdTipListView.Instance.SerializeRecord();
+                this.cmdInput.value = "";
             }
         }
 
         private Color ExecuteBorderColor
         {
-            get => this.executeBtn.style.borderTopColor.value;
             set
             {
                 this.executeBtn.style.borderTopColor = value;

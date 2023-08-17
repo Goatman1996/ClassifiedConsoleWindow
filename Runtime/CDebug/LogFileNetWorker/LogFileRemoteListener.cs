@@ -18,11 +18,20 @@ namespace ClassifiedConsole
             return "Get";
         }
 
+        ClassifiedConsole.Runtime.Cmd cmdExecuter;
         public string PostHandler(string param)
         {
             var requestParam = UnityEngine.JsonUtility.FromJson<LogFileNetRequestParam>(param);
             var responseParam = new LogFileNetResponseParam();
-            if (requestParam.IsGetLogFileList)
+            if (!string.IsNullOrEmpty(requestParam.Cmd))
+            {
+                if (this.cmdExecuter == null) this.cmdExecuter = new Cmd();
+                this.cmdExecuter.cmdContent = requestParam.Cmd;
+                var result = this.cmdExecuter.ExecuteCmd();
+                responseParam.cmdExecuteSuccess = result;
+                return UnityEngine.JsonUtility.ToJson(responseParam);
+            }
+            else if (requestParam.IsGetLogFileList)
             {
                 responseParam.currentLogFileID = ManagedLogFile.currentFileId;
                 responseParam.LogFileIdList = ManagedLogFile.GetAvaliableArchivedLogFile();

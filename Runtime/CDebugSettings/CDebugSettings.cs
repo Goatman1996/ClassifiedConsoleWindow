@@ -111,7 +111,7 @@ namespace ClassifiedConsole
         [Header("所有包含了[CDebugSubSystemAttribute] 设置的Assembly")]
         [SerializeField]
         private List<string> _SubSystemDefinedAssembly = new List<string> { "Assembly-CSharp" };
-        public IEnumerable<string> SubSystemDefinedAssembly
+        public List<string> SubSystemDefinedAssembly
         {
             get
             {

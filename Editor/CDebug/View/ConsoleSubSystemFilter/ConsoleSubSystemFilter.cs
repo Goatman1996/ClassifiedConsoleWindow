@@ -54,7 +54,6 @@ namespace ClassifiedConsole.Editor
             this.subSystemLayout.itemHeight = 23;
             this.subSystemLayout.makeItem = this.OnMakeItem;
             this.subSystemLayout.bindItem = this.BindItem;
-            this.subSystemLayout.unbindItem = this.Unbind;
             this.subSystemLayout.showAlternatingRowBackgrounds = AlternatingRowBackground.ContentOnly;
             this.subSystemLayout.style.flexGrow = 1;
             this.Add(this.subSystemLayout);
@@ -63,11 +62,9 @@ namespace ClassifiedConsole.Editor
 
             this.managedElement = new List<ConsoleSubSystemElement>();
             this.InitSubSystem();
-        }
 
-        private void Unbind(VisualElement element, int arg2)
-        {
-            UnityEngine.Debug.LogError(element.name);
+            var textTest = new CmdTipListView();
+            this.Add(textTest);
         }
 
         // private List<ConsoleSubSystemElement> managedElement;
