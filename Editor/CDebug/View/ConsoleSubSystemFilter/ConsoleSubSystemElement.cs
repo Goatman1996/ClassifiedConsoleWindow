@@ -94,6 +94,9 @@ namespace ClassifiedConsole.Editor
             this.errorCountView.count = errorCount;
             this.exceptionCountView.count = exceptionCount;
 
+            var isOn = CDebugSubSystemEnumConfig.IsSubSystemOn(this._subSystemId);
+            this.showToggle.SetValueWithoutNotify(isOn);
+
             // if (logCount == 0)
             // {
             //     if (this.logCountContainer.Contains(this.logCountView))

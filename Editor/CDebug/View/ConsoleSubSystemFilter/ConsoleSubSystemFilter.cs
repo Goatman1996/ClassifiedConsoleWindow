@@ -84,13 +84,13 @@ namespace ClassifiedConsole.Editor
 
         private void InitSubSystem()
         {
-            if (this.subSystemList.Count != ClassifiedConsoleWindow.windowRoot.editorLogFile.subSystemList.Count)
+            if (this.subSystemList.Count != ClassifiedConsoleWindow.windowRoot.editorLogFile.subSystem_Dic.Count)
             {
                 this.managedElement.Clear();
                 this.subSystemList.Clear();
                 // var subSystemIEnum = ClassifiedConsoleWindow.windowRoot.editorLogFile.GetShowingSubSystem();
                 // var subSystemIEnum = CDebugSubSystemEnumConfig.GetAllSubSystemList();
-                this.subSystemList.AddRange(ClassifiedConsoleWindow.windowRoot.editorLogFile.subSystemList);
+                this.subSystemList.AddRange(ClassifiedConsoleWindow.windowRoot.editorLogFile.subSystem_Dic.Keys);
                 this.subSystemLayout.Refresh();
             }
             else

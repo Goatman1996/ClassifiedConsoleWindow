@@ -8,20 +8,25 @@ namespace ClassifiedConsole.Editor
 {
     internal class CmdHistory
     {
+        private static CmdHistory _Instance;
         internal static CmdHistory Instance
         {
-            get;
-            private set;
+            get
+            {
+                if (_Instance == null)
+                {
+                    _Instance = new CmdHistory();
+                }
+                return _Instance;
+            }
         }
 
         public const int MaxRecord = 30;
         public List<string> recordList;
 
-        public CmdHistory()
+        private CmdHistory()
         {
             this.DeserializeRecord();
-
-            Instance = this;
         }
 
         public void SerializeRecord()

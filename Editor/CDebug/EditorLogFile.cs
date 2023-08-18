@@ -345,6 +345,17 @@ namespace ClassifiedConsole.Editor
         private void PrepareEditorLogData()
         {
             var logCount = this.targetLogFile.logCount;
+
+            this.subSystem_Dic.Clear();
+            foreach (var subSystem in CDebugSubSystemEnumConfig.GetAllSubSystemList())
+            {
+                if (CDebugSubSystemEnumConfig.GetSubSystemName(subSystem) == subSystem.ToString())
+                {
+                    continue;
+                }
+                this.subSystem_Dic[subSystem] = subSystem;
+            }
+
             for (int index = 0; index < logCount; index++)
             {
                 this.OnAppendLogInternal(index);
@@ -413,7 +424,7 @@ namespace ClassifiedConsole.Editor
 
             var subSystems = logReader.subSystem;
             var level = logReader.level;
-            // this.Collect_System_LogCount(level, subSystems);
+            this.Collect_System_LogCount(level, subSystems);
             if (level == LogLevel.Error && CDebugWindowConfig.PauseOnError)
             {
                 return true;
@@ -429,19 +440,11 @@ namespace ClassifiedConsole.Editor
 
         private void RefreshShowingList()
         {
-            this.subSystem_Log_Count.Clear();
-            this.subSystem_Warning_Count.Clear();
-            this.subSystem_Error_Count.Clear();
-            this.subSystem_Exception_Count.Clear();
-            this.subSystemList.Clear();
-            foreach (var subSystem in CDebugSubSystemEnumConfig.GetAllSubSystemList())
-            {
-                if (CDebugSubSystemEnumConfig.GetSubSystemName(subSystem) == subSystem.ToString())
-                {
-                    continue;
-                }
-                this.subSystemList.Add(subSystem);
-            }
+            // this.subSystem_Log_Count.Clear();
+            // this.subSystem_Warning_Count.Clear();
+            // this.subSystem_Error_Count.Clear();
+            // this.subSystem_Exception_Count.Clear();
+
             this.logCount = 0;
             this.warningCount = 0;
             this.errorCount = 0;
@@ -474,7 +477,7 @@ namespace ClassifiedConsole.Editor
                 }
 
                 var subSystem = logReader.subSystem;
-                this.Collect_System_LogCount(level, subSystem);
+                // this.Collect_System_LogCount(level, subSystem);
 
                 if (display == false)
                 {
@@ -553,10 +556,7 @@ namespace ClassifiedConsole.Editor
                 }
                 this.subSystem_Exception_Count[subSystem]++;
             }
-            if (this.subSystemList.Contains(subSystem) == false)
-            {
-                this.subSystemList.Add(subSystem);
-            }
+            this.subSystem_Dic[subSystem] = subSystem;
         }
 
         public int GetCollapseCount(string md5)
@@ -607,6 +607,8 @@ namespace ClassifiedConsole.Editor
         private Dictionary<int, int> subSystem_Warning_Count = new Dictionary<int, int>();
         private Dictionary<int, int> subSystem_Error_Count = new Dictionary<int, int>();
         private Dictionary<int, int> subSystem_Exception_Count = new Dictionary<int, int>();
-        public HashSet<int> subSystemList = new HashSet<int>();
+
+        public Dictionary<int, int> subSystem_Dic = new Dictionary<int, int>();
+        // public HashSet<int> subSystemList = new HashSet<int>();
     }
 }
