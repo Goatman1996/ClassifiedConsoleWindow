@@ -463,7 +463,7 @@ namespace ClassifiedConsole.Editor
 
                 var logReader = this.logReaderList[index];
                 var level = logReader.level;
-                var levelShow = logReader.NeedShowLogLevel;
+                var levelShow = EditorLogReader.NeedShowLogLevel(level);
                 var subSystemShow = logReader.NeedShowSubSystem;
                 var display = levelShow && subSystemShow;
                 var md5 = logReader.md5;

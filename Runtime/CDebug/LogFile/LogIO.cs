@@ -104,6 +104,59 @@ namespace ClassifiedConsole.Runtime
             return this.readerSB.ToString();
         }
 
+        private char[] readBuffer = new char[1024];
+        public string ReadLog(long startIndex, int length)
+        {
+            this.readerSB.Clear();
+            this.streamReader.BaseStream.Position = startIndex;
+            this.streamReader.DiscardBufferedData();
+            // var readLoop = 0;
+            // bool hasContent = false;
+
+
+
+            for (int i = 0; i < length;)
+            {
+                int readedLength = 0;
+                if (length - i >= 1024)
+                {
+                    readedLength = this.streamReader.Read(readBuffer, 0, 1024);
+                }
+                else
+                {
+                    readedLength = this.streamReader.Read(readBuffer, 0, length - i);
+                }
+                this.readerSB.Append(this.readBuffer, 0, readedLength);
+
+                i += readedLength;
+            }
+
+            // while (true)
+            // {
+            //     var line = this.streamReader.ReadLine();
+            //     if (line == endToken)
+            //     {
+            //         if (hasContent)
+            //         {
+            //             // 去掉最后一个换行
+            //             this.readerSB.Remove(this.readerSB.Length - 1, 1);
+            //         }
+            //         break;
+            //     }
+            //     else
+            //     {
+            //         hasContent = true;
+            //         this.readerSB.AppendLine(line);
+            //     }
+
+            //     if (readLoop++ > 1000)
+            //     {
+            //         break;
+            //     }
+            // }
+            return this.readerSB.ToString();
+        }
+
         public string ReadLines(long startIndex, int lineCount)
         {
             this.readerSB.Clear();

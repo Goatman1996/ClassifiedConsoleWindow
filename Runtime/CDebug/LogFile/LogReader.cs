@@ -14,6 +14,7 @@ namespace ClassifiedConsole.Runtime
         public long timeSpan;
         public const string MSG = "#Msg";
         public long msgIndex;
+        public int msgLength;
         public const string END = "#End";
 
         public int stackTrackStartIndex;
@@ -80,6 +81,19 @@ namespace ClassifiedConsole.Runtime
             }
 
             writer.Write(baseSpliter);
+
+            // writer.Write(this.msgLength);
+            // 解GC
+            {
+                var numberString = new NumberString(this.msgLength);
+                for (int j = numberString.Length - 1; j >= 0; j--)
+                {
+                    writer.Write(numberString[j]);
+                }
+            }
+
+            writer.Write(baseSpliter);
+
             writer.Write(this.logFileName);
             writer.WriteLine();
         }
@@ -97,10 +111,11 @@ namespace ClassifiedConsole.Runtime
                 reader.timeSpan = long.Parse(spliter[3]);
                 reader.msgIndex = long.Parse(spliter[4]);
                 reader.stackTrackStartIndex = int.Parse(spliter[5]);
+                reader.msgLength = int.Parse(spliter[6]);
 
                 // SubSystem中可能会带有“_”，特殊处理
                 reader.logFileName = "";
-                for (int s = 6; s < spliter.Length; s++)
+                for (int s = 7; s < spliter.Length; s++)
                 {
                     reader.logFileName += spliter[s];
                     reader.logFileName += "_";
@@ -133,7 +148,7 @@ namespace ClassifiedConsole.Runtime
             get
             {
                 if (this.IsBrokenReader) return "Broken";
-                var content = this.logIO.ReadLog(this.msgIndex);
+                var content = this.logIO.ReadLog(this.msgIndex, this.msgLength);
                 return content;
             }
         }

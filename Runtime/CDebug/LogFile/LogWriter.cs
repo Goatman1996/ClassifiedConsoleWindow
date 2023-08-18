@@ -53,6 +53,15 @@ namespace ClassifiedConsole.Runtime
                 writer.Write(this.msg);
             }
             writer.WriteLine();
+            if (this.msgSb != null)
+            {
+                logReader.msgLength = this.msgSb.Length;
+            }
+            else
+            {
+                logReader.msgLength = this.msg.Length;
+            }
+
             writer.Write(LogReader.END);
             writer.WriteLine();
 

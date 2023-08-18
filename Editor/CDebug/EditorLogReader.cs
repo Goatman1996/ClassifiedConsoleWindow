@@ -22,6 +22,7 @@ namespace ClassifiedConsole.Editor
         public LogLevel level { get => this.internalLogReader.level; }
         public long timeSpan { get => this.internalLogReader.timeSpan; }
         public long msgIndex { get => this.internalLogReader.msgIndex; }
+        public int msgLength { get => this.internalLogReader.msgLength; }
         public const string END = "#End";
 
         public int stackTrackStartIndex { get => this.internalLogReader.stackTrackStartIndex; }
@@ -52,7 +53,8 @@ namespace ClassifiedConsole.Editor
                 if (_msg == null)
                 {
                     if (this.IsBrokenReader) _msg = "Broken";
-                    _msg = this.logIO.ReadLog(this.msgIndex);
+                    _msg = this.logIO.ReadLog(this.msgIndex, this.msgLength);
+                    // _msg = this.logIO.ReadLog(this.msgIndex);
                 }
                 return _msg;
             }
@@ -97,21 +99,6 @@ namespace ClassifiedConsole.Editor
             }
         }
 
-        private int needShowLogLevelVersion = -1;
-        private bool _NeedShowLogLevel;
-        public bool NeedShowLogLevel
-        {
-            get
-            {
-                if (needShowLogLevelVersion != CDebugWindowConfig.needShowLogLevelVersion)
-                {
-                    _NeedShowLogLevel = CDebugWindowConfig.NeedShowLogLevel(this.level);
-                    needShowLogLevelVersion = CDebugWindowConfig.needShowLogLevelVersion;
-                }
-                return _NeedShowLogLevel;
-            }
-        }
-
         public int needShowSubSystemVersion = -1;
         private bool _NeedShowSubSystem;
         public bool NeedShowSubSystem
@@ -124,6 +111,40 @@ namespace ClassifiedConsole.Editor
                     needShowSubSystemVersion = CDebugSubSystemEnumConfig.SubSystemSettingsVersion;
                 }
                 return _NeedShowSubSystem;
+            }
+        }
+
+        private static int needShowLogLevelVersion = -1;
+        private static bool _NeedShowLogLevel_Log;
+        private static bool _NeedShowLogLevel_Warning;
+        private static bool _NeedShowLogLevel_Error;
+        private static bool _NeedShowLogLevel_Exception;
+        public static bool NeedShowLogLevel(LogLevel level)
+        {
+            if (needShowLogLevelVersion != CDebugWindowConfig.needShowLogLevelVersion)
+            {
+                _NeedShowLogLevel_Log = CDebugWindowConfig.NeedShowLogLevel(LogLevel.Log);
+                _NeedShowLogLevel_Warning = CDebugWindowConfig.NeedShowLogLevel(LogLevel.Warning);
+                _NeedShowLogLevel_Error = CDebugWindowConfig.NeedShowLogLevel(LogLevel.Error);
+                _NeedShowLogLevel_Exception = CDebugWindowConfig.NeedShowLogLevel(LogLevel.Exception);
+
+                needShowLogLevelVersion = CDebugWindowConfig.needShowLogLevelVersion;
+            }
+            if (level == LogLevel.Log)
+            {
+                return _NeedShowLogLevel_Log;
+            }
+            else if (level == LogLevel.Warning)
+            {
+                return _NeedShowLogLevel_Warning;
+            }
+            else if (level == LogLevel.Error)
+            {
+                return _NeedShowLogLevel_Error;
+            }
+            else
+            {
+                return _NeedShowLogLevel_Exception;
             }
         }
     }
