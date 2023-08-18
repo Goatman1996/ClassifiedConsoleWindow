@@ -17,32 +17,20 @@ namespace ClassifiedConsole.Editor
         {
             this.style.flexDirection = FlexDirection.Row;
 
-            this.cmdInput = new TextField();
-            this.cmdInput.RegisterCallback<UnityEngine.UIElements.KeyDownEvent>(this.OnKeyDown);
-            this.cmdInput.RegisterCallback<UnityEngine.UIElements.FocusInEvent>(this.OnInputFocusInChanged);
-            this.cmdInput.RegisterCallback<UnityEngine.UIElements.FocusOutEvent>(this.OnInputFocusOutChanged);
-            this.cmdInput.RegisterValueChangedCallback(this.OnCmdInputChanged);
-            this.cmdInput.style.flexGrow = 1;
-            this.Add(this.cmdInput);
-
             this.executeBtn = new Button();
             this.executeBtn.text = "Run";
             this.executeBtn.clicked += this.OnClickExecuteBtn;
             this.Add(this.executeBtn);
 
+            this.cmdInput = new TextField();
+            this.cmdInput.RegisterCallback<UnityEngine.UIElements.KeyDownEvent>(this.OnKeyDown);
+            this.cmdInput.RegisterValueChangedCallback(this.OnCmdInputChanged);
+            this.cmdInput.style.flexGrow = 1;
+            this.Add(this.cmdInput);
+
             this.cmdExecuter = new Cmd();
 
             this.ExecuteBorderColor = Color.red;
-        }
-
-        private void OnInputFocusInChanged(FocusInEvent evt)
-        {
-            CmdTipListView.Instance.display = false;
-        }
-
-        private void OnInputFocusOutChanged(FocusOutEvent evt)
-        {
-            CmdTipListView.Instance.display = false;
         }
 
         private void OnKeyDown(UnityEngine.UIElements.KeyDownEvent evt)
@@ -53,11 +41,11 @@ namespace ClassifiedConsole.Editor
             }
             if (evt.keyCode == KeyCode.UpArrow)
             {
-                this.cmdInput.value = CmdTipListView.Instance.GetUp();
+                this.cmdInput.value = CmdHistory.Instance.GetUp();
             }
             if (evt.keyCode == KeyCode.DownArrow)
             {
-                this.cmdInput.value = CmdTipListView.Instance.GetDown();
+                this.cmdInput.value = CmdHistory.Instance.GetDown();
             }
         }
 
@@ -92,8 +80,8 @@ namespace ClassifiedConsole.Editor
                 var result = this.cmdExecuter.ExecuteCmd();
                 if (result)
                 {
-                    CmdTipListView.Instance.AddRecord(this.cmdExecuter.cmdContent);
-                    CmdTipListView.Instance.SerializeRecord();
+                    CmdHistory.Instance.AddRecord(this.cmdExecuter.cmdContent);
+                    CmdHistory.Instance.SerializeRecord();
                     this.cmdInput.value = "";
                 }
             }
@@ -108,8 +96,8 @@ namespace ClassifiedConsole.Editor
             var responseParam = LogFileNetResponseParam.FromJson(result);
             if (responseParam.cmdExecuteSuccess)
             {
-                CmdTipListView.Instance.AddRecord(this.cmdExecuter.cmdContent);
-                CmdTipListView.Instance.SerializeRecord();
+                CmdHistory.Instance.AddRecord(this.cmdExecuter.cmdContent);
+                CmdHistory.Instance.SerializeRecord();
                 this.cmdInput.value = "";
             }
         }

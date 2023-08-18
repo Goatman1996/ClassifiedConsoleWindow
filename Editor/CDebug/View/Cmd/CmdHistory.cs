@@ -6,9 +6,9 @@ using UnityEngine.UIElements;
 
 namespace ClassifiedConsole.Editor
 {
-    internal class CmdTipListView : VisualElement
+    internal class CmdHistory
     {
-        internal static CmdTipListView Instance
+        internal static CmdHistory Instance
         {
             get;
             private set;
@@ -17,22 +17,9 @@ namespace ClassifiedConsole.Editor
         public const int MaxRecord = 30;
         public List<string> recordList;
 
-        private Label title;
-
-        public CmdTipListView()
+        public CmdHistory()
         {
             this.DeserializeRecord();
-            this.title = new Label();
-            this.title.style.unityTextAlign = TextAnchor.MiddleCenter;
-            this.title.style.borderBottomColor = Color.gray;
-            this.title.style.borderBottomWidth = 1;
-            this.title.text = "History";
-            this.Add(this.title);
-
-            this.borderWidth = 1;
-            this.borderColor = Color.grey;
-
-            this.display = false;
 
             Instance = this;
         }
@@ -79,28 +66,6 @@ namespace ClassifiedConsole.Editor
 
         }
 
-        private int borderWidth
-        {
-            set
-            {
-                this.style.borderTopWidth = value;
-                this.style.borderLeftWidth = value;
-                this.style.borderRightWidth = value;
-                this.style.borderBottomWidth = value;
-            }
-        }
-
-        private Color borderColor
-        {
-            set
-            {
-                this.style.borderTopColor = value;
-                this.style.borderLeftColor = value;
-                this.style.borderRightColor = value;
-                this.style.borderBottomColor = value;
-            }
-        }
-
         private int _index = -1;
         public int index
         {
@@ -138,12 +103,6 @@ namespace ClassifiedConsole.Editor
             {
                 return this.recordList[index];
             }
-        }
-
-        public bool display
-        {
-            get => this.style.display == DisplayStyle.Flex;
-            set => this.style.display = value ? DisplayStyle.Flex : DisplayStyle.None;
         }
     }
 }

@@ -62,9 +62,6 @@ namespace ClassifiedConsole.Editor
 
             this.managedElement = new List<ConsoleSubSystemElement>();
             this.InitSubSystem();
-
-            var textTest = new CmdTipListView();
-            this.Add(textTest);
         }
 
         // private List<ConsoleSubSystemElement> managedElement;
