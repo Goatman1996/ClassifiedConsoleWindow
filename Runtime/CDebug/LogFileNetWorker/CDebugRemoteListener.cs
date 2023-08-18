@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using UnityEngine;
-using HttpRemoteConnector;
 using ClassifiedConsole.Runtime;
 
 namespace ClassifiedConsole
@@ -89,16 +88,16 @@ namespace ClassifiedConsole
             }
         }
 
-        public static void Start(bool ignoreEditor = true)
+        public static string Start(bool ignoreEditor = true)
         {
             if (ignoreEditor && Application.isEditor)
             {
-                return;
+                return "";
             }
             else
             {
                 var listener = new CDebugRemoteListener();
-                listener.StartListen();
+                return RemoteListenerManager.Instance.StartListener(listener);
             }
         }
     }
