@@ -6,7 +6,7 @@ using ClassifiedConsole.Runtime;
 
 namespace ClassifiedConsole.Editor
 {
-    public class EditorLogReader
+    internal class EditorLogReader
     {
         public readonly LogReader internalLogReader;
         public readonly LogIO logIO;

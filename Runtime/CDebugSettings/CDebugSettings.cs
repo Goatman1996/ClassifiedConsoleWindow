@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using ClassifiedConsole.Runtime;
 using UnityEngine;
 
 namespace ClassifiedConsole
@@ -99,7 +100,7 @@ namespace ClassifiedConsole
         private bool _IgnoreSkip = false;
         public bool IgnoreSkip { get => this._IgnoreSkip; }
 
-        public int stackSkipLine
+        internal int stackSkipLine
         {
             get
             {
@@ -118,16 +119,6 @@ namespace ClassifiedConsole
                 return this._SubSystemDefinedAssembly;
             }
         }
-        public int SubSystemDefinedAssemblyCount => this._SubSystemDefinedAssembly.Count;
-
-        public int WindowFPS
-        {
-            get
-            {
-                return 30;
-                // return Mathf.Clamp(this._WindowFPS, 5, 60);
-            }
-        }
 
         private int _limitLogCount = (100 * 100) * 10;
         public int limitLogCount
@@ -139,7 +130,7 @@ namespace ClassifiedConsole
             }
         }
 
-        public int GetWriteLine(LogLevel level)
+        internal int GetWriteLine(LogLevel level)
         {
             switch (level)
             {

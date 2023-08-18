@@ -1,4 +1,4 @@
-namespace ClassifiedConsole
+namespace ClassifiedConsole.Runtime
 {
     public enum LogLevel
     {

@@ -16,6 +16,7 @@ namespace ClassifiedConsole.Editor
 
         public static ClassifiedConsoleWindow windowRoot;
 
+        private const int WindowFps = 30;
         private bool isRemote = false;
         public RemoteRequestor remoteRequestor;
         private VisualElement rootView;
@@ -86,7 +87,7 @@ namespace ClassifiedConsole.Editor
                 {
                     this.RenderConsole();
                     this.isDirty = false;
-                    dirtyDelay = CDebugSettings.Instance.WindowFPS;
+                    dirtyDelay = WindowFps;
                 }
             }
         }
