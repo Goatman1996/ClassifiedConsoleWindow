@@ -17,7 +17,7 @@ namespace ClassifiedConsole.Editor
         public ConsoleLogLeveTogglel(LogLevel level)
         {
             this.level = level;
-            var value = CDebugConfig.GetShowLogLevel(this.level);
+            var value = CDebugWindowConfig.GetShowLogLevel(this.level);
             base.SetValueWithoutNotify(value);
 
             this.icon = new Image();
@@ -39,7 +39,7 @@ namespace ClassifiedConsole.Editor
 
         private void OnValueChanged(ChangeEvent<bool> evt)
         {
-            CDebugConfig.SetShowLogLevel(this.level, evt.newValue);
+            CDebugWindowConfig.SetShowLogLevel(this.level, evt.newValue);
             ClassifiedConsoleWindow.windowRoot.FilterTryNotify();
         }
 

@@ -103,10 +103,10 @@ namespace ClassifiedConsole.Editor
         {
             get
             {
-                if (needShowLogLevelVersion != CDebugConfig.needShowLogLevelVersion)
+                if (needShowLogLevelVersion != CDebugWindowConfig.needShowLogLevelVersion)
                 {
-                    _NeedShowLogLevel = CDebugConfig.NeedShowLogLevel(this.level);
-                    needShowLogLevelVersion = CDebugConfig.needShowLogLevelVersion;
+                    _NeedShowLogLevel = CDebugWindowConfig.NeedShowLogLevel(this.level);
+                    needShowLogLevelVersion = CDebugWindowConfig.needShowLogLevelVersion;
                 }
                 return _NeedShowLogLevel;
             }

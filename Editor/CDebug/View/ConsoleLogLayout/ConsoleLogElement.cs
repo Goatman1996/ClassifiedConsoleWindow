@@ -64,7 +64,7 @@ namespace ClassifiedConsole.Editor
             content += shortMsg;
             this.label.text = content;
 
-            if (CDebugConfig.Collapse)
+            if (CDebugWindowConfig.Collapse)
             {
                 var md5 = this.logReader.md5;
                 var collapseCount = ClassifiedConsoleWindow.windowRoot.editorLogFile.GetCollapseCount(md5);

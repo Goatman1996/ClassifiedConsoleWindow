@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace ClassifiedConsole.Editor
 {
-    internal class CDebugConfig
+    internal class CDebugWindowConfig
     {
         public static bool ArchiveOnPlay
         {

@@ -66,9 +66,9 @@ namespace ClassifiedConsole.Editor
             container.Add(archiveBtn);
 
             var archiveMenu = new ToolbarMenu();
-            archiveMenu.menu.AppendAction("Archive on Play", (act) => { CDebugConfig.ArchiveOnPlay = !CDebugConfig.ArchiveOnPlay; }, (act) =>
+            archiveMenu.menu.AppendAction("Archive on Play", (act) => { CDebugWindowConfig.ArchiveOnPlay = !CDebugWindowConfig.ArchiveOnPlay; }, (act) =>
             {
-                if (CDebugConfig.ArchiveOnPlay)
+                if (CDebugWindowConfig.ArchiveOnPlay)
                 {
                     return DropdownMenuAction.Status.Checked;
                 }
@@ -90,12 +90,12 @@ namespace ClassifiedConsole.Editor
             var collapseToggle = new ToolbarToggle();
             collapseToggle.RegisterValueChangedCallback((evt) =>
             {
-                CDebugConfig.Collapse = evt.newValue;
+                CDebugWindowConfig.Collapse = evt.newValue;
                 ClassifiedConsoleWindow.windowRoot.FilterTryNotify();
             });
             collapseToggle.text = "Collapse";
 
-            collapseToggle.SetValueWithoutNotify(CDebugConfig.Collapse);
+            collapseToggle.SetValueWithoutNotify(CDebugWindowConfig.Collapse);
             return collapseToggle;
         }
 
@@ -104,19 +104,19 @@ namespace ClassifiedConsole.Editor
             var pauseOnMenu = new ToolbarMenu();
             pauseOnMenu.style.flexShrink = 0;
             pauseOnMenu.text = "PauseOn...";
-            pauseOnMenu.menu.AppendAction(nameof(CDebugConfig.PauseOnError),
-            (act) => CDebugConfig.PauseOnError = !CDebugConfig.PauseOnError,
+            pauseOnMenu.menu.AppendAction(nameof(CDebugWindowConfig.PauseOnError),
+            (act) => CDebugWindowConfig.PauseOnError = !CDebugWindowConfig.PauseOnError,
             (act =>
             {
-                var isOn = CDebugConfig.PauseOnError;
+                var isOn = CDebugWindowConfig.PauseOnError;
                 if (isOn) return DropdownMenuAction.Status.Checked;
                 else return DropdownMenuAction.Status.Normal;
             }));
-            pauseOnMenu.menu.AppendAction(nameof(CDebugConfig.PauseOnException),
-            (act) => CDebugConfig.PauseOnException = !CDebugConfig.PauseOnException,
+            pauseOnMenu.menu.AppendAction(nameof(CDebugWindowConfig.PauseOnException),
+            (act) => CDebugWindowConfig.PauseOnException = !CDebugWindowConfig.PauseOnException,
             (act =>
             {
-                var isOn = CDebugConfig.PauseOnException;
+                var isOn = CDebugWindowConfig.PauseOnException;
                 if (isOn) return DropdownMenuAction.Status.Checked;
                 else return DropdownMenuAction.Status.Normal;
             }));

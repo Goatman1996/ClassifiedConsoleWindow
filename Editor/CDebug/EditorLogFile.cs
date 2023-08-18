@@ -415,11 +415,11 @@ namespace ClassifiedConsole.Editor
             var subSystems = logReader.subSystem;
             var level = logReader.level;
             // this.Collect_System_LogCount(level, subSystems);
-            if (level == LogLevel.Error && CDebugConfig.PauseOnError)
+            if (level == LogLevel.Error && CDebugWindowConfig.PauseOnError)
             {
                 return true;
             }
-            if (level == LogLevel.Exception && CDebugConfig.PauseOnException)
+            if (level == LogLevel.Exception && CDebugWindowConfig.PauseOnException)
             {
                 return true;
             }
@@ -450,7 +450,7 @@ namespace ClassifiedConsole.Editor
             this.showingLogIndexList.Clear();
             this.md5CountDic.Clear();
             this.md5_Search_Contains.Clear();
-            var collapse = CDebugConfig.Collapse;
+            var collapse = CDebugWindowConfig.Collapse;
             var searchContent = this.SearchFilter;
             var hasSearchContent = !string.IsNullOrEmpty(searchContent);
 

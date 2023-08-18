@@ -58,7 +58,7 @@ namespace ClassifiedConsole.Editor
                 }
             });
 
-            var ipPrefs = CDebugConfig.IpPrefs;
+            var ipPrefs = CDebugWindowConfig.IpPrefs;
             if (!string.IsNullOrEmpty(ipPrefs))
             {
                 this.menu.AppendAction(ipPrefs,
@@ -111,7 +111,7 @@ namespace ClassifiedConsole.Editor
                 {
                     ip.Replace("http://", "");
                 }
-                CDebugConfig.IpPrefs = ip;
+                CDebugWindowConfig.IpPrefs = ip;
                 this.RefreshMenu();
             }
             else

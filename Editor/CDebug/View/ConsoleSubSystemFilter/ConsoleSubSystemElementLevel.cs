@@ -13,7 +13,7 @@ namespace ClassifiedConsole.Editor
         public ConsoleSubSystemElementLevel(LogLevel level)
         {
             this.level = level;
-            var value = CDebugConfig.GetShowLogLevel(this.level);
+            var value = CDebugWindowConfig.GetShowLogLevel(this.level);
 
             this.icon = new Image();
             this.countLabel = new Label();

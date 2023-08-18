@@ -14,7 +14,7 @@ namespace ClassifiedConsole.Editor
         public ConsoleLogView()
         {
             base.fixedPaneIndex = 0;
-            base.fixedPaneInitialDimension = CDebugConfig.LogLayoutAndDetailRate;
+            base.fixedPaneInitialDimension = CDebugWindowConfig.LogLayoutAndDetailRate;
             base.orientation = TwoPaneSplitViewOrientation.Vertical;
 
             this.top = new ConsoleLogLayout();

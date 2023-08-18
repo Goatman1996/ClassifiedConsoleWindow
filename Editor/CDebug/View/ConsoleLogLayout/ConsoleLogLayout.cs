@@ -48,7 +48,7 @@ namespace ClassifiedConsole.Editor
             {
                 this.BackToBottom();
             }
-            CDebugConfig.LogLayoutAndDetailRate = evt.newRect.height;
+            CDebugWindowConfig.LogLayoutAndDetailRate = evt.newRect.height;
         }
 
         private void DoubleClick(IEnumerable<object> obj)
