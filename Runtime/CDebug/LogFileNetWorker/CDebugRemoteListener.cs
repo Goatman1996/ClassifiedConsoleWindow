@@ -1,14 +1,11 @@
-using System.Collections;
 using System.Collections.Generic;
-using System.Net;
-using System.Text;
 using UnityEngine;
 using HttpRemoteConnector;
 using ClassifiedConsole.Runtime;
 
 namespace ClassifiedConsole
 {
-    public class LogFileRemoteListener : IRemoteListener
+    public class CDebugRemoteListener : IRemoteListener
     {
         private int _port = CDebugSettings.Instance.port;
         public int port => this._port;
@@ -100,7 +97,7 @@ namespace ClassifiedConsole
             }
             else
             {
-                var listener = new LogFileRemoteListener();
+                var listener = new CDebugRemoteListener();
                 listener.StartListen();
             }
         }

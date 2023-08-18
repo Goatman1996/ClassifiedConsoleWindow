@@ -66,7 +66,7 @@ namespace ClassifiedConsole.Editor
                 {
                     if (this.remoteRequestor.state == RemoteRequestor.ConnectionState.NoConnection)
                     {
-                        await this.remoteRequestor.TryConnect(ipPrefs, typeof(LogFileRemoteListener));
+                        await this.remoteRequestor.TryConnect(ipPrefs, typeof(CDebugRemoteListener));
                     }
                 },
                 (act) =>
@@ -104,7 +104,7 @@ namespace ClassifiedConsole.Editor
             {
                 ip = ip + ":" + CDebugSettings.Instance.port;
             }
-            var success = await this.remoteRequestor.TryConnect(ip, typeof(LogFileRemoteListener));
+            var success = await this.remoteRequestor.TryConnect(ip, typeof(CDebugRemoteListener));
             if (success)
             {
                 if (ip.StartsWith("http://"))
