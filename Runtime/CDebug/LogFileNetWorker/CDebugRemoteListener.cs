@@ -97,8 +97,12 @@ namespace ClassifiedConsole
             else
             {
                 var listener = new CDebugRemoteListener();
-                return RemoteListenerManager.Instance.StartListener(listener);
+                ListeningIpAddress = RemoteListenerManager.Instance.StartListener(listener);
+                return ListeningIpAddress;
             }
         }
+
+        private static string _ListeningIpAddress = "";
+        public static string ListeningIpAddress { get; private set; }
     }
 }
