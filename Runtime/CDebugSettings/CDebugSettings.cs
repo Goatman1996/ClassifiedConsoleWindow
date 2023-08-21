@@ -98,7 +98,7 @@ namespace ClassifiedConsole
         [Header("是否放弃跳过栈信息,IL2Cpp出包时推荐勾选")]
         [SerializeField]
         private bool _IgnoreSkip = false;
-        public bool IgnoreSkip { get => this._IgnoreSkip; }
+        public bool IgnoreSkip { get => this._IgnoreSkip; set => this._IgnoreSkip = value; }
 
         internal int stackSkipLine
         {
