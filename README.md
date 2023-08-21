@@ -66,3 +66,5 @@ void StartRemoteListener()
 参数使用空格分开（支持大部分默认的值类型）
 
 完整名称例子:[namespace].[class].[method] [param1] [param2] [...]
+
+局域网 真机调试 亦可
