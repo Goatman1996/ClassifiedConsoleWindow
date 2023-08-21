@@ -58,3 +58,11 @@ void StartRemoteListener()
     string url = ClassifiedConsole.CDebugRemoteListener.Start.Start(false);
 }
 ```
+
+### 命令行工具
+
+在Console窗口的最下方有一个输入框，输入完整的（静态）方法名，可调起静态方法。
+
+参数使用空格分开（支持大部分默认的值类型）
+
+完整名称例子:[namespace].[class].[method] [param1] [param2] [...]
