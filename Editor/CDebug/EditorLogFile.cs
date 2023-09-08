@@ -418,7 +418,9 @@ namespace ClassifiedConsole.Editor
             var logReader = this.targetLogFile[index];
             // this.logReaderIndexList.Add(index);
             var logIo = this.targetLogFile.GetLogIo(logReader.logFileName);
+            UnityEngine.Profiling.Profiler.BeginSample("New EditorLogReader [EditorOnly]");
             var editorLogReader = new EditorLogReader(logReader, logIo);
+            UnityEngine.Profiling.Profiler.EndSample();
             // this.logReaderDic.Add(index, editorLogReader);
             this.logReaderList.Add(editorLogReader);
 
