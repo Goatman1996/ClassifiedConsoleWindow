@@ -4,7 +4,7 @@ using System.IO;
 
 namespace ClassifiedConsole.Runtime
 {
-    public class LogFile
+    internal class LogFile
     {
         public int logFileId { get; private set; }
         private string logDir;

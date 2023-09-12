@@ -6,7 +6,7 @@ using ClassifiedConsole.Runtime;
 
 namespace ClassifiedConsole.Runtime
 {
-    public static class ManagedLogFile
+    internal static class ManagedLogFile
     {
         public static LogFile Current
         {

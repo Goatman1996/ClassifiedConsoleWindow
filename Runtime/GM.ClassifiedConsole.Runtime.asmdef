@@ -1,9 +1,7 @@
 {
     "name": "GM.ClassifiedConsole.Runtime",
     "rootNamespace": "",
-    "references": [
-        "GUID:7beef78e7ac1c4e59a7164cbd18a2e2c"
-    ],
+    "references": [],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,

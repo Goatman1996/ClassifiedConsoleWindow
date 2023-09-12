@@ -5,7 +5,7 @@ using UnityEngine.Networking;
 
 namespace ClassifiedConsole.Runtime
 {
-    public class RemoteRequestor
+    internal class RemoteRequestor
     {
         public enum ConnectionState
         {

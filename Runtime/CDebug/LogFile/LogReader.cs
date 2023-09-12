@@ -6,7 +6,7 @@ using ClassifiedConsole.Runtime;
 
 namespace ClassifiedConsole.Runtime
 {
-    public struct LogReader
+    internal struct LogReader
     {
         public int instanceId;
         public int subSystem;

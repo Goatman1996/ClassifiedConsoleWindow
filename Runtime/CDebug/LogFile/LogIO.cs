@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace ClassifiedConsole.Runtime
 {
-    public class LogIO
+    internal class LogIO
     {
         private FileStream writeBaseStream;
         private FileStream readBaseStream;

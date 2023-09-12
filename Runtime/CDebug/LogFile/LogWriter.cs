@@ -5,7 +5,7 @@ using System.Text;
 namespace ClassifiedConsole.Runtime
 {
     [Serializable]
-    public struct LogWriter
+    internal struct LogWriter
     {
         public int instanceId;
         public int logSubSystem;

@@ -3,7 +3,7 @@ using System.IO;
 
 namespace ClassifiedConsole.Runtime
 {
-    public class LogFilePathConfig
+    internal class LogFilePathConfig
     {
         public static string root
         {

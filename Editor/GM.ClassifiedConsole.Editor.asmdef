@@ -2,8 +2,7 @@
     "name": "GM.ClassifiedConsole.Editor",
     "rootNamespace": "",
     "references": [
-        "GUID:ccd7a338a0eb14b4fbb27bfa68644c5b",
-        "GUID:7beef78e7ac1c4e59a7164cbd18a2e2c"
+        "GUID:ccd7a338a0eb14b4fbb27bfa68644c5b"
     ],
     "includePlatforms": [
         "Editor"

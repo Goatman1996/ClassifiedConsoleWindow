@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace ClassifiedConsole.Runtime
 {
-    public class Cmd
+    internal class Cmd
     {
         private string _cmdContent;
         public string cmdContent

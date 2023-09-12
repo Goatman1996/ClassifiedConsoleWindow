@@ -1,6 +1,6 @@
 namespace ClassifiedConsole.Runtime
 {
-    public enum LogLevel
+    internal enum LogLevel
     {
         Log = 1,
         Warning = 2,

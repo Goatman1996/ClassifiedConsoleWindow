@@ -4,7 +4,7 @@ using System.IO;
 
 namespace ClassifiedConsole.Runtime
 {
-    public class LogFileNetRequestParam
+    internal class LogFileNetRequestParam
     {
         public bool IsGetLogFileList;
         public bool IsGetLogCount;
@@ -25,7 +25,7 @@ namespace ClassifiedConsole.Runtime
     }
 
     [Serializable]
-    public class LogFileNetResponseParam
+    internal class LogFileNetResponseParam
     {
         public int currentLogFileID;
         public List<int> LogFileIdList;

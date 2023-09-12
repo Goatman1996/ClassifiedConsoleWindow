@@ -2,7 +2,7 @@ using System;
 
 namespace ClassifiedConsole.Runtime
 {
-    public struct NumberString
+    internal struct NumberString
     {
         private const char _0 = '0';
         private const char _1 = '1';

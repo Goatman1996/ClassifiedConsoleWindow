@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Reflection;
 using System.IO;
+using System.Runtime.CompilerServices;
 
 namespace ClassifiedConsole.Runtime
 {
-    public class CDebugSubSystemEnumConfig
+    internal class CDebugSubSystemEnumConfig
     {
         public readonly static int subSystemNullName = (int)UnDefinedSubSystem.Not_Classified;
         private static Dictionary<int, string> _subSystemEnumLabelDic;
