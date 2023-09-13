@@ -12,6 +12,7 @@ namespace ClassifiedConsole.Editor
             {
                 var type = typeof(EditorGUI);
                 var evt = type.GetEvent("hyperLinkClicked", BindingFlags.Static | BindingFlags.NonPublic);
+                if (evt == null) return;
                 var addMethod = evt.GetAddMethod(true);
                 addMethod.Invoke(null, new object[] { value });
             }
@@ -19,6 +20,7 @@ namespace ClassifiedConsole.Editor
             {
                 var type = typeof(EditorGUI);
                 var evt = type.GetEvent("hyperLinkClicked", BindingFlags.Static | BindingFlags.NonPublic);
+                if (evt == null) return;
                 var removeMethod = evt.GetRemoveMethod();
                 removeMethod.Invoke(null, new object[] { value });
             }

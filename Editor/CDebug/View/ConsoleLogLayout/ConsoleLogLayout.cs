@@ -112,8 +112,11 @@ namespace ClassifiedConsole.Editor
             this.showingLogIndexList.Clear();
             this.showingLogIndexList.AddRange(showingLog);
 
+#if UNITY_2022_1_OR_NEWER
+            base.Rebuild();
+#else
             base.Refresh();
-
+#endif
             // 不能写在这。 Refresh 后 里面的value就变了
             // needToBottom = this.NeedToBottom();
             if (needToBottom)
@@ -124,6 +127,7 @@ namespace ClassifiedConsole.Editor
 
         private bool NeedToBottom()
         {
+            if (this.internalScrollView == null) return false;
             var maxValue = this.internalScrollView.verticalScroller.highValue;
             var currentScrollValue = this.internalScrollView.verticalScroller.value;
             var need = maxValue - currentScrollValue < base.itemHeight * 0.5f;
@@ -132,6 +136,8 @@ namespace ClassifiedConsole.Editor
 
         private void BackToBottom()
         {
+            if (this.internalScrollView == null) return;
+
             var count = base.itemsSource.Count;
             // 手动计算，刷新最大高度
             this.internalScrollView.verticalScroller.highValue = base.itemHeight * count - this.contentRect.height;

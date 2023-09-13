@@ -91,7 +91,11 @@ namespace ClassifiedConsole.Editor
                 // var subSystemIEnum = ClassifiedConsoleWindow.windowRoot.editorLogFile.GetShowingSubSystem();
                 // var subSystemIEnum = CDebugSubSystemEnumConfig.GetAllSubSystemList();
                 this.subSystemList.AddRange(ClassifiedConsoleWindow.windowRoot.editorLogFile.subSystem_Dic.Keys);
-                this.subSystemLayout.Refresh();
+#if UNITY_2022_1_OR_NEWER
+                subSystemLayout.Rebuild();
+#else
+                subSystemLayout.Refresh();
+#endif
             }
             else
             {

@@ -102,7 +102,7 @@ namespace ClassifiedConsole
             }
         }
 
-        private static string _ListeningIpAddress = "";
+        // private static string _ListeningIpAddress = "";
         public static string ListeningIpAddress { get; private set; }
     }
 }
