@@ -80,6 +80,10 @@ namespace ClassifiedConsole.Editor
         {
             if (this.isDirty)
             {
+                if (dirtyDelay == WindowFps)
+                {
+                    this.AfterUpdate();
+                }
                 dirtyDelay--;
                 if (dirtyDelay < 0)
                 {
@@ -88,6 +92,11 @@ namespace ClassifiedConsole.Editor
                     dirtyDelay = WindowFps;
                 }
             }
+        }
+
+        private void AfterUpdate()
+        {
+            this.mainConsole.logLayout.TryBackToBottom();
         }
 
         private void OnDisable()

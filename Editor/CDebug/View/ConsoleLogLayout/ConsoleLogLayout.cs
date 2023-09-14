@@ -28,6 +28,7 @@ namespace ClassifiedConsole.Editor
             base.onSelectionChange += this.OnItemClick;
             base.onItemsChosen += this.DoubleClick;
             this.RegisterCallback<GeometryChangedEvent>(this.OnGeometryChanged);
+            this.RegisterCallback<KeyDownEvent>(this.OnFKeyDown);
 
             this.style.minHeight = 100f;
 
@@ -41,13 +42,19 @@ namespace ClassifiedConsole.Editor
             }
         }
 
+        private void OnFKeyDown(KeyDownEvent evt)
+        {
+            if (evt.keyCode == UnityEngine.KeyCode.F)
+            {
+                if (this.lastClick != null)
+                {
+                    base.ScrollToItem(this.lastClick.Value);
+                }
+            }
+        }
+
         private void OnGeometryChanged(GeometryChangedEvent evt)
         {
-            var needToBottom = this.NeedToBottom();
-            if (needToBottom)
-            {
-                this.BackToBottom();
-            }
             CDebugWindowConfig.LogLayoutAndDetailRate = evt.newRect.height;
         }
 
@@ -107,7 +114,7 @@ namespace ClassifiedConsole.Editor
         public void Refresh(List<int> showingLog)
         {
             this.elementDic.Clear();
-            var needToBottom = this.NeedToBottom();
+            this.needToBottom = this.NeedToBottom();
 
             this.showingLogIndexList.Clear();
             this.showingLogIndexList.AddRange(showingLog);
@@ -117,14 +124,9 @@ namespace ClassifiedConsole.Editor
 #else
             base.Refresh();
 #endif
-            // 不能写在这。 Refresh 后 里面的value就变了
-            // needToBottom = this.NeedToBottom();
-            if (needToBottom)
-            {
-                this.BackToBottom();
-            }
         }
 
+        bool needToBottom;
         private bool NeedToBottom()
         {
             if (this.internalScrollView == null) return false;
@@ -136,12 +138,15 @@ namespace ClassifiedConsole.Editor
 
         private void BackToBottom()
         {
-            if (this.internalScrollView == null) return;
+            base.ScrollToItem(-1);
+        }
 
-            var count = base.itemsSource.Count;
-            // 手动计算，刷新最大高度
-            this.internalScrollView.verticalScroller.highValue = base.itemHeight * count - this.contentRect.height;
-            base.ScrollToItem(base.itemsSource.Count - 1);
+        public void TryBackToBottom()
+        {
+            if (needToBottom)
+            {
+                BackToBottom();
+            }
         }
     }
 }
