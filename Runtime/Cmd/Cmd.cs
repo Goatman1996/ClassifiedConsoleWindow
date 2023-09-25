@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Reflection;
 using UnityEngine;
 
@@ -24,7 +25,18 @@ namespace ClassifiedConsole.Runtime
         public Cmd()
         {
             var assmblyName = CDebugSettings.Instance.SubSystemDefinedAssembly[0];
-            this.asm = Assembly.Load(assmblyName);
+            try
+            {
+                this.asm = Assembly.Load(assmblyName);
+            }
+            catch (FileNotFoundException)
+            {
+                UnityEngine.Debug.LogWarning($"未找到Assembly {assmblyName} ");
+            }
+            catch (Exception e)
+            {
+                UnityEngine.Debug.LogException(e);
+            }
         }
 
         public bool cmdValid
@@ -52,6 +64,8 @@ namespace ClassifiedConsole.Runtime
                 var methodString = content.Substring(lastDot + 1);
 
                 if (string.IsNullOrEmpty(methodString)) return null;
+
+                if (this.asm == null) return null;
 
                 var type = this.asm.GetType(typeString);
                 if (type == null) return null;
