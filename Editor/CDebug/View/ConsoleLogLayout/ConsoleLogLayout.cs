@@ -119,7 +119,7 @@ namespace ClassifiedConsole.Editor
             this.showingLogIndexList.Clear();
             this.showingLogIndexList.AddRange(showingLog);
 
-#if UNITY_2022_1_OR_NEWER
+#if UNITY_2021_1_OR_NEWER
             base.Rebuild();
 #else
             base.Refresh();
