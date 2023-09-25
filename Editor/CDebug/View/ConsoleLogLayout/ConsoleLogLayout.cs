@@ -33,13 +33,19 @@ namespace ClassifiedConsole.Editor
             this.style.minHeight = 100f;
 
             var type = typeof(ListView);
-            foreach (var f in type.GetRuntimeFields())
+            while (this.internalScrollView == null && type != typeof(object))
             {
-                if (f.Name == "m_ScrollView")
+                foreach (var f in type.GetFields(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public))
                 {
-                    this.internalScrollView = f.GetValue(this) as ScrollView;
+                    if (f.Name == "m_ScrollView")
+                    {
+                        this.internalScrollView = f.GetValue(this) as ScrollView;
+                        break;
+                    }
                 }
+                type = type.BaseType;
             }
+
         }
 
         private void OnFKeyDown(KeyDownEvent evt)
