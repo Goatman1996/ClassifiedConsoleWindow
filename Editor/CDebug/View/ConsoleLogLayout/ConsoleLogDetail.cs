@@ -20,20 +20,18 @@ namespace ClassifiedConsole.Editor
 
             if (!hasAddLinkClicker)
             {
+                OpenCsUtility.Init();
                 OpenCsUtility.hyperLinkClicked += this.OnClickHyperLink;
                 hasAddLinkClicker = true;
             }
         }
 
         private static bool hasAddLinkClicker = false;
-        private void OnClickHyperLink(object sender, EventArgs e)
-        {
-            var evtArgsType = e.GetType();
-            var infosPropty = evtArgsType.GetProperty("hyperlinkInfos");
-            var infos = infosPropty.GetValue(e) as Dictionary<string, string>;
 
-            bool hasFilePath = infos.TryGetValue("hrefPath", out string filePath);
-            bool hasLineString = infos.TryGetValue("line", out string lineString);
+        private void OnClickHyperLink(Dictionary<string, string> hyperLinkData)
+        {
+            bool hasFilePath = hyperLinkData.TryGetValue("hrefPath", out string filePath);
+            bool hasLineString = hyperLinkData.TryGetValue("line", out string lineString);
             if (!hasFilePath || !hasLineString)
             {
                 return;
@@ -41,7 +39,6 @@ namespace ClassifiedConsole.Editor
 
             int line = Int32.Parse(lineString);
             OpenCsUtility.OpenCsFile(filePath, line);
-            // LogEntries.OpenFileOnSpecificLineAndColumn(filePath, line, -1);
         }
 
         Rect rect = new Rect();
