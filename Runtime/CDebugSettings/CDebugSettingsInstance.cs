@@ -1,3 +1,4 @@
+using System.IO;
 using UnityEngine;
 
 namespace ClassifiedConsole
@@ -11,6 +12,10 @@ namespace ClassifiedConsole
             {
                 ret = CDebugSettings.CreateInstance<CDebugSettings>();
 #if UNITY_EDITOR
+                if (!Directory.Exists("Assets/Resources"))
+                {
+                    Directory.CreateDirectory("Assets/Resources");
+                }
                 UnityEditor.AssetDatabase.CreateAsset(ret, "Assets/Resources/CDebugSettings.asset");
 #endif
             }
