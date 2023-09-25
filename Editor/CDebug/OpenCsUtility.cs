@@ -23,7 +23,21 @@ namespace ClassifiedConsole.Editor
 #endif
         }
 
+#if UNITY_2021_1_OR_NEWER
+        private static void OnClickHyperLink(EditorWindow window, UnityEditor.HyperLinkClickedEventArgs args)
+        {
+            var infos = args.hyperLinkData;
 
+            bool hasFilePath = infos.TryGetValue("hrefPath", out string filePath);
+            bool hasLineString = infos.TryGetValue("line", out string lineString);
+            if (!hasFilePath || !hasLineString)
+            {
+                return;
+            }
+
+            hyperLinkClicked?.Invoke(infos);
+        }
+#else
         private static void OnClickHyperLink(object sender, EventArgs e)
         {
             var evtArgsType = e.GetType();
@@ -39,21 +53,7 @@ namespace ClassifiedConsole.Editor
 
             hyperLinkClicked?.Invoke(infos);
         }
-
-
-        private static void OnClickHyperLink(EditorWindow window, UnityEditor.HyperLinkClickedEventArgs args)
-        {
-            var infos = args.hyperLinkData;
-
-            bool hasFilePath = infos.TryGetValue("hrefPath", out string filePath);
-            bool hasLineString = infos.TryGetValue("line", out string lineString);
-            if (!hasFilePath || !hasLineString)
-            {
-                return;
-            }
-
-            hyperLinkClicked?.Invoke(infos);
-        }
+#endif
 
         public static void OpenCsFile(string filePath, int line)
         {
