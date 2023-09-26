@@ -12,14 +12,17 @@ namespace ClassifiedConsole.Editor
         [SettingsProvider]
         public static SettingsProvider GetSettings()
         {
-            return new CDebugSettingsProvider("Project/CDebugSettings", SettingsScope.Project);
+            var settings = new CDebugSettingsProvider("Project/CDebugSettings", SettingsScope.Project);
+            settings.instance = ClassifiedConsole.CDebugSettings.Instance;
+            settings.m_SerializedObject = new SerializedObject(settings.instance);
+            return settings;
         }
+
+        ClassifiedConsole.CDebugSettings instance;
+        SerializedObject m_SerializedObject;
 
         public override void OnGUI(string searchContext)
         {
-            var instance = ClassifiedConsole.CDebugSettings.Instance;
-
-            SerializedObject m_SerializedObject = new SerializedObject(instance);
             m_SerializedObject.Update();
             SerializedProperty m_SerializedProperty = m_SerializedObject.GetIterator();
 

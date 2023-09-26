@@ -51,7 +51,11 @@ namespace ClassifiedConsole.Editor
 
             this.subSystemLayout = new ListView();
             this.subSystemLayout.itemsSource = this.subSystemList;
+#if UNITY_2021_1_OR_NEWER
+            this.subSystemLayout.fixedItemHeight = 23;
+#else
             this.subSystemLayout.itemHeight = 23;
+#endif
             this.subSystemLayout.makeItem = this.OnMakeItem;
             this.subSystemLayout.bindItem = this.BindItem;
             this.subSystemLayout.showAlternatingRowBackgrounds = AlternatingRowBackground.ContentOnly;

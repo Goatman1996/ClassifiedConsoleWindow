@@ -13,20 +13,27 @@ namespace ClassifiedConsole.Editor
         private ScrollView internalScrollView;
         private Dictionary<int, ConsoleLogElement> elementDic;
 
-
         public ConsoleLogLayout()
         {
             this.elementDic = new Dictionary<int, ConsoleLogElement>();
             this.showingLogIndexList = new List<int>();
 
             base.itemsSource = this.showingLogIndexList;
+#if UNITY_2021_1_OR_NEWER
+            base.selectionChanged += this.OnItemClick;
+            base.itemsChosen += this.DoubleClick;
+            base.fixedItemHeight = 40;
+#else
+            base.onSelectionChange += this.OnItemClick;
+            base.onItemsChosen += this.DoubleClick;
             base.itemHeight = 40;
+#endif
             base.makeItem = this.OnMakeItem;
             base.bindItem = this.BindItem;
             base.showAlternatingRowBackgrounds = AlternatingRowBackground.ContentOnly;
             base.selectionType = SelectionType.Single;
-            base.onSelectionChange += this.OnItemClick;
-            base.onItemsChosen += this.DoubleClick;
+
+
             this.RegisterCallback<GeometryChangedEvent>(this.OnGeometryChanged);
             this.RegisterCallback<KeyDownEvent>(this.OnFKeyDown);
 
@@ -138,8 +145,14 @@ namespace ClassifiedConsole.Editor
             if (this.internalScrollView == null) return false;
             var maxValue = this.internalScrollView.verticalScroller.highValue;
             var currentScrollValue = this.internalScrollView.verticalScroller.value;
+#if UNITY_2021_1_OR_NEWER
+            var need = maxValue - currentScrollValue < base.fixedItemHeight * 0.5f;
+            return need;
+#else
             var need = maxValue - currentScrollValue < base.itemHeight * 0.5f;
             return need;
+#endif
+
         }
 
         private void BackToBottom()
