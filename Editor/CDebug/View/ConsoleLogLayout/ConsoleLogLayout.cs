@@ -19,15 +19,23 @@ namespace ClassifiedConsole.Editor
             this.showingLogIndexList = new List<int>();
 
             base.itemsSource = this.showingLogIndexList;
+
 #if UNITY_2021_1_OR_NEWER
+            base.fixedItemHeight = 40;
+#else
+            base.itemHeight = 40;
+#endif
+
+
+#if UNITY_2022_1_OR_NEWER
             base.selectionChanged += this.OnItemClick;
             base.itemsChosen += this.DoubleClick;
-            base.fixedItemHeight = 40;
 #else
             base.onSelectionChange += this.OnItemClick;
             base.onItemsChosen += this.DoubleClick;
-            base.itemHeight = 40;
 #endif
+
+
             base.makeItem = this.OnMakeItem;
             base.bindItem = this.BindItem;
             base.showAlternatingRowBackgrounds = AlternatingRowBackground.ContentOnly;
