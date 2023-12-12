@@ -64,6 +64,19 @@ namespace ClassifiedConsole.Editor
             EditorGUILayout.SelectableLabel(detail, MessageStyle, GUILayout.ExpandWidth(true), GUILayout.ExpandHeight(true), GUILayout.MinHeight(height + 10));
 
             GUILayout.EndScrollView();
+
+            if (Event.current.type == EventType.MouseDown && Event.current.button == 1)
+            {
+                GenericMenu menu = new GenericMenu();
+
+                menu.AddItem(new GUIContent("Hide Async Method Stack"), CDebugWindowConfig.HideAsyncMethodStack, () =>
+                {
+                    CDebugWindowConfig.HideAsyncMethodStack = !CDebugWindowConfig.HideAsyncMethodStack;
+                    RefreshView();
+                });
+
+                menu.ShowAsContext();
+            }
         }
 
         private StringBuilder herfBuider;
@@ -87,6 +100,15 @@ namespace ClassifiedConsole.Editor
                     this.herfBuider.AppendLine(line);
                     continue;
                 }
+
+                if (CDebugWindowConfig.HideAsyncMethodStack)
+                {
+                    if (line.StartsWith("UnityEngine.UnitySynchronizationContext")) continue;
+                    if (line.StartsWith("System.Threading.Tasks.SynchronizationContextAwaitTaskContinuation")) continue;
+                    if (line.StartsWith("System.Runtime.CompilerServices.AsyncMethodBuilderCore")) continue;
+                    if (line.StartsWith("System.Threading.ExecutionContext")) continue;
+                }
+
                 fpIndex += 6;
                 // 类型/方法 信息
                 this.herfBuider.Append(line.Substring(0, fpIndex));
@@ -118,9 +140,19 @@ namespace ClassifiedConsole.Editor
         public string detail { get; set; }
         public int stackTrackStart { get; set; }
 
+        private int tempLogIndex = -1;
+
         public void ShowLog(int logIndex)
         {
-            var logReader = ClassifiedConsoleWindow.windowRoot.editorLogFile[logIndex];
+            tempLogIndex = logIndex;
+
+            RefreshView();
+        }
+
+        private void RefreshView()
+        {
+            if (tempLogIndex == -1) return;
+            var logReader = ClassifiedConsoleWindow.windowRoot.editorLogFile[tempLogIndex];
             this.detail = logReader.msg;
             this.stackTrackStart = logReader.stackTrackStartIndex;
             this.detail = this.GetStackTrackHerfString(this.detail, this.stackTrackStart);

@@ -171,6 +171,26 @@ namespace ClassifiedConsole.Editor
             }
         }
 
+        private static bool? _HideAsyncMethodStack;
+        public static bool HideAsyncMethodStack
+        {
+            get
+            {
+                if (_HideAsyncMethodStack == null)
+                {
+                    var value = PlayerPrefs.GetInt("CDebugConfig.HideAsyncMethodStack", 0);
+                    _HideAsyncMethodStack = value == 1;
+                }
+                return _HideAsyncMethodStack.Value;
+            }
+            set
+            {
+                var intValue = value ? 1 : 0;
+                PlayerPrefs.SetInt("CDebugConfig.HideAsyncMethodStack", intValue);
+                _HideAsyncMethodStack = value;
+            }
+        }
+
         #region LogLevel
         public static bool GetShowLogLevel(LogLevel level)
         {
