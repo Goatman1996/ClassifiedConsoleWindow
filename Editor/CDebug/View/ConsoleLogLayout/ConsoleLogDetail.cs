@@ -107,6 +107,9 @@ namespace ClassifiedConsole.Editor
                     if (line.StartsWith("System.Threading.Tasks.SynchronizationContextAwaitTaskContinuation")) continue;
                     if (line.StartsWith("System.Runtime.CompilerServices.AsyncMethodBuilderCore")) continue;
                     if (line.StartsWith("System.Threading.ExecutionContext")) continue;
+                    if (line.StartsWith("System.Threading.Tasks.Task")) continue;
+                    if (line.StartsWith("System.Threading.Tasks.AwaitTaskContinuation")) continue;
+                    if (line.StartsWith("System.Runtime.CompilerServices.AsyncTaskMethodBuilder")) continue;
                 }
 
                 fpIndex += 6;
