@@ -29,6 +29,9 @@ CDebug.LogError();
 ### 打开配套的Editor 窗口
 
 菜单 Window/Classified/Console 打开 Console 窗口
+
+窗口基于 UnityEngine.UIElements 编写
+
 ![CDebugWindow](https://github.com/Goatman1996/ClassifiedConsoleWindow/assets/48623605/3e16edcc-80f2-4d07-b2f4-fc35f38c38eb)
 Archive按钮，可将当前日志归档
 
