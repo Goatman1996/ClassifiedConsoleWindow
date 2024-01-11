@@ -1,25 +1,27 @@
 # ClassifiedConsoleWindow
 Unity Classified Console Window
 
-一款Unity日志系统
+一款 [可分类] [带控制台] [可局域网连接调试] [可查询历史] Unity日志系统
 
-[可分类]
+性能比较于Unity原生的Console系统，GC更少，速度更快
 
-[带控制台]
-
-[可局域网连接调试]
-
-[可查询历史]
-
+*在不带有栈信息，输入的Msg信息不带字符串拼接的情况下，可以做到了0GC
 
 ### 使用方式
 
 ``` C#
 using ClassifiedConsole;
 CDebug.Log();
+CDebug.LogWarning();
+CDebug.LogError();
 // 其中 参数 [int skipLine] 为 需要额外跳过的栈行数
 // 其中 参数 [int subSystem]  为 该条 Log 的对应分类
 ```
+
+*注：为什么没有 CDebug.LogException()？，因为，日志系统和异常管理系统，是两个系统，专事专干
+
+但这并不代表ClassifiedConsoleWindow看不了异常的信息，所有抛出未处理的异常也都会被捕获并显示，归为Unity_Native_Log分类
+
 ### 打开配套的Editor 窗口
 
 菜单 Window/Classified/Console 打开 Console 窗口
@@ -34,6 +36,8 @@ Editor下拉菜单，可连接真机，输入真机端的Ip地址即可
 ### 打开相关的设置窗口
 
 菜单 Window/Classified/Settings 打开Console Settings 窗口
+
+Settings窗口内的所有设置项均包含说明，详情可打开面板查看
 
 ``` C#
 // Console Settings 窗口 包含了 大部分能配置的内容
