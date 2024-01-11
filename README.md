@@ -39,6 +39,8 @@ Editor下拉菜单，可连接真机，输入真机端的Ip地址即可
 
 Settings窗口内的所有设置项均包含说明，详情可打开面板查看
 
+![CDebugSettings](https://github.com/Goatman1996/ClassifiedConsoleWindow/assets/48623605/fbbca839-a869-42a7-84fd-ef6e6fd9841a)
+
 ``` C#
 // Console Settings 窗口 包含了 大部分能配置的内容
 // 以下是代码层面的相关API
