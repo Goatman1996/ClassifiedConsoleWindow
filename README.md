@@ -1,19 +1,36 @@
 # ClassifiedConsoleWindow
 Unity Classified Console Window
 
-Unity 可分类的日志系统
+一款Unity日志系统
+
+[可分类]
+
+[带控制台]
+
+[可局域网连接调试]
+
+[可查询历史]
+
 
 ### 使用方式
 
 ``` C#
-ClassifiedConsole.CDebug.Log()
+using ClassifiedConsole;
+CDebug.Log();
 // 其中 参数 [int skipLine] 为 需要额外跳过的栈行数
 // 其中 参数 [int subSystem]  为 该条 Log 的对应分类
 ```
 ### 打开配套的Editor 窗口
 
 菜单 Window/Classified/Console 打开 Console 窗口
+![CDebugWindow](https://github.com/Goatman1996/ClassifiedConsoleWindow/assets/48623605/3e16edcc-80f2-4d07-b2f4-fc35f38c38eb)
+Archive按钮，可将当前日志归档
 
+Current_xxx，为选择历史记录菜单
+
+Editor下拉菜单，可连接真机，输入真机端的Ip地址即可
+
+左侧为日志的分类菜单，可选择性的开关显示
 ### 打开相关的设置窗口
 
 菜单 Window/Classified/Settings 打开Console Settings 窗口
