@@ -60,7 +60,7 @@ namespace ClassifiedConsole
         [Header("栈信息是否包含文件信息(建议出包前设置成false)")]
         public bool msgWithFileInfo = true;
 
-        [Header("要保留的LogFile数量")]
+        [Header("要保留的Log历史数量")]
         [SerializeField]
         private int _keepLogFileCount = 3;
         public int keepLogFileCount
