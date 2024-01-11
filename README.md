@@ -7,6 +7,10 @@ Unity Classified Console Window
 
 *在不带有栈信息，输入的Msg信息不带字符串拼接的情况下，可以做到了0GC
 
+### 安装
+
+https://openupm.cn/packages/com.gm.classifiedconsolewindow/
+
 ### 使用方式
 
 ``` C#
