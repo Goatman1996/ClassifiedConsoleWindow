@@ -89,7 +89,7 @@ void Settins()
 using ClassifiedConsole;
 // 这个标签是 用于标记 特定的枚举类型 为 Log分类类型
 [CDebugSubSystem]
-private enum TestType
+public enum LoggerType
 {
     [CDebugSubSystemLabel("启动器")]
     Launcher = 0,
