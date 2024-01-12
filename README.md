@@ -1,7 +1,7 @@
 # ClassifiedConsoleWindow
 Unity Classified Console Window
 
-一款 [可分类] [带控制台] [可局域网连接调试] [可查询历史] Unity日志系统
+一款 [可分类] [带控制台] [可局域网连接调试] [可查询历史] 的Unity日志系统
 
 性能比较于Unity原生的Console系统，GC更少，速度更快
 
@@ -56,6 +56,8 @@ Settings窗口内的所有设置项均包含说明，详情可在面板查看
 *Catch Native XXX （是否监听运行时XXX）选项
 
 即本系统是否需要捕获 UnityEngine.Debug.LogXXX() 的信息，并归为Unity_Native_Log分类
+
+仅运行时捕获
 
 *Sub System Defined Assembly 
 
