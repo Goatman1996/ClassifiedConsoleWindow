@@ -108,9 +108,9 @@ void StartRemoteListener()
     // 真机上调用，一次开启端口监听，端口号可在Settings中配置
     // 在 Console Window 中 填入 真机局域网IP,即可连接真机看Log
     // (如果不填写端口号，系统会自动获取Settings中配置的端口号)
-    string url = ClassifiedConsole.CDebugRemoteListener.Start.Start(false);
+    string url = ClassifiedConsole.CDebugRemoteListener.Start(true);
 
-    // 参数bool为，是否在Editor下也监听端口，默认为false
+    // 参数bool ignoreEditor为，是否忽略Editor（Editor下不监听端口），默认为true
     // 如果Editor也监听，Remote为本机环境，会导致端口监听冲突
 }
 ```
