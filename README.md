@@ -83,9 +83,13 @@ void Settins()
 }
 ```
 ### 日志分类
-分类标签 [ClassifiedConsole.CDebugSubSystem] 为 枚举类型 的属性，为 枚举类型添加此标签，即可在 配套窗口中 中显示此分类，
+[CDebugSubSystem]
 
-分类标签 起名 [ClassifiedConsole.CDebugSubSystemLabel] 为 特定分类类型的别称，用于在窗口中显示
+分类标签 [CDebugSubSystem] 为 枚举类型 的属性，为 枚举类型添加此标签，即可在 配套窗口中 中显示此分类
+
+[CDebugSubSystemLabel]
+
+分类标签 起名 [CDebugSubSystemLabel] 为 特定分类类型的别称，用于在窗口中显示
 
 ``` C#
 using ClassifiedConsole;
