@@ -4,6 +4,7 @@ using UnityEngine.UIElements;
 using System.Reflection;
 using System.Threading.Tasks;
 using ClassifiedConsole.Runtime;
+using UnityEngine;
 
 namespace ClassifiedConsole.Editor
 {
@@ -163,8 +164,10 @@ namespace ClassifiedConsole.Editor
 
         }
 
-        private void BackToBottom()
+        private async void BackToBottom()
         {
+            await Task.Delay(1);
+            if (this == null) return;
             base.ScrollToItem(-1);
         }
 
