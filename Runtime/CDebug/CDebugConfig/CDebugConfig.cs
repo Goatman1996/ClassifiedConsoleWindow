@@ -7,7 +7,7 @@ namespace ClassifiedConsole.Runtime
 {
     internal class CDebugConfig
     {
-        public const string version = "1.0.0";
+        public const string version = "1.0.1";
 
         public static bool ArchiveOnPlay
         {
