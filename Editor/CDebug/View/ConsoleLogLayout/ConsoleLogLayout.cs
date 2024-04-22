@@ -146,6 +146,8 @@ namespace ClassifiedConsole.Editor
 #else
             base.Refresh();
 #endif
+
+            TryBackToBottom();
         }
 
         bool needToBottom;
