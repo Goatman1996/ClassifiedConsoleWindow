@@ -9,7 +9,7 @@ Unity Classified Console Window
 
 ### 安装
 
-https://openupm.cn/packages/com.gm.classifiedconsolewindow/
+https://openupm.com/packages/com.gm.classifiedconsolewindow/
 
 ### 使用方式
 
